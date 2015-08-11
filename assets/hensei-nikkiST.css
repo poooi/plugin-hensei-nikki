@@ -3,10 +3,7 @@
   padding-right: 20px;
   overflow-x: inherit;
 }
-#HenseiNikki btn-block btn btn-md btn-default{
-  height: 35px;
-  margin-top: 1px;
-}
+
 #HenseiNikki .panel {
   border-color: transparent;
   background-color: transparent;
@@ -15,7 +12,6 @@
 }
 
 #HenseiNikki table td {
-  overflow: hidden;
   white-space: nowrap;
 }
 #HenseiNikki table tr:nth-child(odd) td {
@@ -31,4 +27,7 @@
   border: none;
   vertical-align: middle;
   line-height: 1.42857143;
+}
+#HenseiNikki ::-webkit-scrollbar {
+  width: 10px;
 }

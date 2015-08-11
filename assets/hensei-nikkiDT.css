@@ -1,4 +1,5 @@
 #HenseiNikki .container {
+  padding-top: 
   padding-left: 20px;
   padding-right: 20px;
   overflow-x: inherit;
@@ -30,7 +31,7 @@
   padding-right: 0px;
 }
 #HenseiNikki img{
-  width: 60%;
+  width: 450%;
   height: 70%;
 }
 #HenseiNikki .panel-body{
@@ -41,4 +42,7 @@
 
 #HenseiNikki .col-xs-4 {
   padding: 0px;
+}
+#HenseiNikki　::-webkit-scrollbar {
+  width: 10px;
 }
