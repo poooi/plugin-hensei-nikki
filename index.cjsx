@@ -1,10 +1,9 @@
-{$, $$, _, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal} = window
-{NavItem, Nav, PageHeader, Grid, Row, Col, Accordion, Panel, Button, Input, Well, TabbedArea, TabPane} = ReactBootstrap
+{APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal} = window
+{TabbedArea, TabPane} = ReactBootstrap
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 CSON = require 'cson'
 i18n = require './node_modules/i18n'
-{__} = i18n
 
 # i18n configure
 i18n.configure({
@@ -16,6 +15,8 @@ i18n.configure({
     extension: '.json'
 })
 i18n.setLocale(window.language)
+
+{__} = i18n
 
 AddDataTab = require './addDataTab'
 HenseiList = require './henseiList'
@@ -42,12 +43,6 @@ module.exports =
           memberId = body.api_member_id
           @getDataFromFile memberId
           window.removeEventListener 'game.response', @handleResponse
-
-    # data: title:
-    #              details[]: totalLv, avglv, tyku, saku, sakua
-    #              ships[]:
-    #                   name, lv, type, slots[]
-    #       titles[]
     getDataFromFile: (memberId) ->
       data = {}
       try
@@ -61,40 +56,50 @@ module.exports =
       @setState
         henseiData: data
         memberId: memberId
-    saveDataToFile: (title, deck) ->
+    handleAddData: (title, deck) ->
       data = @state.henseiData
       if title in data.titles
         toggleModal(__("save error"), __("The title is already exist."))
       else
         data[title] = deck
         data.titles.push(title)
-        try
-          fs.writeFileSync(join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.cson"), CSON.stringify(data), null, 2)
-        catch e
-          error "Write hensei error!#{e}"
-        console.log "save data to hensei-nikki"
-        @setState
-          henseiData: data
-        toggleModal(__("save succeed"), __("The title is already exist."))
+        @saveData(data)
+    handleDeleteData: (delTitle) ->
+      {henseiData} = @state
+      for title in delTitle
+        delete henseiData[title]
+        for item,index in henseiData.titles
+          if item is title
+            henseiData.titles.splice(index, 1)
+      @saveData(henseiData)
+    saveData: (data) ->
+      try
+        fs.writeFileSync(join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.cson"), CSON.stringify(data), null, 2)
+      catch e
+        error "Write hensei error!#{e}"
+      console.log "save data to hensei-nikki"
+      @setState
+        henseiData: data
     handleSelectTab: (selectedKey) ->
       @setState
         selectedKey: selectedKey
     render: ->
       <TabbedArea activeKey={@state.selectedKey} animation={false} onSelect={@handleSelectTab}>
-      <link rel="stylesheet" href={join(relative(ROOT, __dirname), 'assets', "hensei-nikkiST.css")} />
-        <TabPane eventKey={0} tab='Records' >
+      <link rel="stylesheet" href={join(relative(ROOT, __dirname), 'assets', "hensei-nikki.css")} />
+        <TabPane eventKey={0} tab={__ 'Records'} >
           <HenseiList indexKey={0}
                       selectedKey={@state.selectedKey}
                       henseiData={@state.henseiData} />
         </TabPane>
-        <TabPane eventKey={1} tab='Add' >
+        <TabPane eventKey={1} tab={__ 'Add'} >
           <AddDataTab indexKey={1}
                       selectedKey={@state.selectedKey}
-                      saveDataToFile={@saveDataToFile} />
+                      handleAddData={@handleAddData} />
         </TabPane>
-        <TabPane eventKey={2} tab='Delete' >
+        <TabPane eventKey={2} tab={__ 'Delete'} >
           <DelDataTab indexKey={2}
                       selectedKey={@state.selectedKey}
-                      henseiData={@state.henseiData} />
+                      henseiData={@state.henseiData}
+                      handleDeleteData={@handleDeleteData} />
         </TabPane>
       </TabbedArea>

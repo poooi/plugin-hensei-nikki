@@ -13,5 +13,7 @@
   " Old": " 舊式",
   "save error": "保存錯誤",
   "The title is already exist.": "標題已存在",
-  "delete": "刪除"
+  "Delete": "刪除",
+  "Records": "記錄",
+  "Add": "增加"
 }

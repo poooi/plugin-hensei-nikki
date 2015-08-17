@@ -1,8 +1,5 @@
-{$, $$, _, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal} = window
-{NavItem, Nav, PageHeader, Grid, Row, Col, Accordion, Panel, Button, Input, Well} = ReactBootstrap
-fs = require 'fs-extra'
-{relative, join} = require 'path-extra'
-CSON = require 'cson'
+{React, ReactBootstrap} = window
+{Grid, Row, Col, Accordion, Panel, Input} = ReactBootstrap
 i18n = require './node_modules/i18n'
 {__} = i18n
 
@@ -21,7 +18,6 @@ HenseiList = React.createClass
   handleKeyWordChange: ->
     key = @refs.keywords.getValue()
     @filterBuffer key
-
   filterBuffer: (key) ->
     {henseiData} = @state
     if henseiData.titles isnt []
@@ -37,7 +33,6 @@ HenseiList = React.createClass
       @setState
         filterKey: key
         showData: showData
-
   _filter: (keywords, filterData) ->
     if keywords?
       filterData.filter (data) ->
@@ -48,11 +43,6 @@ HenseiList = React.createClass
             match = true
         match
     else filterData
-  # data: title:
-  #              details[]: totalLv, avglv, tyku, saku, sakua
-  #              ships[]:
-  #                   name, lv, type, slots[]
-  #       titles[]
   getDataValue: (data, title) ->
     valueData = []
     valueData.push(title)

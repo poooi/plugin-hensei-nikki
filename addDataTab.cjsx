@@ -1,7 +1,6 @@
 {_, React, ReactBootstrap} = window
-{Grid, Row, Col, Button, Input, Well, Collapse} = ReactBootstrap
+{Grid, Row, Col, Button, Input} = ReactBootstrap
 {join} = require 'path-extra'
-
 i18n = require './node_modules/i18n'
 {__} = i18n
 
@@ -113,7 +112,6 @@ getDeckMessage = (deckId) ->
   saku25: getSaku25(_decks[deckId])
   saku25a: getSaku25a(_decks[deckId])
 
-
 AddDataTab = React.createClass
   getInitialState: ->
     title: ''
@@ -154,7 +152,6 @@ AddDataTab = React.createClass
         messages.saku25a.total
       ]
       ships: shipsDetail
-
   handleInputChange: ->
     title = @refs.title.getValue()
     if title? and title.length > 0
@@ -166,7 +163,7 @@ AddDataTab = React.createClass
       btnDisable: btnDisable
   handleSaveClick: ->
     deck = @getDeckDetail()
-    @props.saveDataToFile(@state.title, deck)
+    @props.handleAddData(@state.title, deck)
   handleDeckSelect: (e) ->
     deckId = parseInt e.target.value
     @setState
