@@ -15,7 +15,7 @@ ShipItemD = React.createClass
             {
               for slot, index in @props.ship[3]
                 <OverlayTrigger key={index} placement='bottom' overlay={<Tooltip>{slot[1]}{if slot[2] > 0 then <strong style={color: '#45A9A5'}>★+{slot[2]}</strong> else ''}</Tooltip>}>
-                  <img key={index} src={join('assets', 'img', 'slotitem', "#{slot[0] + 33}.png")} />
+                  <img key={index} src={join('assets', 'img', 'slotitem', "#{slot[0] + 100}.png")} />
                 </OverlayTrigger>
             }
             </td>
@@ -39,7 +39,7 @@ ShipItemS = React.createClass
             {
               for slot,index in @props.ship[3]
                 <OverlayTrigger placement='right' overlay={<Tooltip>{slot[1]}{if slot[2] > 0 then <strong style={color: '#45A9A5'}>★+{slot[2]}</strong> else ''}</Tooltip>}>
-                  <img key={index} src={join('assets', 'img', 'slotitem', "#{slot[0] + 33}.png")} />
+                  <img key={index} src={join('assets', 'img', 'slotitem', "#{slot[0] + 100}.png")} />
                 </OverlayTrigger>
             }
             </td>
