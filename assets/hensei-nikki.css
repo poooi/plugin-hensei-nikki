@@ -1,0 +1,31 @@
+#HenseiNikki .container {
+  margin-top: 15px;
+}
+
+#HenseiNikki .panel {
+  border-color: transparent;
+  background-color: transparent;
+  -webkit-box-shadow: transparent;
+  box-shadow: none;
+}
+
+#HenseiNikki table td {
+  white-space: nowrap;
+}
+#HenseiNikki table tr:nth-child(odd) td {
+  font-size: 120%;
+  padding-top: 12px;
+}
+#HenseiNikki table tr:nth-child(even) td {
+  font-size: 90%;
+  padding-top: 4px;
+}
+#HenseiNikki table tr td {
+  padding-bottom: 0px;
+  border: none;
+  vertical-align: middle;
+  line-height: 1.42857143;
+}
+#HenseiNikki ::-webkit-scrollbar {
+  width: 10px;
+}
