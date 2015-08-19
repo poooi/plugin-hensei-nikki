@@ -15,5 +15,8 @@
   "The title is already exist.": "标题已存在",
   "Delete": "删除",
   "Records": "记录",
-  "Add": "添加"
+  "Add": "添加",
+  "Import": "导入",
+  "Code": "代码",
+  "Incorrect code": "代码不正确，无法导入"
 }

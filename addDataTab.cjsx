@@ -1,4 +1,4 @@
-{_, React, ReactBootstrap} = window
+{_, React, ReactBootstrap, JSON, error} = window
 {Grid, Row, Col, Button, Input} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require './node_modules/i18n'
@@ -115,6 +115,7 @@ getDeckMessage = (deckId) ->
 AddDataTab = React.createClass
   getInitialState: ->
     title: ''
+    code: ''
     deckId: 0
     btnDisable: true
   componentWillReceiveProps: (nextProps)->
@@ -123,7 +124,7 @@ AddDataTab = React.createClass
         btnDisable: true
         deckId: 0
         title: ''
-  getDeckDetail: ->
+  getDeckDetailById: (deckId) ->
     {deckId} = @state
     shipsDetail = []
     for shipId in _decks[deckId].api_ship
@@ -152,6 +153,11 @@ AddDataTab = React.createClass
         messages.saku25a.total
       ]
       ships: shipsDetail
+  getDeckDetail: ->
+    @getDeckDetailById @state.deckId
+  getDeckCodeById: (deckId) ->
+    deck = @getDeckDetailById deckId
+    JSON.stringify deck
   handleInputChange: ->
     title = @refs.title.getValue()
     if title? and title.length > 0
@@ -161,13 +167,26 @@ AddDataTab = React.createClass
     @setState
       title: title
       btnDisable: btnDisable
+  handleCodeChange: ->
+    code = @refs.code.getValue()
+    @setState
+      code: code
   handleSaveClick: ->
     deck = @getDeckDetail()
     @props.handleAddData(@state.title, deck)
+  handleImportClick: ->
+    try
+      deck = JSON.parse @refs.code.getValue()
+      @props.handleAddData(@state.title, deck)
+    catch e
+      error __('Incorrect code')
   handleDeckSelect: (e) ->
     deckId = parseInt e.target.value
+    code = @getDeckCodeById deckId
     @setState
       deckId: deckId
+      code: code
+
   render: ->
     <Grid>
       <Row>
@@ -200,6 +219,25 @@ AddDataTab = React.createClass
                   onClick={@handleSaveClick}
                   block>
             {__ "save"}
+          </Button>
+        </Col>
+        <Col xs={5} xsOffset={1}>
+          <Input type='text'
+                 label={__ "Code"}
+                 placeholder={__ "Code"}
+                 value={@state.code}
+                 hasFeedback
+                 ref='code'
+                 onChange={@handleCodeChange}
+                 />
+        </Col>
+        <Col xs={4} xsOffset={7}>
+          <Button bsStyle='default'
+                  bsSize='small'
+                  disabled={@state.btnDisable}
+                  onClick={@handleImportClick}
+                  block>
+            {__ "Import"}
           </Button>
         </Col>
       </Row>
