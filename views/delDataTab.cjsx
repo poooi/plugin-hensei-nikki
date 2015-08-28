@@ -1,6 +1,6 @@
 {React, ReactBootstrap} = window
-{Grid, Input, Nav, NavItem} = ReactBootstrap
-i18n = require './node_modules/i18n'
+{Input, Button} = ReactBootstrap
+i18n = require '../node_modules/i18n'
 {__} = i18n
 
 DelDataTab = React.createClass
@@ -16,7 +16,7 @@ DelDataTab = React.createClass
         deckChecked: deckChecked
   shouldComponentUpdate: (nextProps, nextState)->
     updateflag = false
-    if nextProps.selectedKey is 2
+    if nextProps.indexKey is nextProps.selectedKey
       updateflag = true
     updateflag
   handleClickCheckbox: (index) ->
@@ -28,7 +28,7 @@ DelDataTab = React.createClass
         if deck is true
           btnDisable = false
       @setState {deckChecked, btnDisable}
-  handleSaveSelect: ->
+  handleDelClick: ->
     {deckChecked} = @state
     delTitle = []
     for item, index in deckChecked
@@ -39,20 +39,32 @@ DelDataTab = React.createClass
       @setState
         btnDisable: true
   render: ->
-    <Grid>
-      <Nav bsStyle='pills' activeKey={1} onSelect={@handleSaveSelect}>
-        <NavItem eventKey={1} disabled={@state.btnDisable} block>{__ "Delete"}</NavItem>
-      </Nav>
-      {
-        if @state.deckChecked isnt [] and @state.deckChecked.length > 0
-          for title, index in @props.henseiData.titles
-            shipName = []
-            shipName.push(title)
-            shipName.push(" : ")
-            for ship in @props.henseiData[title].ships
-              shipName.push(ship[0])
-              shipName.push(". ")
-            <Input type='checkbox' label={shipName} key={title} onChange={@handleClickCheckbox.bind(@, index)} checked={@state.deckChecked[index]}/>
-      }
-    </Grid>
+    <div style={padding: '5px 5px 5px 5px'}>
+      <div>
+        {
+          if @state.deckChecked isnt [] and @state.deckChecked.length > 0
+            for title, index in @props.henseiData.titles
+              shipName = []
+              shipName.push(title)
+              shipName.push(' : ')
+              for ship in @props.henseiData[title].ships
+                shipName.push(window.$ships[ship[0]].api_name)
+                shipName.push('. ')
+              <Input type='checkbox'
+                     label={shipName}
+                     key={title}
+                     onChange={@handleClickCheckbox.bind(@, index)}
+                     checked={@state.deckChecked[index]}/>
+        }
+      </div>
+      <Button style={alignItems: 'flex-end'}
+              bsStyle='default'
+              bsSize='small'
+              disabled={@state.btnDisable}
+              onClick={@handleDelClick}
+              block>
+        {__ 'Delete'}
+      </Button>
+    </div>
+
 module.exports = DelDataTab

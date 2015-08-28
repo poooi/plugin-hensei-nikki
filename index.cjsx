@@ -1,38 +1,194 @@
-{APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal} = window
+{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal, JSON} = window
 {TabbedArea, TabPane} = ReactBootstrap
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
-CSON = require 'cson'
 i18n = require './node_modules/i18n'
 
 # i18n configure
 i18n.configure({
     locales: ['en_US', 'ja_JP', 'zh_CN', 'zh_TW'],
     defaultLocale: 'zh_CN',
-    directory: join(__dirname, "i18n"),
+    directory: join(__dirname, 'i18n'),
     updateFiles: false,
-    indent: "\t",
+    indent: '\t',
     extension: '.json'
 })
 i18n.setLocale(window.language)
-
 {__} = i18n
 
-AddDataTab = require './addDataTab'
-HenseiList = require './henseiList'
-DelDataTab = require './delDataTab'
+{HenseiList, EditDataTab} = require './views'
+
+getTyku = (deck) ->
+  {$ships, $slotitems, _ships, _slotitems} = window
+  basicTyku = alvTyku = totalTyku = 0
+  for shipId in deck.api_ship
+    continue if shipId == -1
+    ship = _ships[shipId]
+    for itemId, slotId in ship.api_slot
+      continue if itemId == -1
+      item = _slotitems[itemId]
+      # Basic tyku
+      if item.api_type[3] in [6, 7, 8]
+        basicTyku += Math.floor(Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku)
+      else if item.api_type[3] == 10 && item.api_type[2] == 11
+        basicTyku += Math.floor(Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku)
+      # Alv
+      if item.api_type[3] == 6 && item.api_alv > 0 && item.api_alv <= 7
+        alvTyku += [0, 1, 4, 6, 11, 16, 17, 25][item.api_alv]
+      else if item.api_type[3] in [7, 8] && item.api_alv == 7
+        alvTyku += 3
+      else if item.api_type[3] == 10 && item.api_type[2] == 11 && item.api_alv == 7
+        alvTyku += 9
+  totalTyku = basicTyku + alvTyku
+
+  basic: basicTyku
+  alv: alvTyku
+  total: totalTyku
+
+# Saku (2-5 旧式)
+# 偵察機索敵値×2 ＋ 電探索敵値 ＋ √(艦隊の装備込み索敵値合計 - 偵察機索敵値 - 電探索敵値)
+getSaku25 = (deck) ->
+  {_ships, _slotitems} = window
+  reconSaku = shipSaku = radarSaku = 0
+  for shipId in deck.api_ship
+    continue if shipId == -1
+    ship = _ships[shipId]
+    shipSaku += ship.api_sakuteki[0]
+    for itemId, slotId in ship.api_slot
+      continue if itemId == -1
+      item = _slotitems[itemId]
+      switch item.api_type[3]
+        when 9
+          reconSaku += item.api_saku
+          shipSaku -= item.api_saku
+        when 10
+          if item.api_type[2] == 10
+            reconSaku += item.api_saku
+            shipSaku -= item.api_saku
+        when 11
+          radarSaku += item.api_saku
+          shipSaku -= item.api_saku
+  reconSaku = reconSaku * 2.00
+  shipSaku = Math.sqrt(shipSaku)
+  totalSaku = reconSaku + radarSaku + shipSaku
+
+  recon: parseFloat(reconSaku.toFixed(2))
+  radar: parseFloat(radarSaku.toFixed(2))
+  ship: parseFloat(shipSaku.toFixed(2))
+  total: parseFloat(totalSaku.toFixed(2))
+
+# Saku (2-5 秋式)
+# 索敵スコア = 艦上爆撃機 × (1.04) + 艦上攻撃機 × (1.37) + 艦上偵察機 × (1.66) + 水上偵察機 × (2.00)
+#            + 水上爆撃機 × (1.78) + 小型電探 × (1.00) + 大型電探 × (0.99) + 探照灯 × (0.91)
+#            + √(各艦毎の素索敵) × (1.69) + (司令部レベルを5の倍数に切り上げ) × (-0.61)
+getSaku25a = (deck) ->
+  {_ships, _slotitems} = window
+  totalSaku = shipSaku = itemSaku = teitokuSaku = 0
+  for shipId in deck.api_ship
+    continue if shipId == -1
+    ship = _ships[shipId]
+    shipPureSaku = ship.api_sakuteki[0]
+    for itemId, slotId in ship.api_slot
+      continue if itemId == -1
+      item = _slotitems[itemId]
+      shipPureSaku -= item.api_saku
+      switch item.api_type[3]
+        when 7
+          itemSaku += item.api_saku * 1.04
+        when 8
+          itemSaku += item.api_saku * 1.37
+        when 9
+          itemSaku += item.api_saku * 1.66
+        when 10
+          if item.api_type[2] == 10
+            itemSaku += item.api_saku * 2.00
+          else if item.api_type[2] == 11
+            itemSaku += item.api_saku * 1.78
+        when 11
+          if item.api_type[2] == 12
+            itemSaku += item.api_saku * 1.00
+          else if item.api_type[2] == 13
+            itemSaku += item.api_saku * 0.99
+        when 24
+          itemSaku += item.api_saku * 0.91
+    shipSaku += Math.sqrt(shipPureSaku) * 1.69
+  teitokuSaku = 0.61 * Math.floor((window._teitokuLv + 4) / 5) * 5
+  totalSaku = shipSaku + itemSaku - teitokuSaku
+
+  ship: parseFloat(shipSaku.toFixed(2))
+  item: parseFloat(itemSaku.toFixed(2))
+  teitoku: parseFloat(teitokuSaku.toFixed(2))
+  total: parseFloat(totalSaku.toFixed(2))
+
+getDeckMessage = (deckId) ->
+  {_ships, _decks} = window
+  totalLv = totalShip = 0
+  for shipId in _decks[deckId].api_ship
+    continue if shipId == -1
+    ship = _ships[shipId]
+    totalLv += ship.api_lv
+    totalShip += 1
+  avgLv = totalLv / totalShip
+
+  totalLv: totalLv
+  avgLv: parseFloat(avgLv.toFixed(0))
+  tyku: getTyku(_decks[deckId])
+  saku25: getSaku25(_decks[deckId])
+  saku25a: getSaku25a(_decks[deckId])
+
+isNull = (item) ->
+  item is null
+
+# [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
+emptyShip = [null, [null, -1], [], [], []]
+
+getShipsDetail = (deckId) ->
+  {_ships, _slotitems, _decks} = window
+  shipsDetail = []
+  for shipId in _decks[deckId].api_ship
+    shipDetail = Object.clone emptyShip
+    if shipId isnt -1
+      ship = _ships[shipId]
+      shipDetail[0] = ship.api_ship_id
+      shipDetail[1][0] = ship.api_lv
+      shipDetail[1][1] = ship.api_cond
+      for slotId, index in ship.api_slot
+        continue if slotId is -1
+        shipDetail[2].push _slotitems[slotId].api_slotitem_id
+        if _slotitems[slotId].api_level is 0
+          shipDetail[3].push null
+        else
+          shipDetail[3].push _slotitems[slotId].api_level
+        if _slotitems[slotId].api_alv?
+          shipDetail[4].push _slotitems[slotId].api_alv
+        else
+          shipDetail[4].push null
+      shipDetail[3] = [] if shipDetail[3].every isNull
+      shipDetail[4] = [] if shipDetail[4].every isNull
+    shipsDetail.push shipDetail
+  shipsDetail
+
+getDeckDetail = (deckId, comment, tags)->
+  shipsDetail = getShipsDetail deckId
+  messages = getDeckMessage deckId
+
+  details: [messages.totalLv, messages.avgLv, messages.tyku.total,
+            messages.saku25.total, messages.saku25a.total]
+  ships: shipsDetail
+  comment: comment
+  tags: tags
 
 module.exports =
-  name: "HenseiNikki"
-  displayName: <span><FontAwesome key={0} name='folder-open' />{__ "Organization Records"}</span>
+  name: 'HenseiNikki'
+  displayName: <span><FontAwesome key={0} name='folder-open' />{__ 'Organization Records'}</span>
   priority: 7
-  author: "Rui"
-  link: "https://github.com/ruiii"
-  description: "记录编成信息"
-  version: "2.0.0"
+  author: 'Rui'
+  link: 'https://github.com/ruiii'
+  description: '记录编成信息'
+  version: '2.0.0'
   reactClass: React.createClass
     getInitialState: ->
-      memberId: ""
+      memberId: ''
     henseiData: {}
     componentDidMount: ->
       window.addEventListener 'game.response', @handleResponse
@@ -46,9 +202,9 @@ module.exports =
     getDataFromFile: (memberId) ->
       data = {}
       try
-        fs.ensureDirSync(join(APPDATA_PATH, 'hensei-nikki'))
-        console.log "get data from hensei-nikki"
-        data = CSON.parseCSONFile(join(APPDATA_PATH, 'hensei-nikki', "#{memberId}.cson"))
+        fs.ensureDirSync join(APPDATA_PATH, 'hensei-nikki')
+        console.log 'get data from hensei-nikki'
+        data = fs.readJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{memberId}.json")
       catch e
         error "Read hensei error!#{e}"
       if !data.titles?
@@ -59,47 +215,47 @@ module.exports =
     handleAddData: (title, deck) ->
       data = @state.henseiData
       if title in data.titles
-        toggleModal(__("save error"), __("The title is already exist."))
+        toggleModal __('Error'), __('The title is already exist.')
       else
         data[title] = deck
-        data.titles.push(title)
-        @saveData(data)
+        data.titles.push title
+        @saveData data
     handleDeleteData: (delTitle) ->
       {henseiData} = @state
       for title in delTitle
         delete henseiData[title]
         for item,index in henseiData.titles
           if item is title
-            henseiData.titles.splice(index, 1)
-      @saveData(henseiData)
+            henseiData.titles.splice index, 1
+      @saveData henseiData
     saveData: (data) ->
       try
-        fs.writeFileSync(join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.cson"), CSON.stringify(data), null, 2)
+        fs.writeJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.json"), data
       catch e
         error "Write hensei error!#{e}"
-      console.log "save data to hensei-nikki"
+      console.log 'save data to hensei-nikki'
       @setState
         henseiData: data
     handleSelectTab: (selectedKey) ->
       @setState
         selectedKey: selectedKey
     render: ->
-      <TabbedArea activeKey={@state.selectedKey} animation={false} onSelect={@handleSelectTab}>
-      <link rel="stylesheet" href={join(relative(ROOT, __dirname), 'assets', "hensei-nikki.css")} />
-        <TabPane eventKey={0} tab={__ 'Records'} >
-          <HenseiList indexKey={0}
-                      selectedKey={@state.selectedKey}
-                      henseiData={@state.henseiData} />
-        </TabPane>
-        <TabPane eventKey={1} tab={__ 'Add'} >
-          <AddDataTab indexKey={1}
-                      selectedKey={@state.selectedKey}
-                      handleAddData={@handleAddData} />
-        </TabPane>
-        <TabPane eventKey={2} tab={__ 'Delete'} >
-          <DelDataTab indexKey={2}
-                      selectedKey={@state.selectedKey}
-                      henseiData={@state.henseiData}
-                      handleDeleteData={@handleDeleteData} />
-        </TabPane>
-      </TabbedArea>
+      <div>
+      <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
+        <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab}>
+          <TabPane eventKey={1} tab={__ 'Records'}>
+            <HenseiList indexKey={0}
+                        selectedKey={@state.selectedKey}
+                        henseiData={@state.henseiData}
+                        getDeckDetail={getDeckDetail} />
+          </TabPane>
+          <TabPane eventKey={2} tab={__ 'Edit'}>
+            <EditDataTab indexKey={1}
+                         selectedKey={@state.selectedKey}
+                         henseiData={@state.henseiData}
+                         getDeckDetail={getDeckDetail}
+                         handleAddData={@handleAddData}
+                         handleDeleteData={@handleDeleteData} />
+          </TabPane>
+        </TabbedArea>
+      </div>

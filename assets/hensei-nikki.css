@@ -1,31 +1,92 @@
 #HenseiNikki .container {
   margin-top: 15px;
 }
-
-#HenseiNikki .panel {
-  border-color: transparent;
-  background-color: transparent;
-  -webkit-box-shadow: transparent;
-  box-shadow: none;
+#HenseiNikki .hidden {
+  display: none;
 }
-
-#HenseiNikki table td {
-  white-space: nowrap;
+#HenseiNikki .show {
+  display: flex;
 }
-#HenseiNikki table tr:nth-child(odd) td {
-  font-size: 120%;
-  padding-top: 12px;
-}
-#HenseiNikki table tr:nth-child(even) td {
-  font-size: 90%;
-  padding-top: 4px;
-}
-#HenseiNikki table tr td {
-  padding-bottom: 0px;
-  border: none;
-  vertical-align: middle;
-  line-height: 1.42857143;
+#HenseiNikki .btn-group .btn {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 #HenseiNikki ::-webkit-scrollbar {
   width: 10px;
+}
+
+#HenseiNikki .slotitem-container {
+  position: relative;
+  vertical-align: bottom;
+  display: flex;
+}
+#HenseiNikki .slotitem-container span.show {
+  display: inline !important;
+}
+#HenseiNikki .slotitem-container img {
+  width: 30px;
+  height: 30px;
+  margin-top: -5px;
+  margin-bottom: -5px;
+  margin-left: -3px;
+}
+#HenseiNikki .slotitem-container .slot-name {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#HenseiNikki .ships-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+  padding: 5px;
+}
+#HenseiNikki .ship-item {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 49%;
+}
+#HenseiNikki .ship-item .ship-detail {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: space-around;
+}
+#HenseiNikki .ship-item .ship-name {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 70px;
+  font-size: 130%;
+}
+#HenseiNikki .ship-item .slot-detail {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+#HenseiNikki .titles-container {
+  display: flex;
+  flex-direction: column;
+}
+#HenseiNikki .comment-container {
+  width: 50%;
+  flex: 1;
+  border: double gray;
+  border-radius: 3px;
+  padding: 2px 5px 2px 5px;
+}
+#HenseiNikki .details-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+
+
+#HenseiNikki .add-data-tab {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
 }
