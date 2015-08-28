@@ -226,7 +226,7 @@ module.exports =
         delete henseiData[title]
         for item,index in henseiData.titles
           if item is title
-            henseiData.titles.splice index, 1
+            henseiData.titles.splice(index, 1)
       @saveData henseiData
     saveData: (data) ->
       try

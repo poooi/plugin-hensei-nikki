@@ -19,17 +19,13 @@ HenseiList = React.createClass
       else
         checkItems.push false
     activeTitle: ''
-    henseiData: {}
     isChecking: false
     checkItemsLabel: checkItemsLabel
     checkItems: checkItems
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.henseiData isnt @state.henseiData
-      @setState
-        henseiData: nextProps.henseiData
   handleTitleChange: (title) ->
     @setState
       activeTitle: title
+
   handleClickCheckbox: (index) ->
     {checkItems} = @state
     if checkItems isnt []
@@ -56,17 +52,17 @@ HenseiList = React.createClass
       </div>
       <TitlesList isChecking={@state.isChecking}
                   activeTitle={@state.activeTitle}
-                  henseiData={@state.henseiData}
+                  henseiData={@props.henseiData}
                   handleTitleChange={@handleTitleChange} />
       <div style={width: '85%'}>
         {
-          if @state.henseiData?
-               if @state.henseiData.titles? and @state.henseiData.titles isnt [] and @state.activeTitle isnt ''
+          if @props.henseiData?
+               if @props.henseiData.titles? and @props.henseiData.titles.length >= 1 and @props.henseiData[@state.activeTitle]?
                  <HenseiItem title={@state.activeTitle}
-                            deckItem={@state.henseiData[@state.activeTitle]}
-                            checkItems={@state.checkItems}
-                            handleCheck={@handleCheck}
-                            getDeckDetail={@props.getDeckDetail} />
+                             deckItem={@props.henseiData[@state.activeTitle]}
+                             checkItems={@state.checkItems}
+                             handleCheck={@handleCheck}
+                             getDeckDetail={@props.getDeckDetail} />
         }
       </div>
     </div>

@@ -27,7 +27,7 @@ AddDataTab = React.createClass
         comment: ''
   handleTitleChange: ->
     title = @refs.title.getValue()
-    if title? and title.length > 0 and @state.comment.length > 0
+    if title? and title.length > 0
       btnDisable = false
     else
       btnDisable = true
@@ -36,13 +36,8 @@ AddDataTab = React.createClass
       btnDisable: btnDisable
   handleCommentChange: ->
     comment = @refs.comment.getValue()
-    if comment? and comment.length > 0 and @state.title.length > 0
-      btnDisable = false
-    else
-      btnDisable = true
     @setState
       comment: comment
-      btnDisable: btnDisable
   handleSaveClick: ->
     {deckId, comment, title, tags} = @state
     deck = @props.getDeckDetail deckId, comment, tags
@@ -99,13 +94,14 @@ AddDataTab = React.createClass
                 block>
           {if @state.panelShow then __ 'Cancel' else __ 'Add check tags'}
         </Button>
-        
+
       </div>
       <div>
         <Input style={height: '150px'}
                type='textarea'
                label={__ 'comment'}
                placeholder={__ 'comment'}
+               value={@state.comment}
                hasFeedback
                ref='comment'
                onChange={@handleCommentChange} />
