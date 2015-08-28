@@ -26,7 +26,7 @@ ShipItem = React.createClass
             slot = window.$slotitems[slotId]
             name = slot.api_name
             type = slot.api_type[3]
-            if @props.ship[3] isnt [] and @props.ship[3][index]? and @props.ship[3][index] isnt null
+            if @props.ship[3] isnt [] and @props.ship[3][index]?
               lv = @props.ship[3][index]
             else
               lv = null
