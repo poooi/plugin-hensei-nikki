@@ -29,7 +29,7 @@ ShipItem = React.createClass
             if @props.ship[3] isnt [] and @props.ship[3][index]? and @props.ship[3][index] isnt null
               lv = @props.ship[3][index]
             else
-              lv = 0
+              lv = null
             if @props.ship[4] isnt [] and @props.ship[4][index]? and @props.ship[4][index] isnt null
               alv = @props.ship[4][index]
             else
