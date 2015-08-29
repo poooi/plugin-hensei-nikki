@@ -242,7 +242,7 @@ module.exports =
     render: ->
       <div>
       <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
-        <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab}>
+        <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
           <TabPane eventKey={1} tab={__ 'Records'}>
             <HenseiList indexKey={0}
                         selectedKey={@state.selectedKey}
