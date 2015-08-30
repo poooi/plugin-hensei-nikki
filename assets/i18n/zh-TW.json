@@ -1,0 +1,19 @@
+{
+  "select fleet": "選擇艦隊",
+  "title": "標題",
+  "save": "保存",
+  "Organization Records": "編成日記",
+  "add record": "記錄編成",
+  "keywords": "關鍵詞",
+  "Total Lv ": "總 Lv ",
+  "Avg Lv ": "均 Lv ",
+  "Fighter Power ": "制空 ",
+  "LOS ": "索敵 ",
+  " Autumn": " 秋式",
+  " Old": " 舊式",
+  "save error": "保存錯誤",
+  "The title is already exist.": "標題已存在",
+  "Delete": "刪除",
+  "Records": "記錄",
+  "Add": "增加"
+}

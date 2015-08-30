@@ -6,8 +6,8 @@ i18n = require './node_modules/i18n'
 
 # i18n configure
 i18n.configure({
-    locales: ['en_US', 'ja_JP', 'zh_CN', 'zh_TW'],
-    defaultLocale: 'zh_CN',
+    locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
+    defaultLocale: 'zh-CN',
     directory: join(__dirname, 'assets', 'i18n'),
     updateFiles: false,
     indent: '\t',
