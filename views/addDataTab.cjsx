@@ -1,72 +1,90 @@
 {React, ReactBootstrap, $ships, $shipTypes, $slotitems} = window
-{Button, Input, Panel} = ReactBootstrap
+{Button, Input, Label} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
-TagPanel = require './tagPanel'
+getStyleByType = (type) ->
+  switch type
+    when 0 and 1
+      return 'default'
+    when 2 and 3
+      return 'primary'
+    when 4
+      return 'info'
+    when 5
+      return 'warning'
+    else
+      return 'danger'
 
 AddDataTab = React.createClass
   getInitialState: ->
     title: ''
-    comment: ''
     deckId: 0
-    btnDisable: true
-    panelShow: false
-    disable: true
-    checkItem: ''
-    selectItems: ''
-    tagItem: ''
-    tags: ''
+    saveDisable: true
+    tagDisable: true
+    tagType: 0
+    tags: []
+    tagsStyle: []
+    tagTypesLabel: [__('Ship type'), "#{__('Ship type')}(#{__('Do not add')})",
+                      __('Ship name'), "#{__('Ship name')}(#{__('Do not add')})",
+                      __('Slot items'), __('Fighter Power '), __('LOS ')]
   componentWillReceiveProps: (nextProps)->
     if nextProps.indexKey is nextProps.selectedKey
       @setState
-        btnDisable: true
+        saveDisable: true
+        tagDisable: true
         deckId: 0
         title: ''
-        comment: ''
+        tagType: ''
+        tags: []
+        tagsStyle: []
   handleTitleChange: ->
     title = @refs.title.getValue()
     if title? and title.length > 0
-      btnDisable = false
+      saveDisable = false
     else
-      btnDisable = true
+      saveDisable = true
     @setState
       title: title
-      btnDisable: btnDisable
-  handleCommentChange: ->
-    comment = @refs.comment.getValue()
-    @setState
-      comment: comment
-  handleSaveClick: ->
-    {deckId, comment, title, tags} = @state
-    deck = @props.getDeckDetail deckId, comment, tags
-    @props.handleAddData title, deck
-  handleAddTagClick: ->
-    if !@state.panelShow
-      deck = @props.getDeckDetail @state.deckId, '', ''
-      #shipTypes & without = shipNames & without= slotItems = []
-      selectItems = [[], [], [], [], []]
-      for item in deck.ships
-        continue if item[0] is null
-        ship = $ships[item[0]]
-        selectItems[0].push $shipTypes[ship.api_stype].api_name
-        selectItems[2].push ship.api_name
-        for slotId in item[2]
-          selectItems[4].push $slotitems[slotId].api_name
-      for count in [1..$shipTypes.length - 1]
-        continue if $shipTypes[count].api_name in selectItems[0]
-        selectItems[1].push $shipTypes[count].api_name
-      @setState
-        panelShow: true
-        selectItems: selectItems
-    else
-      @setState
-        panelShow: !@state.panelShow
+      saveDisable: saveDisable
   handleDeckSelect: (e) ->
     deckId = parseInt e.target.value
     @setState
       deckId: deckId
+  handleTagTypeSelect: (e) ->
+    tagType = parseInt e.target.value
+    @setState
+      tagType: tagType
+  handleTagInputChange: ->
+    tagInput = @refs.tagInput.getValue()
+    if tagInput? and tagInput.length > 0
+      tagDisable = false
+    else
+      tagDisable = true
+    @setState
+      tagInput: tagInput
+      tagDisable: tagDisable
+  handleTagAddClick: ->
+    {tags, tagsStyle, tagInput, tagType} = @state
+    tags.push tagInput
+    tagsStyle.push getStyleByType(tagType)
+    @setState
+      tags: tags
+      tagInput: ''
+      tagsStyle: tagsStyle
+  handleSaveClick: ->
+    {deckId, title, tags, tagsStyle} = @state
+    deck = @props.getDeckDetail deckId, tags, tagsStyle
+    @props.handleAddData title, deck
+    @setState
+      saveDisable: true
+      tagDisable: true
+      deckId: 0
+      title: ''
+      tagType: ''
+      tags: []
+      tagsStyle: []
   render: ->
     <div className='add-data-tab'>
       <Input type='select'
@@ -86,29 +104,47 @@ AddDataTab = React.createClass
              hasFeedback
              ref='title'
              onChange={@handleTitleChange} />
-      <div>
-        <Button bsSize='small'
-                disabled={@state.disable}
-                onClick={@handleAddTagClick}
-                block>
-          {if @state.panelShow then __ 'Cancel' else __ 'Add check tags'}
-        </Button>
-        <TagPanel panelShow={@state.panelShow}
-                  selectItems={@state.selectItems}/>
-      </div>
-      <div>
-        <Input style={height: '100px'}
-               type='textarea'
-               label={__ 'Comment'}
-               placeholder={__ 'Comment'}
-               value={@state.comment}
+      <div className='tags-input-container'>
+        <Input style={margin: 10}
+               type='select'
+               label={__ 'Select type'}
+               value={@state.tagType}
+               onChange={@handleTagTypeSelect}>
+          {
+            for item, index in @state.tagTypesLabel
+              <option value={index} key={index}>{item}</option>
+          }
+        </Input>
+        <Input style={margin: 10}
+               type='text'
+               label={@state.tagTypesLabel[@state.tagType]}
+               placeholder={@state.tagTypesLabel[@state.tagType]}
+               value={@state.tagInput}
                hasFeedback
-               ref='comment'
-               onChange={@handleCommentChange} />
+               ref='tagInput'
+               onChange={@handleTagInputChange} />
+        <Button style={height: '50%', width: '20%', margin: 10}
+                bsSize='small'
+                disabled={@state.tagDisable}
+                onClick={@handleTagAddClick}>
+          {__ 'Add'}
+        </Button>
+      </div>
+      <div style={display: 'flex', padding: 5}>
+        {
+          if @state.tags.length > 0
+            for tag, index in @state.tags
+              <Label bsSize='medium'
+                     style={margin: 5}
+                     bsStyle={@state.tagsStyle[index]}
+                     key={index}>
+                {tag}
+              </Label>
+        }
       </div>
       <div>
         <Button bsSize='small'
-                disabled={@state.btnDisable}
+                disabled={@state.saveDisable}
                 onClick={@handleSaveClick}
                 block>
           {__ 'Save'}

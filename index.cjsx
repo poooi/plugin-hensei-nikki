@@ -169,7 +169,7 @@ getShipsDetail = (deckId) ->
     shipsDetail.push shipDetail
   shipsDetail
 
-getDeckDetail = (deckId, comment, tags)->
+getDeckDetail = (deckId, tags, tagsStyle)->
   shipsDetail = getShipsDetail deckId
   messages = getDeckMessage deckId
 
@@ -179,8 +179,8 @@ getDeckDetail = (deckId, comment, tags)->
             messages.saku25.total,
             messages.saku25a.total]
   ships: shipsDetail
-  comment: comment
   tags: tags
+  tagsStyle: tagsStyle
 
 module.exports =
   name: 'HenseiNikki'
@@ -189,7 +189,7 @@ module.exports =
   author: 'Rui'
   link: 'https://github.com/ruiii'
   description: '记录编成信息'
-  version: '2.0.0'
+  version: '3.0.0'
   reactClass: React.createClass
     getInitialState: ->
       memberId: ''

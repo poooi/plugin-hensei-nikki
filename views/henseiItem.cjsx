@@ -1,8 +1,9 @@
 {React, ReactBootstrap, FontAwesome} = window
-{Grid, Row, Col, OverlayTrigger, Tooltip, Table, Button, Input} = ReactBootstrap
+{OverlayTrigger, Tooltip, Button, Input, Label} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
+
 
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
 
@@ -16,7 +17,7 @@ ShipItem = React.createClass
         <div className='ship-detail'>
           <span className='ship-name'>{name}</span>
           <span>Lv.{@props.ship[1][0]}</span>
-          <span>{type}</span>
+          <span className='ship-type'>{type}</span>
         </div>
       }
       <div className='slot-detail'>
@@ -65,67 +66,26 @@ ShipItem = React.createClass
 HenseiItem = React.createClass
   getInitialState: ->
     deckId: 0
-    isChecking: false
     disable: true
-  getStatusStyle: (status) ->
-    flag = status.reduce (a, b) -> a or b
-    if flag? and flag
-      return {opacity: 0.4}
-    else
-      return {}
   handleDeckSelect: (e) ->
     deckId = parseInt e.target.value
     @setState
       deckId: deckId
-  handleCheckClick: ->
-    @props.handleCheck()
-    #if @state.isChecking
-    #  window.removeEventListener 'game.response', @handleResponse
-    #else
-    #  window.addEventListener 'game.response', @handleResponse
-    @setState
-      isChecking: !@state.isChecking
-  handleResponse: (e) ->
-    {path, body} = e.detail
-    refreshFlag = false
-    switch path
-      when '/kcsapi/api_req_hensei/change'
-        refreshFlag = true
-      when '/kcsapi/api_req_kaisou/slotset'
-        refreshFlag = true
-    if refreshFlag
-      @checkDeck()
-  checkDeck: ->
-    {deckId} = @state
-    deckDetail = @props.getDeckDetail deckId, ''
-    checkDetail = @props.henseiData[title]
   render: ->
     <div className='titles-container'>
-      <div style={display: 'flex', padding: '5px 5px 5px 5px'}>
-        <div className='titles-container' style={width: '50%', padding: '0 5px 0 5px'}>
+      <div style={display: 'flex', padding: 10}>
+        <div className='titles-container' style={width: '50%', padding: 10}>
           <span style={textAlign: 'center', fontSize: '120%'}>{@props.title}</span>
-          <Button bsSize='small'
-                  disabled={@state.disable}
-                  onClick={@handleCheckClick}
-                  block>
-            {if @state.isChecking then __ 'Close Check' else __ 'Check'}
-          </Button>
         </div>
-        <div className={if @state.isChecking then 'hidden' else 'comment-container'}>
-          <span>{if @props.deckItem.comment? then @props.deckItem.comment else ' '}</span>
-        </div>
-        <div className={if @state.isChecking then 'show' else 'hidden'}
-             style={width: '50%', padding: '0 5px 0 5px'}>
-          <Input type='select'
-                 label={__ 'Select fleet'}
-                 value={@state.deckId}
-                 onChange={@handleDeckSelect}>
-            {
-              if window._decks?
-                for deck, index in window._decks
-                  <option value={index} key={index}>{deck.api_name}</option>
-            }
-          </Input>
+        <div style={display: 'flex', padding: 5}>
+          {
+            for tag, index in @props.deckItem.tags
+              <Label style={margin: 5}
+                     bsStyle={@props.deckItem.tagsStyle[index]}
+                     key={index}>
+                {tag}
+              </Label>
+          }
         </div>
       </div>
       <div className='details-container'>

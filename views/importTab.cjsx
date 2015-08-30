@@ -190,7 +190,8 @@ ImportTab = React.createClass
                  ref='importCode'
                  onChange={@handleImportCodeChange} />
           <Button disabled={@state.btnDisable}
-                  onClick={@importLogHandle}>
+                  onClick={@importLogHandle}
+                  block>
             {__ 'Import'}
           </Button>
         </div>

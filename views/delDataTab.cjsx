@@ -39,7 +39,7 @@ DelDataTab = React.createClass
       @setState
         btnDisable: true
   render: ->
-    <div style={padding: '5px 5px 5px 5px'}>
+    <div className='tab-container'>
       <div>
         {
           if @state.deckChecked isnt [] and @state.deckChecked.length > 0
@@ -59,7 +59,6 @@ DelDataTab = React.createClass
         }
       </div>
       <Button style={alignItems: 'flex-end'}
-              bsStyle='default'
               bsSize='small'
               disabled={@state.btnDisable}
               onClick={@handleDelClick}
