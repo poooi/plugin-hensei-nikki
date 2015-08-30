@@ -70,7 +70,7 @@ AddDataTab = React.createClass
   render: ->
     <div className='add-data-tab'>
       <Input type='select'
-             label={__ 'select fleet'}
+             label={__ 'Select fleet'}
              value={@state.deckId}
              onChange={@handleDeckSelect}>
         {
@@ -80,39 +80,38 @@ AddDataTab = React.createClass
         }
       </Input>
       <Input type='text'
-             label={__ 'title'}
-             placeholder={__ 'title'}
+             label={__ 'Title'}
+             placeholder={__ 'Title'}
              value={@state.title}
              hasFeedback
              ref='title'
              onChange={@handleTitleChange} />
       <div>
-        <Button bsStyle='default'
-                bsSize='small'
+        <Button bsSize='small'
                 disabled={@state.disable}
                 onClick={@handleAddTagClick}
                 block>
           {if @state.panelShow then __ 'Cancel' else __ 'Add check tags'}
         </Button>
-
+        <TagPanel panelShow={@state.panelShow}
+                  selectItems={@state.selectItems}/>
       </div>
       <div>
-        <Input style={height: '150px'}
+        <Input style={height: '100px'}
                type='textarea'
-               label={__ 'comment'}
-               placeholder={__ 'comment'}
+               label={__ 'Comment'}
+               placeholder={__ 'Comment'}
                value={@state.comment}
                hasFeedback
                ref='comment'
                onChange={@handleCommentChange} />
       </div>
       <div>
-        <Button bsStyle='default'
-                bsSize='small'
+        <Button bsSize='small'
                 disabled={@state.btnDisable}
                 onClick={@handleSaveClick}
                 block>
-          {__ 'save'}
+          {__ 'Save'}
         </Button>
       </div>
     </div>

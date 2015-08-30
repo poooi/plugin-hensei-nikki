@@ -35,13 +35,13 @@ HenseiList = React.createClass
     @setState
       isChecking: !@state.isChecking
   render: ->
-    <div style={display: 'flex', flex: 'none', padding: 15}>
+    <div className='hensei-list-container'>
       <div className={if @state.isChecking then 'show' else 'hidden'}
            style={width: '15%'}>
       {
         for item, index in @state.checkItemsLabel
           if item is null
-            <hr style={display: 'block', marginTop: -7, marginBottom: 15}/>
+            <hr style={display: 'block', marginTop: -7, marginBottom: 15} />
           else
             <Input type='checkbox'
                    label={item}

@@ -15,7 +15,7 @@ ShipItem = React.createClass
         type = window.$shipTypes[ship.api_stype].api_name
         <div className='ship-detail'>
           <span className='ship-name'>{name}</span>
-          <span>Lv:{@props.ship[1][0]}</span>
+          <span>Lv.{@props.ship[1][0]}</span>
           <span>{type}</span>
         </div>
       }
@@ -30,7 +30,7 @@ ShipItem = React.createClass
               lv = @props.ship[3][index]
             else
               lv = null
-            if @props.ship[4] isnt [] and @props.ship[4][index]? and @props.ship[4][index] isnt null
+            if @props.ship[4]? and @props.ship[4] isnt [] and @props.ship[4][index]? and @props.ship[4][index] isnt null
               alv = @props.ship[4][index]
             else
               alv = 0
@@ -104,8 +104,7 @@ HenseiItem = React.createClass
       <div style={display: 'flex', padding: '5px 5px 5px 5px'}>
         <div className='titles-container' style={width: '50%', padding: '0 5px 0 5px'}>
           <span style={textAlign: 'center', fontSize: '120%'}>{@props.title}</span>
-          <Button bsStyle='default'
-                  bsSize='small'
+          <Button bsSize='small'
                   disabled={@state.disable}
                   onClick={@handleCheckClick}
                   block>
@@ -118,7 +117,7 @@ HenseiItem = React.createClass
         <div className={if @state.isChecking then 'show' else 'hidden'}
              style={width: '50%', padding: '0 5px 0 5px'}>
           <Input type='select'
-                 label={__ 'select fleet'}
+                 label={__ 'Select fleet'}
                  value={@state.deckId}
                  onChange={@handleDeckSelect}>
             {
@@ -133,12 +132,18 @@ HenseiItem = React.createClass
         <span>{__ 'Total Lv '}{@props.deckItem.details[0]}</span>
         <span>{__ 'Avg Lv '}{@props.deckItem.details[1]}</span>
         <span>{__ 'Fighter Power '}{@props.deckItem.details[2]}</span>
-        <span>{__ 'LOS '}{@props.deckItem.details[3]}({__ ' Old'}),{@props.deckItem.details[4]}({__ ' Autumn'})</span>
+        {
+          if @props.deckItem.details.length > 3
+            <span>
+              {__ 'LOS '}{@props.deckItem.details[3]}({__ ' Old'}),
+                         {@props.deckItem.details[4]}({__ ' Autumn'})
+            </span>
+        }
       </div>
       <div className='ships-container'>
         {
           for ship, index in @props.deckItem.ships
-            continue if ship[0] is null
+            break if ship[0] is null
             <ShipItem ship={ship} key={index}/>
         }
      </div>

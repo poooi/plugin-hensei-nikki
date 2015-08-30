@@ -17,6 +17,13 @@ getStyleByType = (Type) ->
     else
       return 'error'
 
+getShipType = (inputDetail) ->
+  for item, index in inputDetail
+    if index % 2 is 0
+      return 0
+
+getShipName = (inputDetail) ->
+
 TagPanel = React.createClass
   getInitialState: ->
     btnDisable: true
@@ -53,11 +60,15 @@ TagPanel = React.createClass
       tagInput: tagInput
       btnDisable: btnDisable
   handleTagAddClick: ->
-    if @state.checkItem is 4 and @state.number is 0
-      toggleModal __('Error'), __('"The number must be larger than 0.')
+    {checkItem, number, tagInput} = @state
+    if checkItem is 4 and number is 0
+      toggleModal __('Error'), __('The number must be larger than 0.')
     else
-      type = getStyleByType @state.checkItem
-      
+      tagDetail = tagInput.trim().split(' ')
+
+  #  else
+  #    type = getStyleByType @state.checkItem
+
   handleNumberChange: ->
     number = @refs.number.getValue()
     @setState
@@ -68,7 +79,7 @@ TagPanel = React.createClass
         if @props.panelShow
           <div>
             <Input type='select'
-                   label={__ 'select fleet'}
+                   label={__ 'Select fleet'}
                    value={@state.checkItem}
                    onChange={@handleCheckItemSelect}>
               {
@@ -76,41 +87,14 @@ TagPanel = React.createClass
                   <option value={index} key={index}>{item}</option>
               }
             </Input>
-            <div>
-              {
-                if @state.checkItem in [0, 2, 3, 4]
-                  <Input type='select'
-                         label={__ 'select fleet'}
-                         value={@state.tagItem}
-                         onChange={@handleTagItemSelect}>
-                  {
-                    if @state.checkItem isnt ''
-                      for item, index in @props.selectItems[@state.checkItem]
-                        <option value={index} key={index}>{item}</option>
-                  }
-                  </Input>
-                else
-                  <Input type='text'
-                         label={@state.checkItemsLabel[@state.checkItem]}
-                         placeholder={@state.checkItemsLabel[@state.checkItem]}
-                         value={@state.tagInput}
-                         hasFeedback
-                         ref='tagInput'
-                         onChange={@handleTagInputChange} />
-              }
-              {
-                if @state.checkItem is 4
-                  <Input type='text'
-                         label={__ 'Number'}
-                         placeholder={__ 'Number'}
-                         value={@state.number}
-                         hasFeedback
-                         ref='number'
-                         onChange={@handleNumberChange} />
-              }
-            </div>
-            <Button bsStyle='default'
-                    bsSize='small'
+            <Input type='text'
+                   label={@state.checkItemsLabel[@state.checkItem]}
+                   placeholder={@state.checkItemsLabel[@state.checkItem]}
+                   value={@state.tagInput}
+                   hasFeedback
+                   ref='tagInput'
+                   onChange={@handleTagInputChange} />
+            <Button bsSize='small'
                     disabled={@state.btnDisable}
                     onClick={@handleTagAddClick}
                     block>

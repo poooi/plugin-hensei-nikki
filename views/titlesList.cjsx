@@ -65,7 +65,7 @@ TitlesList = React.createClass
       <div style={flex: 1}>
         <Input type='text'
                value={@state.filterKey}
-               placeholder={__ "keywords"}
+               placeholder={__ "Keywords"}
                hasFeedback
                ref='keywords'
                onChange={@handleKeyWordChange} />

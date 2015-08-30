@@ -23,11 +23,11 @@ EditDataTab = React.createClass
                     getDeckDetail={@props.getDeckDetail}
                     handleAddData={@props.handleAddData} />
       </TabPane>
-      <TabPane eventKey={1} tab={__ 'Import'} >
+      <TabPane eventKey={1} tab={__('Import') + '/' + __('Export')} >
         <ImportTab indexKey={1}
                    selectedKey={@state.selectedKey}
                    henseiData={@props.henseiData}
-                   handleDeleteData={@props.handleDeleteData} />
+                   handleAddData={@props.handleAddData} />
       </TabPane>
       <TabPane eventKey={2} tab={__ 'Delete'} >
         <DelDataTab indexKey={2}

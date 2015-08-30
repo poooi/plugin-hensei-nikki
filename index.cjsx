@@ -8,7 +8,7 @@ i18n = require './node_modules/i18n'
 i18n.configure({
     locales: ['en_US', 'ja_JP', 'zh_CN', 'zh_TW'],
     defaultLocale: 'zh_CN',
-    directory: join(__dirname, 'i18n'),
+    directory: join(__dirname, 'assets', 'i18n'),
     updateFiles: false,
     indent: '\t',
     extension: '.json'
@@ -139,7 +139,7 @@ getDeckMessage = (deckId) ->
 isNull = (item) ->
   item is null
 
-# [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
+# [shipId, [lv, luck], [slotId], [slotLv], [slotALv]]
 emptyShip = [null, [null, -1], [], [], []]
 
 getShipsDetail = (deckId) ->
@@ -151,7 +151,8 @@ getShipsDetail = (deckId) ->
       ship = _ships[shipId]
       shipDetail[0] = ship.api_ship_id
       shipDetail[1][0] = ship.api_lv
-      shipDetail[1][1] = ship.api_cond
+      #shipDetail[1][1] = ship.api_luck[0]
+      shipDetail[1][1] = -1
       for slotId, index in ship.api_slot
         continue if slotId is -1
         shipDetail[2].push _slotitems[slotId].api_slotitem_id
@@ -172,8 +173,11 @@ getDeckDetail = (deckId, comment, tags)->
   shipsDetail = getShipsDetail deckId
   messages = getDeckMessage deckId
 
-  details: [messages.totalLv, messages.avgLv, messages.tyku.total,
-            messages.saku25.total, messages.saku25a.total]
+  details: [messages.totalLv,
+            messages.avgLv,
+            messages.tyku.total,
+            messages.saku25.total,
+            messages.saku25a.total]
   ships: shipsDetail
   comment: comment
   tags: tags
