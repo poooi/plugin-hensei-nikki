@@ -173,11 +173,12 @@ getDeckDetail = (deckId, tags, tagsStyle)->
   shipsDetail = getShipsDetail deckId
   messages = getDeckMessage deckId
 
-  details: [messages.totalLv,
-            messages.avgLv,
-            messages.tyku.total,
-            messages.saku25.total,
-            messages.saku25a.total]
+  details:
+    totalLv: messages.totalLv,
+    tykuBasic: messages.tyku.basic,
+    tykuAlv: messages.tyku.alv
+    saku25: messages.saku25.total,
+    saku25a: messages.saku25a.total
   ships: shipsDetail
   tags: tags
   tagsStyle: tagsStyle

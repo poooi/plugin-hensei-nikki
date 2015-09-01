@@ -1,6 +1,5 @@
 {React, ReactBootstrap} = window
-{Input, ButtonGroup, Button} = ReactBootstrap
-{Table, ProgressBar, OverlayTrigger, Tooltip, Grid, Col, Alert, Row, Overlay} = ReactBootstrap
+{Input, ButtonGroup, Button, OverlayTrigger, Tooltip, Overlay, Label} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -79,16 +78,16 @@ TitlesList = React.createClass
               for title, index in @state.showData.titles
                 <div>
                   {
-                    if @props.henseiData[title].tags.length != 0
+                    if @state.showData[title].tags.length != 0
                       <OverlayTrigger placement='bottom' overlay={
                         <Tooltip>
                           <div style={display: 'flex', padding: 5}>
                             {
 
-                              for tag, tagIndex in @props.henseiData[title].tags
+                              for tag, tagIndex in @state.showData[title].tags
                                 <Label style={margin: 5}
-                                       bsStyle={@props.henseiData[title].tagsStyle[tagIndex]}
-                                       key={index}>
+                                       bsStyle={@state.showData[title].tagsStyle[tagIndex]}
+                                       key={tagIndex}>
                                  {tag}
                                 </Label>
                             }

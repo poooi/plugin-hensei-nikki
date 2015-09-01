@@ -73,23 +73,59 @@ HenseiItem = React.createClass
       deckId: deckId
   render: ->
     <div className='titles-container'>
-      <div className='details-container'>
-        <span>{__ 'Total Lv '}{@props.deckItem.details[0]}</span>
-        <span>{__ 'Fighter Power '}{@props.deckItem.details[2]}</span>
-        {
+      {
+        if @props.deckItem.details.totalLv?
+          totalLv = @props.deckItem.details.totalLv
+          fpTotal = @props.deckItem.details.tykuBasic + @props.deckItem.details.tykuAlv
+          fpBasic = @props.deckItem.details.tykuBasic
+          fpAlv = @props.deckItem.details.tykuAlv
+          los = @props.deckItem.details.saku25
+          losA = @props.deckItem.details.saku25a
+        else
           if @props.deckItem.details.length > 3
-            <span>
-              <OverlayTrigger placement='bottom' overlay={
-                <Tooltip>
-                  <div>{@props.deckItem.details[4]}{__ ' Autumn'}</div>
-                  <div>{@props.deckItem.details[3]}{__ ' Old'}</div>
-                </Tooltip>
-              }>
-                <span>{__ 'LOS'}: {@props.deckItem.details[3]}</span>
-              </OverlayTrigger>
-            </span>
-        }
-      </div>
+            totalLv = @props.deckItem.details[0]
+            fpTotal = @props.deckItem.details[2]
+            fpBasic = fpAlv = null
+            los = @props.deckItem.details[3]
+            losA = @props.deckItem.details[4]
+          else
+            totalLv = @props.deckItem.details[0]
+            fpTotal = @props.deckItem.details[1] + @props.deckItem.details[2]
+            fpBasic = @props.deckItem.details[1]
+            fpAlv = @props.deckItem.details[2]
+            los = losA = null
+        <div className='details-container'>
+          <span>{__ 'Total Lv '}{totalLv}</span>
+          {
+            if fpBasic isnt null
+              <span>
+                <OverlayTrigger placement='bottom' overlay={
+                  <Tooltip>
+                    <div>{__ 'Basic FP'}: {fpBasic}</div>
+                    <div>{__ 'Rank bonuses'}: {fpAlv}</div>
+                  </Tooltip>
+                }>
+                  <span>{__ 'Fighter Power '}{fpTotal}</span>
+                </OverlayTrigger>
+              </span>
+            else
+              <span>{__ 'Fighter Power '}{fpTotal}</span>
+          }
+          {
+            if los isnt null
+              <span>
+                <OverlayTrigger placement='bottom' overlay={
+                  <Tooltip>
+                    <div>{losA}{__ ' Autumn'}</div>
+                    <div>{los}{__ ' Old'}</div>
+                  </Tooltip>
+                }>
+                  <span>{__ 'LOS'}: {los}</span>
+                </OverlayTrigger>
+              </span>
+          }
+        </div>
+      }
       <div className='ships-container'>
         {
           for ship, index in @props.deckItem.ships

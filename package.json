@@ -1,0 +1,26 @@
+{
+  "name": "hensei-nikki",
+  "version": "3.0.0",
+  "description": "a plugin which can save your fleet organize for poi",
+  "main": "index.js",
+  "dependencies": {
+    "i18n": "^0.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/poooi/plugin-hensei-nikki/"
+  },
+  "keywords": [
+    "poi",
+    "henseinikki",
+    "kancolle",
+    "hensei",
+    "nikki"
+  ],
+  "author": "Rui",
+  "license": "MIT"
+}

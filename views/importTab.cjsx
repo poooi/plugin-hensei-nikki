@@ -27,24 +27,20 @@ getTyku = (deck) ->
           alvTyku += 3
         else if slot.api_type[3] is 10 and slot.api_type[2] is 11 and shipDetail[4][index] is 7
           alvTyku += 9
-  totalTyku = basicTyku + alvTyku
 
   basic: basicTyku
   alv: alvTyku
-  total: totalTyku
 
 getDetails = (deck) ->
   totalLv = 0
-  ships = 0
   for ship in deck
     continue if ship[0] is null
     totalLv += ship[1][0]
-    ships += 1
-  avgLv = Math.floor(totalLv / ships)
-
+  tyku = getTyku(deck)
+  
   [totalLv,
-   avgLv,
-   getTyku(deck).total]
+   tyku.basic,
+   tyku.alv]
 
 checkData = (data) ->
   matchFlag = true
