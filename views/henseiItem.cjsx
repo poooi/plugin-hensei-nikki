@@ -73,30 +73,20 @@ HenseiItem = React.createClass
       deckId: deckId
   render: ->
     <div className='titles-container'>
-      <div style={display: 'flex', padding: 10}>
-        <div className='titles-container' style={width: '50%', padding: 10}>
-          <span style={textAlign: 'center', fontSize: '120%'}>{@props.title}</span>
-        </div>
-        <div style={display: 'flex', padding: 5}>
-          {
-            for tag, index in @props.deckItem.tags
-              <Label style={margin: 5}
-                     bsStyle={@props.deckItem.tagsStyle[index]}
-                     key={index}>
-                {tag}
-              </Label>
-          }
-        </div>
-      </div>
       <div className='details-container'>
         <span>{__ 'Total Lv '}{@props.deckItem.details[0]}</span>
-        <span>{__ 'Avg Lv '}{@props.deckItem.details[1]}</span>
         <span>{__ 'Fighter Power '}{@props.deckItem.details[2]}</span>
         {
           if @props.deckItem.details.length > 3
             <span>
-              {__ 'LOS '}{@props.deckItem.details[3]}({__ ' Old'}),
-                         {@props.deckItem.details[4]}({__ ' Autumn'})
+              <OverlayTrigger placement='bottom' overlay={
+                <Tooltip>
+                  <div>{@props.deckItem.details[4]}{__ ' Autumn'}</div>
+                  <div>{@props.deckItem.details[3]}{__ ' Old'}</div>
+                </Tooltip>
+              }>
+                <span>{__ 'LOS'}: {@props.deckItem.details[3]}</span>
+              </OverlayTrigger>
             </span>
         }
       </div>

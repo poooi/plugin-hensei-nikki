@@ -62,7 +62,7 @@ TitlesList = React.createClass
   render: ->
     <div className={if @props.isChecking then 'hidden' else ''}
          style={width: '15%'}>
-      <div style={flex: 1}>
+      <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
                placeholder={__ "Keywords"}

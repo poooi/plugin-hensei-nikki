@@ -103,6 +103,17 @@
   display: flex;
   flex-direction: column;
 }
+#HenseiNikki .titles-keywords {
+  padding: 0px;
+}
+#HenseiNikki .titles-keywords input {
+  height: 100%;
+  padding: 0px;
+}
+#HenseiNikki .titles-keywords .form-group {
+  height: 100%;
+  padding: 0px;
+}
 #HenseiNikki .comment-container {
   width: 50%;
   flex: 1;
@@ -113,5 +124,5 @@
 #HenseiNikki .details-container{
   display: flex;
   justify-content: space-around;
-  padding: 10px;
+  padding: 0px 10px;
 }
