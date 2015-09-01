@@ -1,5 +1,6 @@
 {React, ReactBootstrap} = window
 {Input, ButtonGroup, Button} = ReactBootstrap
+{Table, ProgressBar, OverlayTrigger, Tooltip, Grid, Col, Alert, Row, Overlay} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -76,11 +77,39 @@ TitlesList = React.createClass
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
               for title, index in @state.showData.titles
-                <Button key={index}
-                        onClick={@handleClick.bind(@, title)}
-                        className={if @props.activeTitle is title then 'active' else ''}>
-                  {title}
-                </Button>
+                <div>
+                  {
+                    nowTitle = @props.henseiData['titles'][index]
+                    if @props.henseiData[nowTitle].tags.length != 0
+                      <OverlayTrigger placement='bottom' overlay={
+                        <Tooltip>
+                          <div style={display: 'flex', padding: 5}>
+                            {
+
+                              for tag, tagIndex in @props.henseiData[nowTitle].tags
+                                <Label style={margin: 5}
+                                       bsStyle={@props.henseiData[nowTitle].tagsStyle[tagIndex]}
+                                       key={index}>
+                                 {tag}
+                                </Label>
+                            }
+                          </div>
+                        </Tooltip>
+                      }>
+                        <Button key={index}
+                                onClick={@handleClick.bind(@, title)}
+                                className={if @props.activeTitle is title then 'active' else ''}>
+                          {title}
+                        </Button>
+                      </OverlayTrigger>
+                    else
+                      <Button key={index}
+                              onClick={@handleClick.bind(@, title)}
+                              className={if @props.activeTitle is title then 'active' else ''}>
+                        {title}
+                      </Button>
+                  }
+                </div>
         }
         </ButtonGroup>
       </div>

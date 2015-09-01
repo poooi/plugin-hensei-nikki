@@ -16,6 +16,8 @@
   border-top-right-radius: 0;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
+  padding: 0px;
+  width: 100%;
 }
 #HenseiNikki ::-webkit-scrollbar {
   width: 10px;
