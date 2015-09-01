@@ -1,5 +1,6 @@
 {React, ReactBootstrap} = window
 {Input, ButtonGroup, Button} = ReactBootstrap
+{Table, ProgressBar, OverlayTrigger, Tooltip, Grid, Col, Alert, Row, Overlay} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -62,7 +63,7 @@ TitlesList = React.createClass
   render: ->
     <div className={if @props.isChecking then 'hidden' else ''}
          style={width: '15%'}>
-      <div style={flex: 1}>
+      <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
                placeholder={__ "Keywords"}
@@ -76,11 +77,38 @@ TitlesList = React.createClass
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
               for title, index in @state.showData.titles
-                <Button key={index}
-                        onClick={@handleClick.bind(@, title)}
-                        className={if @props.activeTitle is title then 'active' else ''}>
-                  {title}
-                </Button>
+                <div>
+                  {
+                    if @props.henseiData[title].tags.length != 0
+                      <OverlayTrigger placement='bottom' overlay={
+                        <Tooltip>
+                          <div style={display: 'flex', padding: 5}>
+                            {
+
+                              for tag, tagIndex in @props.henseiData[title].tags
+                                <Label style={margin: 5}
+                                       bsStyle={@props.henseiData[title].tagsStyle[tagIndex]}
+                                       key={index}>
+                                 {tag}
+                                </Label>
+                            }
+                          </div>
+                        </Tooltip>
+                      }>
+                        <Button key={index}
+                                onClick={@handleClick.bind(@, title)}
+                                className={if @props.activeTitle is title then 'active' else ''}>
+                          {title}
+                        </Button>
+                      </OverlayTrigger>
+                    else
+                      <Button key={index}
+                              onClick={@handleClick.bind(@, title)}
+                              className={if @props.activeTitle is title then 'active' else ''}>
+                        {title}
+                      </Button>
+                  }
+                </div>
         }
         </ButtonGroup>
       </div>
