@@ -133,7 +133,7 @@ ImportTab = React.createClass
       selectTitle: selectTitle
   handleExportClick: ->
     title = @props.henseiData.titles[@state.selectTitle]
-    code = JSON.stringify @props.henseiData.title.ships
+    code = JSON.stringify @props.henseiData[title].ships
     code = '[' + code + ']'
     @setState
       code: code
