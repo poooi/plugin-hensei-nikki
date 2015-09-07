@@ -37,7 +37,7 @@ getDetails = (deck) ->
     continue if ship[0] is null
     totalLv += ship[1][0]
   tyku = getTyku(deck)
-  
+
   [totalLv,
    tyku.basic,
    tyku.alv]
