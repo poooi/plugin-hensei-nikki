@@ -88,22 +88,30 @@ ImportTab = React.createClass
     try
       importCode = JSON.parse importCode
       deck = {}
-      for fleets in importCode
-        continue if fleets is []
-        for ship in fleets
-          ship[0] = parseInt ship[0]
-          if ship.length is 4
-            ship.push []
-        if !checkData(fleets)
-          toggleModal __('Error'), __('Incorrect code.')
-        else
-          deck.ships = fleets
-          deck.details = []
-          for item in getDetails fleets
-            deck.details.push item
-          deck.comment = ''
-          deck.tags = ''
-          @props.handleAddData inputTitle, deck
+      flag = true
+      for fleets, index in importCode
+        continue if index is 0
+        if fleets isnt []
+          flag = false
+      if flag
+        for fleets in importCode
+          continue if fleets is []
+          for ship in fleets
+            ship[0] = parseInt ship[0]
+            if ship.length is 4
+              ship.push []
+          if !checkData(fleets)
+            toggleModal __('Error'), __('Incorrect code.')
+          else
+            deck.ships = fleets
+            deck.details = []
+            for item in getDetails fleets
+              deck.details.push item
+            deck.comment = ''
+            deck.tags = ''
+            @props.handleAddData inputTitle, deck
+      else
+        toggleModal __('Error'), '不支持联合舰队导入'
     catch e
       throw e
     @setState
