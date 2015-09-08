@@ -135,7 +135,7 @@ ImportTab = React.createClass
     @setState
       importCode: importCode
       btnDisable: btnDisable
-  handleTitleSelect: ->
+  handleTitleSelect: (e) ->
     selectTitle = parseInt e.target.value
     @setState
       selectTitle: selectTitle
