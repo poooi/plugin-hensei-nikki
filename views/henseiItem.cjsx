@@ -120,7 +120,7 @@ HenseiItem = React.createClass
                     <div>{los}{__ ' Old'}</div>
                   </Tooltip>
                 }>
-                  <span>{__ 'LOS'}: {los}</span>
+                  <span>{__ 'LOS '}: {los}</span>
                 </OverlayTrigger>
               </span>
           }
