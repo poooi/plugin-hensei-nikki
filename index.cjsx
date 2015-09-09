@@ -190,7 +190,7 @@ module.exports =
   author: 'Rui'
   link: 'https://github.com/ruiii'
   description: '记录编成信息'
-  version: '3.2.0'
+  version: '3.2.1'
   reactClass: React.createClass
     getInitialState: ->
       memberId: ''

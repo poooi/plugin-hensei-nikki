@@ -1,5 +1,5 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
-{Grid, Row, Col, Button, Input} = ReactBootstrap
+{Button, Input} = ReactBootstrap
 {openExternal} = require 'shell'
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
@@ -77,7 +77,7 @@ ImportTab = React.createClass
     importFlag: true
     importCode: []
     code: ''
-    selectTitle: ''
+    selectTitle: 0
     inputTitle: ''
     btnDisable: true
   #[[
