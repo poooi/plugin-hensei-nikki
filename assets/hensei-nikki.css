@@ -116,15 +116,13 @@
   height: 100%;
   padding: 0px;
 }
-#HenseiNikki .comment-container {
-  width: 50%;
-  flex: 1;
-  border: double gray;
-  border-radius: 3px;
-  padding: 2px 5px 2px 5px;
-}
 #HenseiNikki .details-container{
   display: flex;
   justify-content: space-around;
   padding: 0px 10px;
+}
+#HenseiNikki .label-container {
+  padding: 5px;
+  width: 120px;
+  word-break: break-all;
 }

@@ -1,5 +1,5 @@
 {_, React, ReactBootstrap} = window
-{Grid, Row, Col, Button, Input, TabbedArea, TabPane} = ReactBootstrap
+{TabbedArea, TabPane} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -7,6 +7,7 @@ i18n = require '../node_modules/i18n'
 AddDataTab = require './addDataTab'
 ImportTab = require './importTab'
 DelDataTab = require './delDataTab'
+EditTagTab = require './editTagTab'
 
 EditDataTab = React.createClass
   getInitialState: ->
@@ -34,6 +35,12 @@ EditDataTab = React.createClass
                     selectedKey={@state.selectedKey}
                     henseiData={@props.henseiData}
                     handleDeleteData={@props.handleDeleteData} />
+      </TabPane>
+      <TabPane eventKey={3} tab='编辑tag' >
+        <EditTagTab indexKey={3}
+                    selectedKey={@state.selectedKey}
+                    henseiData={@props.henseiData}
+                    saveData={@props.saveData} />
       </TabPane>
     </TabbedArea>
 

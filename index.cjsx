@@ -260,7 +260,8 @@ module.exports =
                          henseiData={@state.henseiData}
                          getDeckDetail={getDeckDetail}
                          handleAddData={@handleAddData}
-                         handleDeleteData={@handleDeleteData} />
+                         handleDeleteData={@handleDeleteData}
+                         saveData={@saveData} />
           </TabPane>
         </TabbedArea>
       </div>

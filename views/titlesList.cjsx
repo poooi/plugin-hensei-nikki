@@ -1,5 +1,5 @@
 {React, ReactBootstrap} = window
-{Input, ButtonGroup, Button, OverlayTrigger, Tooltip, Overlay, Label} = ReactBootstrap
+{Input, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -71,7 +71,7 @@ TitlesList = React.createClass
                onChange={@handleKeyWordChange} />
       </div>
       <div>
-        <ButtonGroup bsSize="xsmall" className="titles-container">
+        <ButtonGroup bsSize='xsmall' className='titles-container'>
         {
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
@@ -80,19 +80,19 @@ TitlesList = React.createClass
                   {
                     if @state.showData[title].tags.length != 0
                       <OverlayTrigger placement='bottom' overlay={
-                        <Tooltip>
-                          <div style={display: 'flex', padding: 5}>
+                        <Popover>
+                          <div style={padding: 5, width: 150}>
                             {
 
                               for tag, tagIndex in @state.showData[title].tags
-                                <Label style={margin: 5}
+                                <Label style={display: 'inline-block', margin: 5}
                                        bsStyle={@state.showData[title].tagsStyle[tagIndex]}
                                        key={tagIndex}>
                                  {tag}
                                 </Label>
                             }
                           </div>
-                        </Tooltip>
+                        </Popover>
                       }>
                         <Button key={index}
                                 onClick={@handleClick.bind(@, title)}
