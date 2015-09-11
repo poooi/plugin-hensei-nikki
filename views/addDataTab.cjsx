@@ -1,5 +1,5 @@
 {React, ReactBootstrap, $ships, $shipTypes, $slotitems} = window
-{Button, Input} = ReactBootstrap
+{Button, Input, Label} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
