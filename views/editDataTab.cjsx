@@ -36,7 +36,7 @@ EditDataTab = React.createClass
                     henseiData={@props.henseiData}
                     handleDeleteData={@props.handleDeleteData} />
       </TabPane>
-      <TabPane eventKey={3} tab='编辑tag' >
+      <TabPane eventKey={3} tab={__ 'Edit tag'} >
         <EditTagTab indexKey={3}
                     selectedKey={@state.selectedKey}
                     henseiData={@props.henseiData}

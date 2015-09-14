@@ -31,5 +31,8 @@
   "Code": "代码",
   "Incorrect code.": "代码不正确，无法导入。",
   "Select title": "选择标题",
-  "Select type": "选择类型"
+  "Select type": "选择类型",
+  "Edit tag": "编辑tag",
+  "Not support combie fleet.": "不支持联合舰队导入。",
+  "Support": "代码支持"
 }

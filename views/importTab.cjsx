@@ -111,7 +111,7 @@ ImportTab = React.createClass
             deck.tags = ''
             @props.handleAddData inputTitle, deck
       else
-        toggleModal __('Error'), '不支持联合舰队导入'
+        toggleModal __('Error'), __('Not support combie fleet.')
     catch e
       throw e
     @setState
@@ -162,7 +162,7 @@ ImportTab = React.createClass
   render: ->
     <div className='tab-container'>
       <span>
-        代码支持:
+        {__ 'Support'}:
           <a onClick={openExternal.bind(this, 'http://fleet.diablohu.com')}>是谁呼叫舰队</a>,
           <a onClick={openExternal.bind(this, 'http://www.kancolle-calc.net/')}>艦載機厨デッキビルダー</a>。
       </span>
