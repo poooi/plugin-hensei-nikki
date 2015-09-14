@@ -35,11 +35,18 @@ ShipItem = React.createClass
               alv = @props.ship[4][index]
             else
               alv = 0
+
             <div key={index} className='slotitem-container'>
               <span>
                 <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
               </span>
-              <span className='slot-name'>{name}</span>
+              <OverlayTrigger placement='top' overlay={
+                <Tooltip>
+                  <span>{name}</span>
+                </Tooltip>
+              }>
+                <span className='slot-name'>{name}</span>
+              </OverlayTrigger>
               <span>
                   {if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★+{lv}</strong> else ''}
                   &nbsp;&nbsp;{

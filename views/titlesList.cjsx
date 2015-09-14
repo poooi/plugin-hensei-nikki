@@ -60,8 +60,7 @@ TitlesList = React.createClass
     if title isnt @props.activeTitle
       @props.handleTitleChange title
   render: ->
-    <div className={if @props.isChecking then 'hidden' else ''}
-         style={width: '15%'}>
+    <div style={width: '15%'}>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
@@ -76,38 +75,30 @@ TitlesList = React.createClass
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
               for title, index in @state.showData.titles
-                <div>
-                  {
-                    if @state.showData[title].tags.length != 0
-                      <OverlayTrigger placement='bottom' overlay={
-                        <Popover>
-                          <div style={padding: 5, width: 150}>
-                            {
-
-                              for tag, tagIndex in @state.showData[title].tags
-                                <Label style={display: 'inline-block', margin: 5}
-                                       bsStyle={@state.showData[title].tagsStyle[tagIndex]}
-                                       key={tagIndex}>
-                                 {tag}
-                                </Label>
-                            }
-                          </div>
-                        </Popover>
-                      }>
-                        <Button key={index}
-                                onClick={@handleClick.bind(@, title)}
-                                className={if @props.activeTitle is title then 'active' else ''}>
-                          {title}
-                        </Button>
-                      </OverlayTrigger>
-                    else
-                      <Button key={index}
-                              onClick={@handleClick.bind(@, title)}
-                              className={if @props.activeTitle is title then 'active' else ''}>
-                        {title}
-                      </Button>
-                  }
-                </div>
+                <OverlayTrigger placement='bottom' overlay={
+                  <Popover>
+                    <div style={padding: 7}>
+                      <div>{title}</div>
+                      <div>
+                        {
+                          if @state.showData[title].tags.length != 0
+                            for tag, tagIndex in @state.showData[title].tags
+                              <Label style={display: 'inline-block', margin: 5}
+                                     bsStyle={@state.showData[title].tagsStyle[tagIndex]}
+                                     key={tagIndex}>
+                               {tag}
+                              </Label>
+                        }
+                      </div>
+                    </div>
+                  </Popover>
+                }>
+                  <Button key={index}
+                          onClick={@handleClick.bind(@, title)}
+                          className={if @props.activeTitle is title then 'active' else ''}>
+                    {title}
+                  </Button>
+                </OverlayTrigger>
         }
         </ButtonGroup>
       </div>
