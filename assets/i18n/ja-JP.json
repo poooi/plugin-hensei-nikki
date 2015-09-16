@@ -16,7 +16,7 @@
   "Error": "エラー",
   "The title is already exist.": "このタイトルは既に存在しています。",
   "Delete": "削除",
-  "Records": "編成記録",
+  "Records": "記録",
   "Add": "追加",
   "Edit": "編集",
   "Add tags": "タグを追加します",
@@ -24,14 +24,15 @@
   "Do not add": "使用不可",
   "Ship name": "艦名",
   "Slot items": "装備",
-   "Import": "導入",
+  "Number": "件数",
+  "Import": "導入",
   "Export": "導出",
   "Import code": "コードを導入します",
   "Code": "コード",
   "Incorrect code.": "コードは間違っています。導入できません。",
   "Select title": "タイトルを選択します",
-  "Select type": "項目",
+  "Select type": "種類を選択します",
   "Edit tag": "タグを編集します",
   "Not support combie　fleet.": "連合艦隊は記録できません。",
-  "Support": "サポーター"
+  "Support": "サポート"
 }
