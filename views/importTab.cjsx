@@ -209,7 +209,7 @@ ImportTab = React.createClass
           <a onClick={openExternal.bind(this, 'http://www.kancolle-calc.net/')}>艦載機厨デッキビルダー</a>。
       </span>
       <div className='container-col'>
-        <div style={display: 'flex'}>
+        <div style={display: 'flex', padding: 7}>
             <Input type='radio'
                    label={__ 'Import'}
                    onChange={@handleCilckRadio.bind(@, 0)}
@@ -219,11 +219,13 @@ ImportTab = React.createClass
                    onChange={@handleCilckRadio.bind(@, 1)}
                    checked={@state.checked[1]} />
             <Button onClick={@handleFileImportClick}
-                    disabled={@state.fileDisable}>
+                    disabled={@state.fileDisable}
+                    style={height: '50%'}>
               {__ 'Import records file'}
             </Button>
             <Button onClick={@handleFileExportClick}
-                    disabled={@state.fileDisable}>
+                    disabled={@state.fileDisable}
+                    style={height: '50%'}>
               {__ 'Export records file'}
             </Button>
         </div>
