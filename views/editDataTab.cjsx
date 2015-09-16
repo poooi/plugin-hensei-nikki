@@ -28,7 +28,8 @@ EditDataTab = React.createClass
         <ImportTab indexKey={1}
                    selectedKey={@state.selectedKey}
                    henseiData={@props.henseiData}
-                   handleAddData={@props.handleAddData} />
+                   handleAddData={@props.handleAddData}
+                   saveData={@props.saveData} />
       </TabPane>
       <TabPane eventKey={2} tab={__ 'Delete'} >
         <DelDataTab indexKey={2}

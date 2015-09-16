@@ -1,7 +1,10 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
 {Button, Input} = ReactBootstrap
 {openExternal} = require 'shell'
+fs = require 'fs-extra'
 {join} = require 'path-extra'
+remote = require 'remote'
+dialog = remote.require 'dialog'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -80,6 +83,11 @@ ImportTab = React.createClass
     selectTitle: 0
     inputTitle: ''
     btnDisable: true
+    fileDisable: true
+  componentWillUpdate: (nextProps, nextState) ->
+    if nextProps.henseiData? and nextProps.henseiData.titles? and nextState.fileDisable
+      @setState
+        fileDisable: false
   #[[
   #  [shipid,[lv,-1],[slotId],[slotLv],[slotALv]],X6
   #],[],[],[]]
@@ -145,6 +153,40 @@ ImportTab = React.createClass
     code = '[' + code + ']'
     @setState
       code: code
+  handleFileImportClick: ->
+    henseiData = @props.henseiData
+    filename = dialog.showOpenDialog
+      title: __ 'Import records file'
+      filters: [
+        {
+          name: "json file"
+          extensions: ['json']
+        }
+      ]
+      properties: ['openFile']
+    if filename?[0]?
+      try
+        fs.accessSync(filename[0], fs.R_OK)
+        fileContentBuffer = fs.readJSONSync filename[0]
+        flag = false
+        for title in fileContentBuffer.titles
+          continue if title in henseiData.titles
+          henseiData.titles.push title
+          henseiData[title] = fileContentBuffer[title]
+          flag = true
+        if flag
+          @props.saveData henseiData
+      catch e
+        console.log e.message
+        throw e
+  handleFileExportClick: ->
+    filename = dialog.showSaveDialog
+      title: __ 'Export records file'
+      defaultPath: "HenseiNikki.json"
+    if filename?
+      fs.writeFile filename, JSON.stringify(@props.henseiData), (err)->
+        if err
+          console.log "err! Save data error"
   handleCilckRadio: (index) ->
     {checked} = @state
     for item in [0, 1]
@@ -176,6 +218,14 @@ ImportTab = React.createClass
                    label={__ 'Export'}
                    onChange={@handleCilckRadio.bind(@, 1)}
                    checked={@state.checked[1]} />
+            <Button onClick={@handleFileImportClick}
+                    disabled={@state.fileDisable}>
+              {__ 'Import records file'}
+            </Button>
+            <Button onClick={@handleFileExportClick}
+                    disabled={@state.fileDisable}>
+              {__ 'Export records file'}
+            </Button>
         </div>
         <div className={if @state.importFlag then 'show' else 'hidden'}>
           <Input type='text'

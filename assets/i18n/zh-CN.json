@@ -34,5 +34,7 @@
   "Select type": "选择类型",
   "Edit tag": "编辑tag",
   "Not support combie fleet.": "不支持联合舰队导入。",
-  "Support": "代码支持"
+  "Support": "代码支持",
+  "Export records file": "导出记录文件",
+  "Import records file": "导入记录文件"
 }
