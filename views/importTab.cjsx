@@ -99,11 +99,11 @@ ImportTab = React.createClass
       flag = true
       for fleets, index in importCode
         continue if index is 0
-        if fleets isnt []
+        if fleets.length isnt 0
           flag = false
       if flag
         for fleets in importCode
-          continue if fleets is []
+          continue if fleets.length is 0
           for ship in fleets
             ship[0] = parseInt ship[0]
             if ship.length is 4
