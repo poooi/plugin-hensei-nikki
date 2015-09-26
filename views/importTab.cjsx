@@ -8,6 +8,47 @@ dialog = remote.require 'dialog'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
+emptyShip = [null, [null, -1], [], [], []]
+
+handleSlot = (slots) ->
+  slotId = []
+  slotLv = []
+  for i in [1..4]
+    slot = 'i' + i.toString()
+    if slots.hasOwnProperty slot
+      slotId.push slots[slot].id
+      if slots[slot].rf > 0
+        slotLv.push slots[slot].rf
+      else
+        slotLv.push null
+  if slots.ix?.id?
+    slotId.push slots.ix.id
+    slotLv.push null
+
+  ids: slotId
+  lvs: slotLv
+
+
+
+handleFleet = (fleet) ->
+  ship = Object.clone emptyShip
+  ship[0] = parseInt fleet.id
+  ship[1][0] = fleet.lv
+  ship[1][1] = fleet.luck
+  slots = handleSlot fleet.items
+  ship[2] = slots.ids
+  ship[3] = slots.lvs
+
+  ship
+
+codeConversion = (code) ->
+  fleet = []
+  for i in [1..6]
+    ship = 's' + i.toString()
+    if code.hasOwnProperty(ship) and code[ship].id?
+      fleet[i - 1] = handleFleet code[ship]
+
+  fleet
 
 getTyku = (deck) ->
   {$ships, $slotitems} = window
@@ -93,38 +134,46 @@ ImportTab = React.createClass
   #],[],[],[]]
   importLogHandle: ->
     {importCode, inputTitle} = @state
+    importCode = JSON.parse importCode
     try
-      importCode = JSON.parse importCode
-      deck = {}
-      flag = true
-      for fleets, index in importCode
-        continue if index is 0
-        if fleets.length isnt 0
-          flag = false
-      if flag
-        for fleets in importCode
-          continue if fleets.length is 0
-          for ship in fleets
-            ship[0] = parseInt ship[0]
-            if ship.length is 4
-              ship.push []
-          if !checkData(fleets)
-            toggleModal __('Error'), __('Incorrect code.')
-          else
-            deck.ships = fleets
-            deck.details = []
-            for item in getDetails fleets
-              deck.details.push item
-            deck.comment = ''
-            deck.tags = ''
-            @props.handleAddData inputTitle, deck
+      if importCode.version?
+        if importCode.f2?
+          toggleModal __('Error'), __('Not support combie fleet.')
+        else
+          fleet = codeConversion importCode.f1
       else
-        toggleModal __('Error'), __('Not support combie fleet.')
+        flag = true
+        for fleet, index in importCode
+          continue if index is 0
+          if fleet.length isnt 0
+            flag = false
+        if flag
+          for fleet in importCode
+            continue if fleet.length is 0
+            for ship in fleet
+              ship[0] = parseInt ship[0]
+              if ship.length is 4
+                ship.push []
+        else
+          toggleModal __('Error'), __('Not support combie fleet.')
+      if !checkData(fleet)
+        toggleModal __('Error'), __('Incorrect code.')
+      else
+        deck = {}
+        deck.ships = fleet
+        deck.details = []
+        for item in getDetails fleet
+          deck.details.push item
+        deck.comment = ''
+        deck.tags = ''
+        @props.handleAddData inputTitle, deck
+
     catch e
       throw e
     @setState
       inputTitle: ''
       importCode: ''
+
   handleInputTitleChange: ->
     inputTitle = @refs.inputTitle.getValue()
     if inputTitle? and inputTitle.length > 0 and @state.importCode.length > 0
