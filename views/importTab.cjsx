@@ -21,9 +21,6 @@ handleSlot = (slots) ->
         slotLv.push slots[slot].rf
       else
         slotLv.push null
-  if slots.ix?.id?
-    slotId.push slots.ix.id
-    slotLv.push null
 
   ids: slotId
   lvs: slotLv
