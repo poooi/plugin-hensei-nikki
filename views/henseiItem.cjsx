@@ -48,7 +48,7 @@ ShipItem = React.createClass
                 <span className='slot-name'>{name}</span>
               </OverlayTrigger>
               <span>
-                  {if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★+{lv}</strong> else ''}
+                  {if lv? and lv isnt null then <strong className='slot-improvment' style={color: '#45A9A5'}>★+{lv}</strong> else ''}
                   &nbsp;&nbsp;{
                     if alv? and alv >=1 and alv <= 3
                       for j in [1..alv]

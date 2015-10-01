@@ -19,7 +19,7 @@ HenseiList = React.createClass
                   activeTitle={@state.activeTitle}
                   henseiData={@props.henseiData}
                   handleTitleChange={@handleTitleChange} />
-      <div style={width: '85%'}>
+      <div style={flex: 1}>
         {
           if @props.henseiData?
                if @props.henseiData.titles? and @props.henseiData.titles.length >= 1 and @props.henseiData[@state.activeTitle]?
