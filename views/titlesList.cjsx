@@ -60,7 +60,7 @@ TitlesList = React.createClass
     if title isnt @props.activeTitle
       @props.handleTitleChange title
   render: ->
-    <div style={width: '15%'}>
+    <div style={flex: "0 1", maxWidth: 80, minWidth: 50}>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}

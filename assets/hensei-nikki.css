@@ -12,11 +12,6 @@
   display: flex;
 }
 #HenseiNikki .btn-group .btn {
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  padding: 0px;
   width: 100%;
   overflow: hidden;
 }
@@ -34,7 +29,6 @@
 #HenseiNikki .hensei-list-container {
   display: flex;
   flex: none;
-  padding: 15px;
 }
 #HenseiNikki .container-col {
   display: flex;
@@ -49,7 +43,8 @@
   position: relative;
   vertical-align: bottom;
   display: flex;
-  margin: -1px;
+  margin: 0;
+  max-height: 24px;
 }
 #HenseiNikki .slotitem-container span.show {
   display: inline !important;
@@ -62,22 +57,23 @@
   margin-left: -3px;
 }
 #HenseiNikki .slotitem-container .slot-name {
-  width: 90px;
   font-size: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+#HenseiNikki .slotitem-container .slot-improvment {
+  display: inline-block;
+}
 #HenseiNikki .ships-container {
   display: flex;
-  flex-wrap: wrap;
-  margin: 9px;
-  padding: 5px;
+  flex-flow: row wrap;
+  padding: 10px 0 0 15px;
 }
 #HenseiNikki .ship-item {
   display: flex;
-  margin-top: 5px;
-  width: 245px;
+  margin: 5px 10px 0 0;
+  width: 200px;
   padding-bottom: 7px;
 }
 #HenseiNikki .ship-item .ship-detail {
@@ -100,6 +96,7 @@
 }
 #HenseiNikki .ship-item .slot-detail {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-content: center;
 }
@@ -120,6 +117,6 @@
 }
 #HenseiNikki .details-container{
   display: flex;
-  justify-content: space-around;
-  padding: 0px 10px;
+  justify-content: space-between;
+  padding: 0 0 0 15px;
 }
