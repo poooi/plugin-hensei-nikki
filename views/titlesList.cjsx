@@ -70,7 +70,7 @@ TitlesList = React.createClass
                onChange={@handleKeyWordChange} />
       </div>
       <div>
-        <ButtonGroup bsSize='xsmall' className='titles-container'>
+        <ButtonGroup vertical bsSize='xsmall' className='titles-container'>
         {
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
