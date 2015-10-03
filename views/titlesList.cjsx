@@ -51,7 +51,7 @@ TitlesList = React.createClass
       continue if ship[0] is null
       name = window.$ships[ship[0]].api_name
       valueData.push name
-      valueData.push ship[1][0]
+      valueData.push(ship[1][0]) if ship[1][0] isnt null
       for slotId in ship[2]
         continue if slotId is null
         valueData.push window.$slotitems[slotId].api_name
