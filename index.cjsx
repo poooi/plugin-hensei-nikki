@@ -13,8 +13,6 @@ i18n.configure({
     indent: '\t',
     extension: '.json'
 })
-console.log join(__dirname, 'assets', 'i18n')
-console.log window.language
 i18n.setLocale(window.language)
 {__} = i18n
 
@@ -249,7 +247,6 @@ module.exports =
         fs.writeJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.json"), data
       catch e
         error "Write hensei error!#{e}"
-      console.log 'save data to hensei-nikki'
       @setState
         henseiData: data
     handleSelectTab: (selectedKey) ->
