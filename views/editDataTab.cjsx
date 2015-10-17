@@ -1,5 +1,5 @@
 {_, React, ReactBootstrap} = window
-{TabbedArea, TabPane} = ReactBootstrap
+{Tabs, Tab} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -16,33 +16,33 @@ EditDataTab = React.createClass
     @setState
       selectedKey: selectedKey
   render: ->
-    <TabbedArea activeKey={@state.selectedKey} animation={false} onSelect={@handleSelectTab}>
-      <TabPane eventKey={0} tab={__ 'Add'} >
+    <Tabs activeKey={@state.selectedKey} animation={false} onSelect={@handleSelectTab}>
+      <Tab eventKey={0} title={__ 'Add'} >
         <AddDataTab indexKey={0}
                     selectedKey={@state.selectedKey}
                     henseiData={@props.henseiData}
                     getDeckDetail={@props.getDeckDetail}
                     handleAddData={@props.handleAddData} />
-      </TabPane>
-      <TabPane eventKey={1} tab={__('Import') + '/' + __('Export')} >
+      </Tab>
+      <Tab eventKey={1} title={__('Import') + '/' + __('Export')} >
         <ImportTab indexKey={1}
                    selectedKey={@state.selectedKey}
                    henseiData={@props.henseiData}
                    handleAddData={@props.handleAddData}
                    saveData={@props.saveData} />
-      </TabPane>
-      <TabPane eventKey={2} tab={__ 'Delete'} >
+      </Tab>
+      <Tab eventKey={2} title={__ 'Delete'} >
         <DelDataTab indexKey={2}
                     selectedKey={@state.selectedKey}
                     henseiData={@props.henseiData}
                     handleDeleteData={@props.handleDeleteData} />
-      </TabPane>
-      <TabPane eventKey={3} tab={__ 'Edit tag'} >
+      </Tab>
+      <Tab eventKey={3} title={__ 'Edit tag'} >
         <EditTagTab indexKey={3}
                     selectedKey={@state.selectedKey}
                     henseiData={@props.henseiData}
                     saveData={@props.saveData} />
-      </TabPane>
-    </TabbedArea>
+      </Tab>
+    </Tabs>
 
 module.exports = EditDataTab
