@@ -47,10 +47,16 @@ DelDataTab = React.createClass
               shipName = []
               shipName.push(title)
               shipName.push(' : ')
-              for ship in @props.henseiData[title].ships
-                continue if ship[0] is null
-                shipName.push(window.$ships[ship[0]].api_name)
-                shipName.push('. ')
+              if !@props.henseiData[title].ships[0][0][0]?
+                for ship in @props.henseiData[title].ships
+                  break if ship[0] is null
+                  shipName.push(window.$ships[ship[0]].api_name)
+                  shipName.push('. ')
+              else
+                for fleet, index in @props.henseiData[title].ships
+                  break if !fleet[0]?[0]?
+                  shipName.push(window.$ships[fleet[0][0]].api_name)
+                  shipName.push('. ')
               <Input type='checkbox'
                      label={shipName}
                      key={title}

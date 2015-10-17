@@ -41,26 +41,31 @@ TitlesList = React.createClass
             match = true
         match
     else filterData
-# [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
+# {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
   getDataValue: (data, title) ->
     valueData = []
     valueData.push title
     for item in data.details
       valueData.push item
-    for ship in data.ships
-      continue if ship[0] is null
-      name = window.$ships[ship[0]].api_name
-      valueData.push name
-      valueData.push(ship[1][0]) if ship[1][0] isnt null
-      for slotId in ship[2]
-        continue if slotId is null
-        valueData.push window.$slotitems[slotId].api_name
+    for fIdx in [1..4]
+      index = 'f' + fIdx
+      break if !data.ships[index]?
+      fleet = data.ships[index]
+      for sIdx in [1..6]
+        index = 's' + sIdx
+        break if !fleet[ship]?
+        valueData.push window.$ships[fleet[ship].id].api_name
+        valueData.push fleet[ship].lv if fleet[ship].lv isnt null
+        for iIdx in [1..5]
+          index = 'i' + iIdx
+          break if !fleet[ship].items[index]?
+          valueData.push window.$slotitems[fleet[ship].items[index].id].api_name
     valueData
   handleClick: (title) ->
     if title isnt @props.activeTitle
       @props.handleTitleChange title
   render: ->
-    <div style={flex: "0 1", maxWidth: 80, minWidth: 50}>
+    <div style={width: '15%'}>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
@@ -70,7 +75,7 @@ TitlesList = React.createClass
                onChange={@handleKeyWordChange} />
       </div>
       <div>
-        <ButtonGroup vertical bsSize='xsmall' className='titles-container'>
+        <ButtonGroup bsSize='xsmall' className='titles-container'>
         {
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []

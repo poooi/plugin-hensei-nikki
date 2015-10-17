@@ -12,22 +12,16 @@ HenseiList = React.createClass
   handleTitleChange: (title) ->
     @setState
       activeTitle: title
-
   render: ->
     <div className='hensei-list-container'>
-      <TitlesList isChecking={@state.isChecking}
-                  activeTitle={@state.activeTitle}
+      <TitlesList activeTitle={@state.activeTitle}
                   henseiData={@props.henseiData}
                   handleTitleChange={@handleTitleChange} />
-      <div style={flex: 1}>
+      <div style={width: '85%'}>
         {
           if @props.henseiData?
                if @props.henseiData.titles? and @props.henseiData.titles.length >= 1 and @props.henseiData[@state.activeTitle]?
-                 <HenseiItem title={@state.activeTitle}
-                             deckItem={@props.henseiData[@state.activeTitle]}
-                             checkItems={@state.checkItems}
-                             handleCheck={@handleCheck}
-                             getDeckDetail={@props.getDeckDetail} />
+                 <HenseiItem deckItem={@props.henseiData[@state.activeTitle]} />
         }
       </div>
     </div>

@@ -1,11 +1,12 @@
 {React, ReactBootstrap, FontAwesome} = window
-{OverlayTrigger, Tooltip, Button, Input, Label} = ReactBootstrap
+{OverlayTrigger, Tooltip, Button, Input, TabbedArea, TabPane} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
 
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
+# {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
 
 ShipItem = React.createClass
   render: ->
@@ -70,14 +71,7 @@ ShipItem = React.createClass
       </div>
     </div>
 
-HenseiItem = React.createClass
-  getInitialState: ->
-    deckId: 0
-    disable: true
-  handleDeckSelect: (e) ->
-    deckId = parseInt e.target.value
-    @setState
-      deckId: deckId
+FleetItem = React.createClass
   render: ->
     <div className='titles-container'>
       {
@@ -141,5 +135,80 @@ HenseiItem = React.createClass
         }
      </div>
     </div>
+
+HenseiItem = React.createClass
+  getInitialState: ->
+    deckId: 0
+    selectedKey: 0
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.deckItem isnt @props.deckItem
+      @setState
+        selectedKey: 0
+  handleSelectTab: (selectedKey) ->
+    @setState
+      selectedKey: selectedKey
+  render: ->
+    if @props.deckItem.ships[0][0][0]?
+      <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
+      {
+        for fleet, index in @props.deckItem.ships
+          break if !fleet[0]?
+          if @props.deckItem.details.length > 3
+            totalLv = @props.deckItem.details[index][0]
+            fpTotal = @props.deckItem.details[index][2]
+            fpBasic = fpAlv = null
+            los = @props.deckItem.details[index][3]
+            losA = @props.deckItem.details[index][4]
+          else
+            totalLv = @props.deckItem.details[index][0]
+            fpTotal = @props.deckItem.details[index][1] + @props.deckItem.details[index][2]
+            fpBasic = @props.deckItem.details[index][1]
+            fpAlv = @props.deckItem.details[index][2]
+            los = losA = null
+
+          <TabPane eventKey={index} tab={index}>
+            <div className='details-container'>
+              <span>{__ 'Total Lv '}{totalLv}</span>
+              {
+                if fpBasic isnt null
+                  <span>
+                    <OverlayTrigger placement='bottom' overlay={
+                      <Tooltip>
+                        <div>{__ 'Basic FP'}: {fpBasic}</div>
+                        <div>{__ 'Rank bonuses'}: {fpAlv}</div>
+                      </Tooltip>
+                    }>
+                      <span>{__ 'Fighter Power '}{fpTotal}</span>
+                    </OverlayTrigger>
+                  </span>
+                else
+                  <span>{__ 'Fighter Power '}{fpTotal}</span>
+              }
+              {
+                if los isnt null
+                  <span>
+                    <OverlayTrigger placement='bottom' overlay={
+                      <Tooltip>
+                        <div>{losA}{__ ' Autumn'}</div>
+                        <div>{los}{__ ' Old'}</div>
+                      </Tooltip>
+                    }>
+                      <span>{__ 'LOS '}: {losA}</span>
+                    </OverlayTrigger>
+                  </span>
+              }
+            </div>
+            <div className='ships-container'>
+              {
+                for ship, idx in @props.deckItem.ships[index]
+                  break if ship[0] is null
+                  <ShipItem ship={ship} key={idx}/>
+              }
+           </div>
+          </TabPane>
+      }
+      </TabbedArea>
+    else
+      <FleetItem deckItem={@props.deckItem} />
 
 module.exports = HenseiItem

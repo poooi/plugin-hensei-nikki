@@ -5,9 +5,8 @@
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
-getTags = (style, index, tag) ->
+getTags = (index, tag) ->
   <Label style={display: 'inline-block', margin: 5}
-         bsStyle={style}
          key={index}>
    {tag}
   </Label>
@@ -19,19 +18,16 @@ EditTagTab = React.createClass
     delDisable: true
     selectTitle: 0
     tags: []
-    tagsStyle: []
     tagChecked: []
   componentWillReceiveProps: (nextProps) ->
     if nextProps.indexKey is nextProps.selectedKey and nextProps.henseiData.titles?
       tagChecked = []
       title = nextProps.henseiData.titles[0]
       tags = nextProps.henseiData[title].tags
-      tagsStyle = nextProps.henseiData[title].tagsStyle
       for item in tags
         tagChecked.push false
       @setState
         tags: tags
-        tagsStyle: tagsStyle
         tagChecked: tagChecked
         delDisable: true
   handleClickCheckbox: (index) ->
@@ -44,7 +40,7 @@ EditTagTab = React.createClass
           delDisable = false
       @setState {tagChecked, delDisable}
   handleDelClick: ->
-    {tagChecked, tags, tagsStyle} = @state
+    {tagChecked, tags} = @state
     delTags = []
     for item, index in tagChecked
       if item is true
@@ -53,7 +49,6 @@ EditTagTab = React.createClass
       for tag, index in tags
         if delTag is tag
           tags.splice(index, 1)
-          tagsStyle.splice(index, 1)
     tagChecked = []
     for item in tags
       tagChecked.push false
@@ -61,39 +56,32 @@ EditTagTab = React.createClass
       delDisable: true
       tagChecked: tagChecked
       tags: tags
-      tagsStyle: tagsStyle
   handleTitleSelect: (e) ->
     selectTitle = parseInt e.target.value
     title = @props.henseiData.titles[selectTitle]
     tags = @props.henseiData[title].tags
-    tagsStyle = @props.henseiData[title].tagsStyle
     tagChecked = []
     for item in tags
       tagChecked.push false
     @setState
       selectTitle: selectTitle
       tags: tags
-      tagsStyle: tagsStyle
       tagChecked: tagChecked
-  handleTagAddClick: (tagInput, tagType) ->
-    {tags, tagsStyle} = @state
+  handleTagAddClick: (tagInput) ->
+    {tags} = @state
     tags.push tagInput
-    tagsStyle.push tagType
     @setState
       tags: tags
-      tagsStyle: tagsStyle
   handleSaveClick: ->
-    {selectTitle, tags, tagsStyle} = @state
+    {selectTitle, tags} = @state
     henseiData = @props.henseiData
     title = henseiData.titles[selectTitle]
     henseiData[title].tags = tags
-    henseiData[title].tagsStyle = tagsStyle
     @props.saveData henseiData
     title = @props.henseiData.titles[selectTitle]
     @setState
       selectTitle: 0
       tags: @props.henseiData[title].tags
-      tagsStyle: @props.henseiData[title].tagsStyle
       btnDisable: true
   render: ->
     <div className='tab-container'>
@@ -112,7 +100,7 @@ EditTagTab = React.createClass
           {
             for tag, index in @state.tags
               title = @props.henseiData.titles[@state.selectTitle]
-              label = getTags @props.henseiData[title].tagsStyle[index], index, tag
+              label = getTags index, tag
               <Input type='checkbox'
                      label={label}
                      key={index}

@@ -1,6 +1,5 @@
-{React, ReactBootstrap, $ships, $shipTypes, $slotitems} = window
+{React, ReactBootstrap} = window
 {Button, Input, Label} = ReactBootstrap
-{join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -9,59 +8,60 @@ TagsInputContainer = require './tagsInputContainer'
 AddDataTab = React.createClass
   getInitialState: ->
     title: ''
-    deckId: 0
     saveDisable: true
     tags: []
-    tagsStyle: []
+    deckChecked: [false, false, false, false]
   componentWillReceiveProps: (nextProps)->
     if nextProps.indexKey is nextProps.selectedKey
       @setState
         saveDisable: true
-        deckId: 0
         title: ''
         tags: []
   handleTitleChange: ->
     title = @refs.title.getValue()
-    if title? and title.length > 0
+    flag = false
+    for item in @state.deckChecked
+      if item
+        flag = true
+    if title? and title.length > 0 and flag
       saveDisable = false
     else
       saveDisable = true
     @setState
       title: title
       saveDisable: saveDisable
-  handleDeckSelect: (e) ->
-    deckId = parseInt e.target.value
-    @setState
-      deckId: deckId
-  handleTagAddClick: (tagInput, tagType) ->
-    {tags, tagsStyle} = @state
+  handleTagAddClick: (tagInput) ->
+    {tags} = @state
     tags.push tagInput
-    tagsStyle.push tagType
     @setState
       tags: tags
-      tagsStyle: tagsStyle
   handleSaveClick: ->
-    {deckId, title, tags, tagsStyle} = @state
-    deck = @props.getDeckDetail deckId, tags, tagsStyle
+    {deckChecked, title, tags} = @state
+    deck = @props.getDeckDetail deckChecked, tags
     @props.handleAddData title, deck
     @setState
       saveDisable: true
-      deckId: 0
+      deckChecked: [false, false, false, false]
       title: ''
       tags: []
-      tagsStyle: []
+  handleClickCheckbox: (index) ->
+    {deckChecked} = @state
+    if deckChecked isnt []
+      deckChecked[index] = !deckChecked[index]
+      @setState {deckChecked}
   render: ->
     <div className='add-data-tab'>
-      <Input type='select'
-             label={__ 'Select fleet'}
-             value={@state.deckId}
-             onChange={@handleDeckSelect}>
-        {
-          if window._decks?
-            for deck, index in window._decks
-              <option value={index} key={index}>{deck.api_name}</option>
-        }
-      </Input>
+      <div style={display: 'flex', padding: 7}>
+      {
+        if window._decks?
+          for deck, index in window._decks
+            <Input type='checkbox'
+                   label={deck.api_name}
+                   key={index}
+                   onChange={@handleClickCheckbox.bind(@, index)}
+                   checked={@state.deckChecked[index]}/>
+      }
+      </div>
       <Input type='text'
              label={__ 'Title'}
              placeholder={__ 'Title'}
@@ -76,7 +76,6 @@ AddDataTab = React.createClass
             for tag, index in @state.tags
               <Label bsSize='medium'
                      style={margin: 5}
-                     bsStyle={@state.tagsStyle[index]}
                      key={index}>
                 {tag}
               </Label>

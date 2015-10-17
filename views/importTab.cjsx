@@ -15,37 +15,46 @@ handleSlot = (slots) ->
   slotLv = []
   for i in [1..4]
     slot = 'i' + i.toString()
-    if slots.hasOwnProperty slot
+    if slots.hasOwnProperty(slot)
       slotId.push slots[slot].id
       if slots[slot].rf > 0
         slotLv.push slots[slot].rf
       else
         slotLv.push null
+  if slots.ix?.id?
+    slotId.push slots.ix.id
+    slotLv.push null
 
   ids: slotId
   lvs: slotLv
 
+handleShip = (ship) ->
+  shipDetail = Object.clone emptyShip
+  shipDetail[0] = parseInt ship.id
+  shipDetail[1][0] = ship.lv
+  shipDetail[1][1] = ship.luck
+  slots = handleSlot ship.items
+  shipDetail[2] = slots.ids
+  shipDetail[3] = slots.lvs
 
+  shipDetail
 
 handleFleet = (fleet) ->
-  ship = Object.clone emptyShip
-  ship[0] = parseInt fleet.id
-  ship[1][0] = fleet.lv
-  ship[1][1] = fleet.luck
-  slots = handleSlot fleet.items
-  ship[2] = slots.ids
-  ship[3] = slots.lvs
+  newfleet = []
+  for i in [1..6]
+    ship = 's' + i
+    if fleet.hasOwnProperty(ship) and fleet[ship].id?
+      newfleet.push handleShip fleet[ship]
 
-  ship
+  newfleet
 
 codeConversion = (code) ->
-  fleet = []
-  for i in [1..6]
-    ship = 's' + i.toString()
-    if code.hasOwnProperty(ship) and code[ship].id?
-      fleet[i - 1] = handleFleet code[ship]
-
-  fleet
+  newCode = [[], [], [], []]
+  for i in [1..4]
+    fleet = 'f' + i
+    if code.hasOwnProperty(fleet) and code[fleet].s1?
+      newCode[i - 1] = handleFleet code[fleet]
+  newCode
 
 getTyku = (deck) ->
   {$ships, $slotitems} = window
@@ -87,6 +96,7 @@ checkData = (data) ->
   matchFlag = true
   try
     for ship in data
+      continue if ship.length is 0
       if ship.length < 4
         matchFlag = false
         break
@@ -129,42 +139,41 @@ ImportTab = React.createClass
   #[[
   #  [shipid,[lv,-1],[slotId],[slotLv],[slotALv]],X6
   #],[],[],[]]
-  importLogHandle: ->
+  importHandle: ->
     {importCode, inputTitle} = @state
     importCode = JSON.parse importCode
     try
       if importCode.version?
-        if importCode.f2?
-          toggleModal __('Error'), __('Not support combie fleet.')
-        else
-          fleet = codeConversion importCode.f1
+        fleets = codeConversion importCode
       else
-        flag = true
+        fleets = []
         for fleet, index in importCode
-          continue if index is 0
-          if fleet.length isnt 0
-            flag = false
-        if flag
-          for fleet in importCode
-            continue if fleet.length is 0
-            for ship in fleet
-              ship[0] = parseInt ship[0]
-              if ship.length is 4
-                ship.push []
-        else
-          toggleModal __('Error'), __('Not support combie fleet.')
-      if !checkData(fleet)
+          continue if fleet.length is 0
+          for ship in fleet
+            continue if ship.length is 0
+            ship[0] = parseInt ship[0]
+            if ship.length is 4
+              ship.push []
+          fleets[index] = fleet
+      flag = false
+      for fleet in fleets
+        break if fleet.lenth is 0
+        if !checkData(fleet)
+          flag = true
+          break
+      if flag
         toggleModal __('Error'), __('Incorrect code.')
       else
         deck = {}
-        deck.ships = fleet
+        deck.ships = fleets
         deck.details = []
-        for item in getDetails fleet
-          deck.details.push item
-        deck.comment = ''
+        for fleet in fleets
+          detail = []
+          for item in getDetails fleet
+            detail.push item
+          deck.details.push detail
         deck.tags = ''
         @props.handleAddData inputTitle, deck
-
     catch e
       throw e
     @setState
@@ -196,7 +205,8 @@ ImportTab = React.createClass
   handleExportClick: ->
     title = @props.henseiData.titles[@state.selectTitle]
     code = JSON.stringify @props.henseiData[title].ships
-    code = '[' + code + ']'
+    if !code[0][0]?
+      code = '[' + code + ']'
     @setState
       code: code
   handleFileImportClick: ->
@@ -235,15 +245,14 @@ ImportTab = React.createClass
           console.log "err! Save data error"
   handleCilckRadio: (index) ->
     {checked} = @state
-    for item in [0, 1]
-      if index is item
-        checked[item] = true
-      else
-        checked[item] = false
     if index is 0
       importFlag = true
+      checked[0] = true
+      checked[1] = false
     else
       importFlag = false
+      checked[0] = false
+      checked[1] = true
     @setState
       checked: checked
       importFlag: importFlag
@@ -264,6 +273,8 @@ ImportTab = React.createClass
                    label={__ 'Export'}
                    onChange={@handleCilckRadio.bind(@, 1)}
                    checked={@state.checked[1]} />
+        </div>
+        <div style={display: 'flex', padding: 7}>
             <Button onClick={@handleFileImportClick}
                     disabled={@state.fileDisable}
                     style={height: '50%'}>
@@ -292,7 +303,7 @@ ImportTab = React.createClass
                  ref='importCode'
                  onChange={@handleImportCodeChange} />
           <Button disabled={@state.btnDisable}
-                  onClick={@importLogHandle}
+                  onClick={@importHandle}
                   block>
             {__ 'Import'}
           </Button>

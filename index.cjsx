@@ -1,5 +1,5 @@
 {_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal, JSON} = window
-{Tabs, Tab} = ReactBootstrap
+{TabbedArea, TabPane} = ReactBootstrap
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 i18n = require './node_modules/i18n'
@@ -13,6 +13,8 @@ i18n.configure({
     indent: '\t',
     extension: '.json'
 })
+console.log join(__dirname, 'assets', 'i18n')
+console.log window.language
 i18n.setLocale(window.language)
 {__} = i18n
 
@@ -141,6 +143,7 @@ isNull = (item) ->
 
 # [shipId, [lv, luck], [slotId], [slotLv], [slotALv]]
 emptyShip = [null, [null, -1], [], [], []]
+# {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
 
 getShipsDetail = (deckId) ->
   {_ships, _slotitems, _decks} = window
@@ -151,8 +154,8 @@ getShipsDetail = (deckId) ->
       ship = _ships[shipId]
       shipDetail[0] = ship.api_ship_id
       shipDetail[1][0] = ship.api_lv
-      #shipDetail[1][1] = ship.api_luck[0]
-      shipDetail[1][1] = -1
+      shipDetail[1][1] = ship.api_luck[0]
+      #shipDetail[1][1] = -1
       for slotId, index in ship.api_slot
         continue if slotId is -1
         shipDetail[2].push _slotitems[slotId].api_slotitem_id
@@ -169,19 +172,27 @@ getShipsDetail = (deckId) ->
     shipsDetail.push shipDetail
   shipsDetail
 
-getDeckDetail = (deckId, tags, tagsStyle)->
-  shipsDetail = getShipsDetail deckId
-  messages = getDeckMessage deckId
+getDeckDetail = (deckChecked, tags)->
+  shipsDetail = []
+  decks = []
+  messages = []
+  for deck, index in deckChecked
+    if deck
+      decks.push index
+  for deckId in decks
+    shipsDetail.push getShipsDetail deckId
+    message = getDeckMessage deckId
+    messages.push [
+                    message.totalLv,
+                    message.tyku.basic,
+                    message.tyku.alv,
+                    message.saku25.total,
+                    message.saku25a.total
+                  ]
 
-  details:
-    totalLv: messages.totalLv,
-    tykuBasic: messages.tyku.basic,
-    tykuAlv: messages.tyku.alv
-    saku25: messages.saku25.total,
-    saku25a: messages.saku25a.total
+  details: messages
   ships: shipsDetail
   tags: tags
-  tagsStyle: tagsStyle
 
 module.exports =
   name: 'HenseiNikki'
@@ -247,14 +258,13 @@ module.exports =
     render: ->
       <div>
       <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
-        <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
-          <Tab eventKey={1} title={__ 'Records'}>
+        <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
+          <TabPane eventKey={1} tab={__ 'Records'}>
             <HenseiList indexKey={0}
                         selectedKey={@state.selectedKey}
-                        henseiData={@state.henseiData}
-                        getDeckDetail={getDeckDetail} />
-          </Tab>
-          <Tab eventKey={2} title={__ 'Edit'}>
+                        henseiData={@state.henseiData} />
+          </TabPane>
+          <TabPane eventKey={2} tab={__ 'Edit'}>
             <EditDataTab indexKey={1}
                          selectedKey={@state.selectedKey}
                          henseiData={@state.henseiData}
@@ -262,6 +272,6 @@ module.exports =
                          handleAddData={@handleAddData}
                          handleDeleteData={@handleDeleteData}
                          saveData={@saveData} />
-          </Tab>
-        </Tabs>
+          </TabPane>
+        </TabbedArea>
       </div>
