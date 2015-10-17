@@ -65,7 +65,7 @@ TitlesList = React.createClass
     if title isnt @props.activeTitle
       @props.handleTitleChange title
   render: ->
-    <div style={width: '15%'}>
+    <div style={flex: "0 1", maxWidth: 80, minWidth: 50}>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
@@ -75,7 +75,7 @@ TitlesList = React.createClass
                onChange={@handleKeyWordChange} />
       </div>
       <div>
-        <ButtonGroup bsSize='xsmall' className='titles-container'>
+        <ButtonGroup vertical bsSize='xsmall' className='titles-container'>
         {
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
