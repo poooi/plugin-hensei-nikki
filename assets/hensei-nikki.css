@@ -46,15 +46,17 @@
   margin: 0;
   max-height: 24px;
 }
-#HenseiNikki .slotitem-container span.show {
-  display: inline !important;
+#HenseiNikki .slotitem-container > span {
+  display: flex;
+  flex-flow: row nowrap;
 }
 #HenseiNikki .slotitem-container img {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   margin-top: -5px;
   margin-bottom: -5px;
   margin-left: -3px;
+  flex: none;
 }
 #HenseiNikki .slotitem-container .slot-name {
   font-size: 90%;
@@ -63,7 +65,9 @@
   white-space: nowrap;
 }
 #HenseiNikki .slotitem-container .slot-improvment {
-  display: inline-block;
+  display: flex;
+  flex-flow: row nowrap;
+  flex: none;
 }
 #HenseiNikki .ships-container {
   display: flex;
@@ -72,9 +76,8 @@
 }
 #HenseiNikki .ship-item {
   display: flex;
-  margin: 5px 10px 0 0;
-  width: 200px;
-  padding-bottom: 7px;
+  margin: 5px 0 0 10px;
+  min-width: 200px;
 }
 #HenseiNikki .ship-item .ship-detail {
   display: flex;
@@ -87,12 +90,12 @@
   white-space: nowrap;
   width: 70px;
   font-size: 120%;
-  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(255,255,255,1)), to(rgba(0,0,0,0.1)));
+  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(255,255,255,1)), to(rgba(0,0,0,0.01)));
 }
 #HenseiNikki .ship-item .ship-type {
   overflow: hidden;
   white-space: nowrap;
-  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(222,187,71,1)), to(rgba(0,0,0,0.1)));
+  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(222,187,71,1)), to(rgba(0,0,0,0.01)));
 }
 #HenseiNikki .ship-item .slot-detail {
   display: flex;
@@ -103,6 +106,9 @@
 #HenseiNikki .titles-container {
   display: flex;
   flex-direction: column;
+}
+#HenseiNikki .titles-container button{
+  overflow: hidden;
 }
 #HenseiNikki .titles-keywords {
   padding: 0px;
@@ -117,6 +123,27 @@
 }
 #HenseiNikki .details-container{
   display: flex;
-  justify-content: space-between;
-  padding: 0 0 0 15px;
+  justify-content: flex-start;
+  padding: 0 0 0 25px;
+}
+#HenseiNikki .details-container > span{
+  margin-right: 15px;
+}
+
+@media screen and (max-width: 1366px) {
+    .ship-item {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1550px) and (min-width: 1366px) {
+    .ship-item {
+        width: 45%;
+    }
+}
+
+@media screen and (min-width: 1550px) {
+    .ship-item {
+        width: 30%;
+    }
 }

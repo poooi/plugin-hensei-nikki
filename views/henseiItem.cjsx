@@ -38,9 +38,7 @@ ShipItem = React.createClass
               alv = 0
 
             <div key={index} className='slotitem-container'>
-              <span>
-                <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
-              </span>
+              <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
               <OverlayTrigger placement='top' overlay={
                 <Tooltip>
                   <span>{name}</span>
@@ -48,9 +46,9 @@ ShipItem = React.createClass
               }>
                 <span className='slot-name'>{name}</span>
               </OverlayTrigger>
-              <span>
-                  {if lv? and lv isnt null then <strong className='slot-improvment' style={color: '#45A9A5'}>★+{lv}</strong> else ''}
-                  &nbsp;&nbsp;{
+              <span className='slot-improvment'>
+                  &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★+{lv}</strong> else ''}
+                  {
                     if alv? and alv >=1 and alv <= 3
                       for j in [1..alv]
                         <strong key={j} style={color: '#3EAEFF'}>|</strong>
