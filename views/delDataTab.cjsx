@@ -53,7 +53,7 @@ DelDataTab = React.createClass
                   shipName.push(window.$ships[ship[0]].api_name)
                   shipName.push('. ')
               else
-                for fleet, index in @props.henseiData[title].ships
+                for fleet in @props.henseiData[title].ships
                   break if !fleet[0]?[0]?
                   shipName.push(window.$ships[fleet[0][0]].api_name)
                   shipName.push('. ')
