@@ -1,5 +1,5 @@
 {_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal, JSON} = window
-{TabbedArea, TabPane} = ReactBootstrap
+{Tabs, Tab} = ReactBootstrap
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 i18n = require './node_modules/i18n'
@@ -258,13 +258,13 @@ module.exports =
     render: ->
       <div>
       <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
-        <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
-          <TabPane eventKey={1} tab={__ 'Records'}>
+        <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
+          <Tab eventKey={1} title={__ 'Records'}>
             <HenseiList indexKey={0}
                         selectedKey={@state.selectedKey}
                         henseiData={@state.henseiData} />
-          </TabPane>
-          <TabPane eventKey={2} tab={__ 'Edit'}>
+          </Tab>
+          <Tab eventKey={2} title={__ 'Edit'}>
             <EditDataTab indexKey={1}
                          selectedKey={@state.selectedKey}
                          henseiData={@state.henseiData}
@@ -272,6 +272,6 @@ module.exports =
                          handleAddData={@handleAddData}
                          handleDeleteData={@handleDeleteData}
                          saveData={@saveData} />
-          </TabPane>
-        </TabbedArea>
+          </Tab>
+        </Tabs>
       </div>

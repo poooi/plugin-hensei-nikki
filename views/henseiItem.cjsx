@@ -1,5 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
-{OverlayTrigger, Tooltip, Button, Input, TabbedArea, TabPane} = ReactBootstrap
+{OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -149,7 +149,7 @@ HenseiItem = React.createClass
       selectedKey: selectedKey
   render: ->
     if @props.deckItem.ships[0][0][0]?
-      <TabbedArea activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
+      <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
       {
         for fleet, index in @props.deckItem.ships
           break if !fleet[0]?
@@ -166,7 +166,7 @@ HenseiItem = React.createClass
             fpAlv = @props.deckItem.details[index][2]
             los = losA = null
 
-          <TabPane eventKey={index} tab={index}>
+          <Tab eventKey={index} title={index}>
             <div className='details-container'>
               <span>{__ 'Total Lv '}{totalLv}</span>
               {
@@ -205,9 +205,9 @@ HenseiItem = React.createClass
                   <ShipItem ship={ship} key={idx}/>
               }
            </div>
-          </TabPane>
+          </Tab>
       }
-      </TabbedArea>
+      </Tabs>
     else
       <FleetItem deckItem={@props.deckItem} />
 
