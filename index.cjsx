@@ -217,7 +217,7 @@ module.exports =
       data = {}
       try
         fs.ensureDirSync join(APPDATA_PATH, 'hensei-nikki')
-        console.log 'get data from hensei-nikki'
+        # console.log 'get data from hensei-nikki'
         data = fs.readJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{memberId}.json")
       catch e
         error "Read hensei error!#{e}"
