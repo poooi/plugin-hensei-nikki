@@ -80,7 +80,7 @@ TitlesList = React.createClass
           if @state.showData?
             if @state.showData.titles? and @state.showData.titles isnt []
               for title, index in @state.showData.titles
-                <OverlayTrigger key={index} placement='bottom' overlay={
+                <OverlayTrigger key={index} placement='right' overlay={
                   <Popover>
                     <div style={padding: 7}>
                       <div>{title}</div>
