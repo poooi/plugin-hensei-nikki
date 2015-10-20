@@ -1,4 +1,4 @@
-{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, error, log, toggleModal, JSON} = window
+{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, toggleModal, JSON} = window
 {Tabs, Tab} = ReactBootstrap
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
@@ -217,10 +217,9 @@ module.exports =
       data = {}
       try
         fs.ensureDirSync join(APPDATA_PATH, 'hensei-nikki')
-        # console.log 'get data from hensei-nikki'
         data = fs.readJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{memberId}.json")
       catch e
-        error "Read hensei error!#{e}"
+        console.log "Read hensei error!#{e}" if process.env.DEBUG?
       if !data.titles?
         data.titles = []
       @setState
@@ -246,7 +245,7 @@ module.exports =
       try
         fs.writeJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.json"), data
       catch e
-        error "Write hensei error!#{e}"
+        console.log "Write hensei error!#{e}" if process.env.DEBUG?
       @setState
         henseiData: data
     handleSelectTab: (selectedKey) ->
