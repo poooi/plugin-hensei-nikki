@@ -245,7 +245,7 @@ module.exports =
       try
         fs.writeJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.json"), data
       catch e
-        console.log "Write hensei error!#{e}" if process.env.DEBUG?
+        console.log "Write hensei error!#{e}"
       @setState
         henseiData: data
     handleSelectTab: (selectedKey) ->
