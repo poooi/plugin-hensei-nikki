@@ -89,7 +89,6 @@ TitlesList = React.createClass
                           if @state.showData[title].tags.length != 0
                             for tag, tagIndex in @state.showData[title].tags
                               <Label style={display: 'inline-block', margin: 5}
-                                     bsStyle={@state.showData[title].tagsStyle[tagIndex]}
                                      key={tagIndex}>
                                {tag}
                               </Label>
