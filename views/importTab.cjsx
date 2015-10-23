@@ -204,9 +204,9 @@ ImportTab = React.createClass
       selectTitle: selectTitle
   handleExportClick: ->
     title = @props.henseiData.titles[@state.selectTitle]
-    code = JSON.stringify @props.henseiData[title].ships
-    if !code[0][0]?
-      code = '[' + code + ']'
+    code = @props.henseiData[title].ships
+    if !code[0][0][0]?
+      code = '[' + JSON.stringify(code) + ']'
     @setState
       code: code
   handleFileImportClick: ->
