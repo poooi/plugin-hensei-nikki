@@ -56,6 +56,22 @@ codeConversion = (code) ->
       newCode[i - 1] = handleFleet code[fleet]
   newCode
 
+battleDetail2Code = (code) ->
+  newCode = [[], [], [], []]
+  newfleet = []
+  for shipId, index in code.poi_sortie_fleet
+    newShip = Object.clone emptyShip
+    newShip[0] = shipId
+    newShip[2] = code.poi_sortie_equipment[index].filter (item) -> item isnt null
+    newCode[0].push newShip
+  if code.poi_combined_fleet.length > 0
+    for shipId, index in poi_combined_fleet
+      newShip = Object.clone emptyShip
+      newShip[0] = shipId
+      newShip[2] = code.poi_combined_equipment[index].filter (item) -> item isnt null
+      newCode[1].push newShip
+  newCode
+
 getTyku = (deck) ->
   {$ships, $slotitems} = window
   basicTyku = alvTyku = totalTyku = 0
@@ -145,6 +161,8 @@ ImportTab = React.createClass
     try
       if importCode.version?
         fleets = codeConversion importCode
+      else if importCode.poi_sortie_fleet?
+        fleets = battleDetail2Code importCode
       else
         fleets = []
         for fleet, index in importCode
@@ -175,6 +193,7 @@ ImportTab = React.createClass
         deck.tags = ''
         @props.handleAddData inputTitle, deck
     catch e
+      toggleModal __('Error'), __('Incorrect code.')
       throw e
     @setState
       inputTitle: ''
