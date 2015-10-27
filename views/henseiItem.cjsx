@@ -39,7 +39,7 @@ ShipItem = React.createClass
             <Col xs={12} key={index} className='slotitem-container'>
               <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
               <OverlayTrigger placement='top' overlay={
-                <Tooltip>
+                <Tooltip id='name'>
                   <span>{name}</span>
                 </Tooltip>
               }>
@@ -98,7 +98,7 @@ FleetItem = React.createClass
             if fpBasic isnt null
               <span>
                 <OverlayTrigger placement='bottom' overlay={
-                  <Tooltip>
+                  <Tooltip id='fp-basic'>
                     <div>{__ 'Basic FP'}: {fpBasic}</div>
                     <div>{__ 'Rank bonuses'}: {fpAlv}</div>
                   </Tooltip>
@@ -113,7 +113,7 @@ FleetItem = React.createClass
             if los isnt null
               <span>
                 <OverlayTrigger placement='bottom' overlay={
-                  <Tooltip>
+                  <Tooltip id='los'>
                     <div>{losA}{__ ' Autumn'}</div>
                     <div>{los}{__ ' Old'}</div>
                   </Tooltip>
@@ -180,7 +180,7 @@ HenseiItem = React.createClass
                 if fpBasic isnt null
                   <span>
                     <OverlayTrigger placement='bottom' overlay={
-                      <Tooltip>
+                      <Tooltip id='fpbasic'>
                         <div>{__ 'Basic FP'}: {fpBasic}</div>
                         <div>{__ 'Rank bonuses'}: {fpAlv}</div>
                       </Tooltip>
@@ -195,7 +195,7 @@ HenseiItem = React.createClass
                 if los isnt null
                   <span>
                     <OverlayTrigger placement='bottom' overlay={
-                      <Tooltip>
+                      <Tooltip id='los'>
                         <div>{losA}{__ ' Autumn'}</div>
                         <div>{los}{__ ' Old'}</div>
                       </Tooltip>
