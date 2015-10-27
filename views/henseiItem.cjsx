@@ -128,7 +128,7 @@ FleetItem = React.createClass
         {
           for ship, index in @props.deckItem.ships
             break if ship[0] is null
-            <Col xs={5} key={index}>
+            <Col xs={if @props.layout == 'horizontal' or window.doubleTabbed then 6 else 4} key={index}>
               <ShipItem ship={ship} key={index}/>
             </Col>
         }
@@ -139,6 +139,7 @@ HenseiItem = React.createClass
   getInitialState: ->
     deckId: 0
     selectedKey: 0
+    layout: window.config.get 'poi.layout', 'horizontal'
   componentWillReceiveProps: (nextProps) ->
     if nextProps.deckItem isnt @props.deckItem
       @setState
@@ -146,6 +147,13 @@ HenseiItem = React.createClass
   handleSelectTab: (selectedKey) ->
     @setState
       selectedKey: selectedKey
+  handleChangeLayout: (e) ->
+    @setState
+      layout: e.detail.layout
+  componentDidMount: ->
+    window.addEventListener 'layout.change', @handleChangeLayout
+  componentWillUnmount: ->
+    window.removeEventListener 'layout.change', @handleChangeLayout
   render: ->
     if @props.deckItem.ships[0][0][0]?
       <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
@@ -201,7 +209,7 @@ HenseiItem = React.createClass
               {
                 for ship, idx in @props.deckItem.ships[index]
                   break if ship[0] is null
-                  <Col xs={5} key={idx}>
+                  <Col xs={if @state.layout == 'horizontal' or window.doubleTabbed then 6 else 4} key={idx}>
                     <ShipItem ship={ship} key={idx}/>
                   </Col>
               }
@@ -210,6 +218,6 @@ HenseiItem = React.createClass
       }
       </Tabs>
     else
-      <FleetItem deckItem={@props.deckItem} />
+      <FleetItem deckItem={@props.deckItem} layout={@state.layout} />
 
 module.exports = HenseiItem
