@@ -67,7 +67,7 @@
   white-space: nowrap;
   width: calc(100% - 48px);
 }
-#HenseiNikki .tainer .slot-improvment {
+#HenseiNikki .slotitem-container .slot-improvment {
   display: flex;
   flex-flow: row nowrap;
   flex: none;
