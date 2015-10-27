@@ -76,7 +76,7 @@
 #HenseiNikki .ships-container {
   display: flex;
   flex-flow: row wrap;
-  /*padding: 10px 0 0 15px;*/
+  padding: 0 30px 0 0px;
 }
 #HenseiNikki .ship-item {
   display: flex;
