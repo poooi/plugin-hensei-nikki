@@ -1,5 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
-{OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
+{OverlayTrigger, Tooltip, Button, Input, Tabs, Tab, Grid, Col, Row, Label} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -10,18 +10,17 @@ i18n = require '../node_modules/i18n'
 
 ShipItem = React.createClass
   render: ->
-    <div className='ship-item'>
+    <Col xs={6} className='ship-item'>
       {
         ship = window.$ships[@props.ship[0]]
         name = ship.api_name
         type = window.$shipTypes[ship.api_stype].api_name
-        <div className='ship-detail'>
-          <span className='ship-name'>{name}</span>
-          <span>Lv.{@props.ship[1][0]}</span>
-          <span className='ship-type'>{type}</span>
-        </div>
+        <Col xs={12} className='ship-detail'>
+          <div className='ship-name'>{name}</div>
+          <div className='ship-type'> Lv.{@props.ship[1][0]} {type}</div>
+        </Col>
       }
-      <div className='slot-detail'>
+      <Col className='slot-detail'>
         {
           for slotId, index in @props.ship[2]
             continue if slotId is null
@@ -37,17 +36,17 @@ ShipItem = React.createClass
             else
               alv = 0
 
-            <div key={index} className='slotitem-container'>
+            <Col xs={12} key={index} className='slotitem-container'>
               <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
               <OverlayTrigger placement='top' overlay={
                 <Tooltip>
                   <span>{name}</span>
                 </Tooltip>
               }>
-                <span className='slot-name'>{name}</span>
+                <div className='slot-name'>{name}</div>
               </OverlayTrigger>
               <span className='slot-improvment'>
-                  &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★+{lv}</strong> else ''}
+                  &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★{lv}</strong> else ''}
                   {
                     if alv? and alv >=1 and alv <= 3
                       for j in [1..alv]
@@ -64,10 +63,10 @@ ShipItem = React.createClass
                     else ''
                   }
              </span>
-          </div>
+           </Col>
         }
-      </div>
-    </div>
+      </Col>
+    </Col>
 
 FleetItem = React.createClass
   render: ->
@@ -125,13 +124,15 @@ FleetItem = React.createClass
           }
         </div>
       }
-      <div className='ships-container'>
+      <Row className='ships-container'>
         {
           for ship, index in @props.deckItem.ships
             break if ship[0] is null
-            <ShipItem ship={ship} key={index}/>
+            <Col xs={5} key={index}>
+              <ShipItem ship={ship} key={index}/>
+            </Col>
         }
-     </div>
+     </Row>
     </div>
 
 HenseiItem = React.createClass
@@ -196,13 +197,15 @@ HenseiItem = React.createClass
                   </span>
               }
             </div>
-            <div className='ships-container'>
+            <Row className='ships-container'>
               {
                 for ship, idx in @props.deckItem.ships[index]
                   break if ship[0] is null
-                  <ShipItem ship={ship} key={idx}/>
+                  <Col xs={5} key={idx}>
+                    <ShipItem ship={ship} key={idx}/>
+                  </Col>
               }
-           </div>
+           </Row>
           </Tab>
       }
       </Tabs>
