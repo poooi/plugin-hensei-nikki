@@ -151,7 +151,7 @@ HenseiItem = React.createClass
       {
         for fleet, index in @props.deckItem.ships
           break if !fleet[0]?
-          if @props.deckItem.details.length > 3
+          if @props.deckItem.details[index].length > 3
             totalLv = @props.deckItem.details[index][0]
             fpTotal = @props.deckItem.details[index][2]
             fpBasic = fpAlv = null
