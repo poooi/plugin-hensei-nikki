@@ -164,7 +164,7 @@ HenseiItem = React.createClass
             fpAlv = @props.deckItem.details[index][2]
             los = losA = null
 
-          <Tab eventKey={index} title={index}>
+          <Tab eventKey={index} title={index} key={index}>
             <div className='details-container'>
               <span>{__ 'Total Lv '}{totalLv}</span>
               {
