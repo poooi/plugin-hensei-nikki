@@ -80,7 +80,7 @@
 }
 #HenseiNikki .ship-item {
   display: flex;
-  width: 120%;
+  width: 135%;
   flex-flow: column;
   padding-bottom: 10px;
 }
