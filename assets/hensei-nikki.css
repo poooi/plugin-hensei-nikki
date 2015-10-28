@@ -80,11 +80,9 @@
 }
 #HenseiNikki .ship-item {
   display: flex;
-  margin: 5px 0 0 10px;
-  min-width: 200px;
+  width: 120%;
   flex-flow: column;
   padding-bottom: 10px;
-  /*border-bottom: 1px solid #888;*/
 }
 #HenseiNikki .ship-item .ship-detail {
   display: flex;

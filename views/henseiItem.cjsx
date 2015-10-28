@@ -1,5 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
-{OverlayTrigger, Tooltip, Button, Input, Tabs, Tab, Grid, Col, Row, Label} = ReactBootstrap
+{OverlayTrigger, Tooltip, Button, Input, Tabs, Tab, Grid, Col, Label} = ReactBootstrap
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -124,7 +124,7 @@ FleetItem = React.createClass
           }
         </div>
       }
-      <Row className='ships-container'>
+      <Grid className='ships-container'>
         {
           for ship, index in @props.deckItem.ships
             break if ship[0] is null
@@ -132,7 +132,7 @@ FleetItem = React.createClass
               <ShipItem ship={ship} key={index}/>
             </Col>
         }
-     </Row>
+     </Grid>
     </div>
 
 HenseiItem = React.createClass
@@ -205,7 +205,7 @@ HenseiItem = React.createClass
                   </span>
               }
             </div>
-            <Row className='ships-container'>
+            <Grid className='ships-container'>
               {
                 for ship, idx in @props.deckItem.ships[index]
                   break if ship[0] is null
@@ -213,7 +213,7 @@ HenseiItem = React.createClass
                     <ShipItem ship={ship} key={idx}/>
                   </Col>
               }
-           </Row>
+           </Grid>
           </Tab>
       }
       </Tabs>
