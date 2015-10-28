@@ -45,10 +45,12 @@
   display: flex;
   margin: 0;
   max-height: 24px;
+  padding: 2px;
 }
 #HenseiNikki .slotitem-container > span {
   display: flex;
   flex-flow: row nowrap;
+  font-size: 90%
 }
 #HenseiNikki .slotitem-container img {
   width: 24px;
@@ -63,43 +65,50 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: calc(100% - 48px);
 }
 #HenseiNikki .slotitem-container .slot-improvment {
   display: flex;
   flex-flow: row nowrap;
   flex: none;
+  width: 24px;
 }
 #HenseiNikki .ships-container {
   display: flex;
   flex-flow: row wrap;
-  padding: 10px 0 0 15px;
+  padding: 0 30px 0 0px;
 }
 #HenseiNikki .ship-item {
   display: flex;
-  margin: 5px 0 0 10px;
-  min-width: 200px;
+  width: 135%;
+  flex-flow: column;
+  padding-bottom: 10px;
 }
 #HenseiNikki .ship-item .ship-detail {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-content: space-around;
-  justify-content: space-around;
+  justify-content: center;
 }
 #HenseiNikki .ship-item .ship-name {
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  width: 70px;
   font-size: 120%;
-  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(255,255,255,1)), to(rgba(0,0,0,0.01)));
+  text-align: center;
+  /*-webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(255,255,255,1)), to(rgba(0,0,0,0.01)));*/
 }
 #HenseiNikki .ship-item .ship-type {
   overflow: hidden;
   white-space: nowrap;
-  -webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(222,187,71,1)), to(rgba(0,0,0,0.01)));
+  padding-left: 10px;
+  text-align: center;
+  /*-webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(222,187,71,1)), to(rgba(0,0,0,0.01)));*/
 }
 #HenseiNikki .ship-item .slot-detail {
-  display: flex;
-  flex: 1;
+  flex: 4;
+  overflow: hidden;
   flex-direction: column;
   align-content: center;
 }
@@ -129,21 +138,6 @@
 #HenseiNikki .details-container > span{
   margin-right: 15px;
 }
-
-@media screen and (max-width: 1366px) {
-  #HenseiNikki .ship-item {
-        width: 100%;
-    }
-}
-
-@media screen and (max-width: 1550px) and (min-width: 1366px) {
-  #HenseiNikki .ship-item {
-        width: 45%;
-    }
-}
-
-@media screen and (min-width: 1550px) {
-  #HenseiNikki .ship-item {
-        width: 30%;
-    }
+#HenseiNikki .tab-content {
+  overflow: hidden;
 }

@@ -97,7 +97,7 @@ TitlesList = React.createClass
                     </div>
                   </Popover>
                 }>
-                  <Button
+                  <Button style={margin: '0px'}
                           onClick={@handleClick.bind(@, title)}
                           className={if @props.activeTitle is title then 'active' else ''}>
                     {title}
