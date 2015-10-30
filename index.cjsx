@@ -192,6 +192,12 @@ getDeckDetail = (deckChecked, tags)->
   ships: shipsDetail
   tags: tags
 
+getCss = ->
+  {doubleTabbed} = window
+  if doubleTabbed then width = 800 else width = 400
+  if $('poi-app').clientWidth < width then css = 'ship-item-horizontal.css' else css = 'ship-item-vertical.css'
+  css
+
 module.exports =
   name: 'HenseiNikki'
   displayName: <span><FontAwesome key={0} name='folder-open' />{__ 'Organization Records'}</span>
@@ -203,9 +209,14 @@ module.exports =
   reactClass: React.createClass
     getInitialState: ->
       memberId: ''
+      css: getCss()
     henseiData: {}
     componentDidMount: ->
       window.addEventListener 'game.response', @handleResponse
+      window.addEventListener 'resize', @handleResize
+    handleResize: ->
+      @setState
+        css: getCss()
     handleResponse: (e) ->
       {path, body} = e.detail
       switch path
@@ -254,6 +265,7 @@ module.exports =
     render: ->
       <div>
       <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
+      <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
         <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
           <Tab eventKey={1} title={__ 'Records'}>
             <HenseiList indexKey={0}

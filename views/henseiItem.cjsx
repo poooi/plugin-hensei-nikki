@@ -1,6 +1,8 @@
 {React, ReactBootstrap, FontAwesome} = window
 {OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
-{join} = require 'path-extra'
+# {join} = require 'path-extra'
+fs = require 'fs-extra'
+{relative, join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -17,8 +19,10 @@ ShipItem = React.createClass
         type = window.$shipTypes[ship.api_stype].api_name
         <div className='ship-detail'>
           <span className='ship-name'>{name}</span>
-          <span>Lv.{@props.ship[1][0]}</span>
-          <span className='ship-type'>{type}</span>
+          <div className='ship-detail-group'>
+            <span>Lv.{@props.ship[1][0]}</span>
+            <span className='ship-type'>{type}</span>
+          </div>
         </div>
       }
       <div className='slot-detail'>
@@ -40,14 +44,14 @@ ShipItem = React.createClass
             <div key={index} className='slotitem-container'>
               <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
               <OverlayTrigger placement='top' overlay={
-                <Tooltip>
+                <Tooltip id='name'>
                   <span>{name}</span>
                 </Tooltip>
               }>
                 <span className='slot-name'>{name}</span>
               </OverlayTrigger>
               <span className='slot-improvment'>
-                  &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★+{lv}</strong> else ''}
+                  &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★{lv}</strong> else ''}
                   {
                     if alv? and alv >=1 and alv <= 3
                       for j in [1..alv]
@@ -99,7 +103,7 @@ FleetItem = React.createClass
             if fpBasic isnt null
               <span>
                 <OverlayTrigger placement='bottom' overlay={
-                  <Tooltip>
+                  <Tooltip id='fp-basic'>
                     <div>{__ 'Basic FP'}: {fpBasic}</div>
                     <div>{__ 'Rank bonuses'}: {fpAlv}</div>
                   </Tooltip>
@@ -114,7 +118,7 @@ FleetItem = React.createClass
             if los isnt null
               <span>
                 <OverlayTrigger placement='bottom' overlay={
-                  <Tooltip>
+                  <Tooltip id='los'>
                     <div>{losA}{__ ' Autumn'}</div>
                     <div>{los}{__ ' Old'}</div>
                   </Tooltip>
@@ -171,7 +175,7 @@ HenseiItem = React.createClass
                 if fpBasic isnt null
                   <span>
                     <OverlayTrigger placement='bottom' overlay={
-                      <Tooltip>
+                      <Tooltip id='fpbasic'>
                         <div>{__ 'Basic FP'}: {fpBasic}</div>
                         <div>{__ 'Rank bonuses'}: {fpAlv}</div>
                       </Tooltip>
@@ -186,7 +190,7 @@ HenseiItem = React.createClass
                 if los isnt null
                   <span>
                     <OverlayTrigger placement='bottom' overlay={
-                      <Tooltip>
+                      <Tooltip id='los'>
                         <div>{losA}{__ ' Autumn'}</div>
                         <div>{los}{__ ' Old'}</div>
                       </Tooltip>
