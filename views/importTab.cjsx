@@ -13,6 +13,7 @@ emptyShip = [null, [null, -1], [], [], []]
 handleSlot = (slots) ->
   slotId = []
   slotLv = []
+  slotAlv = []
   for i in [1..4]
     slot = 'i' + i.toString()
     if slots.hasOwnProperty(slot)
@@ -21,12 +22,17 @@ handleSlot = (slots) ->
         slotLv.push slots[slot].rf
       else
         slotLv.push null
+      if slots[slot].rp? > 0
+        slotAlv.push slots[slot].rp
+      else
+        slotAlv.push null
   if slots.ix?.id?
     slotId.push slots.ix.id
     slotLv.push null
 
   ids: slotId
   lvs: slotLv
+  alvs: slotAlv
 
 handleShip = (ship) ->
   shipDetail = Object.clone emptyShip
@@ -36,6 +42,7 @@ handleShip = (ship) ->
   slots = handleSlot ship.items
   shipDetail[2] = slots.ids
   shipDetail[3] = slots.lvs
+  shipDetail[4] = slots.alvs
 
   shipDetail
 
