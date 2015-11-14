@@ -174,12 +174,14 @@ ImportTab = React.createClass
         fleets = []
         for fleet, index in importCode
           continue if fleet.length is 0
+          _fleet = []
           for ship in fleet
-            continue if ship.length is 0
+            continue if !ship[0]? or ship.length is 0
             ship[0] = parseInt ship[0]
             if ship.length is 4
               ship.push []
-          fleets[index] = fleet
+            _fleet.push ship  
+          fleets[index] = _fleet
       flag = false
       for fleet in fleets
         break if fleet.lenth is 0
@@ -233,6 +235,8 @@ ImportTab = React.createClass
     code = @props.henseiData[title].ships
     if !code[0][0][0]?
       code = '[' + JSON.stringify(code) + ']'
+    else 
+      code = JSON.stringify(code)
     @setState
       code: code
   handleFileImportClick: ->
