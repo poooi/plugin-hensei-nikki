@@ -205,7 +205,7 @@ module.exports =
   author: 'Rui'
   link: 'https://github.com/ruiii'
   description: '记录编成信息'
-  version: '3.2.3'
+  version: '3.2.4'
   reactClass: React.createClass
     getInitialState: ->
       memberId: ''
