@@ -99,7 +99,7 @@ AddDataTab = React.createClass
                 disabled={@state.saveDisable}
                 onClick={@handlePreClick}
                 block>
-          {__ 'Save'}
+          {__ 'Preview'}
         </Button>
         <Button bsSize='small'
                 disabled={@state.saveDisable}
@@ -110,13 +110,13 @@ AddDataTab = React.createClass
       </div>
       <Modal show={@state.showPre} container={this}>
         <Modal.Header>
-          <Modal.Title id='contained-modal-title'>Preview</Modal.Title>
+          <Modal.Title id='contained-modal-title'>{__ 'Preview'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <HenseiItem deckItem={@state.deck}/>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={@close}>Close</Button>
+          <Button onClick={@close}>{__ 'Close'}</Button>
         </Modal.Footer>
       </Modal>
     </div>
