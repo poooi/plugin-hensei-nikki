@@ -142,6 +142,7 @@ HenseiItem = React.createClass
   getInitialState: ->
     deckId: 0
     selectedKey: 0
+    tab: ['I', 'II', 'III', 'IV']
   componentWillReceiveProps: (nextProps) ->
     if nextProps.deckItem isnt @props.deckItem
       @setState
@@ -169,7 +170,7 @@ HenseiItem = React.createClass
             fpAlv = @props.deckItem.details[index][2]
             los = losA = null
 
-          <Tab eventKey={index} title={index} key={index}>
+          <Tab eventKey={index} title={@state.tab[index]} key={index}>
             <div className='details-container'>
               <span>{__ 'Total Lv '}{totalLv}</span>
               {
