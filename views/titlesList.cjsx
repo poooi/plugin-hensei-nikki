@@ -65,11 +65,11 @@ TitlesList = React.createClass
     if title isnt @props.activeTitle
       @props.handleTitleChange title
   render: ->
-    <div style={flex: "0 1", maxWidth: 80, minWidth: 50}>
+    <div style={flex: '0 1', maxWidth: 80, minWidth: 50}>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}
-               placeholder={__ "Keywords"}
+               placeholder={__ 'Keywords'}
                hasFeedback
                ref='keywords'
                onChange={@handleKeyWordChange} />
@@ -88,7 +88,7 @@ TitlesList = React.createClass
                         {
                           if @state.showData[title].tags.length != 0
                             for tag, tagIndex in @state.showData[title].tags
-                              <Label style={display: 'inline-block', margin: 5}
+                              <Label style={display: 'inline-block', margin: 5, fontSize: 14}
                                      key={tagIndex}>
                                {tag}
                               </Label>
