@@ -195,7 +195,8 @@ getDeckDetail = (deckChecked, tags)->
 getCss = ->
   {doubleTabbed} = window
   if doubleTabbed then width = 800 else width = 400
-  if $('poi-app').clientWidth < width then css = 'ship-item-horizontal.css' else css = 'ship-item-vertical.css'
+  if config.get('poi.layout', 'horizontal') == 'horizontal' then area = 'poi-app' else area = 'body'
+  if $("#{area}").clientWidth < width then css = 'ship-item-horizontal.css' else css = 'ship-item-vertical.css'
   css
 
 module.exports =
