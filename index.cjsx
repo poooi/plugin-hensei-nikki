@@ -201,11 +201,11 @@ getCss = ->
 
 module.exports =
   name: 'HenseiNikki'
-  displayName: <span><FontAwesome key={0} name='folder-open' /> {__ 'Organization Records'}</span>
+  displayName: <span><FontAwesome key={0} name='folder-open' /> {__ 'Display Name'}</span>
   priority: 7
   author: 'Rui'
   link: 'https://github.com/ruiii'
-  description: '记录编成信息'
+  description: __ 'Description'
   version: '3.3.0'
   reactClass: React.createClass
     getInitialState: ->
