@@ -1,9 +1,11 @@
 {React, ReactBootstrap} = window
-{Button, Input, Label} = ReactBootstrap
+{Button, Input, Label, Modal} = ReactBootstrap
+{relative, join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
 TagsInputContainer = require './tagsInputContainer'
+HenseiItem = require './henseiItem'
 
 AddDataTab = React.createClass
   getInitialState: ->
@@ -11,6 +13,8 @@ AddDataTab = React.createClass
     saveDisable: true
     tags: []
     deckChecked: [false, false, false, false]
+    showPre: false
+    deck: ''
   componentWillReceiveProps: (nextProps)->
     if nextProps.indexKey is nextProps.selectedKey
       @setState
@@ -44,6 +48,15 @@ AddDataTab = React.createClass
       deckChecked: [false, false, false, false]
       title: ''
       tags: []
+  handlePreClick: ->
+    {deckChecked, title, tags} = @state
+    deck = @props.getDeckDetail deckChecked, tags
+    @setState
+      deck: deck
+      showPre: true
+  close: ->
+    @setState
+      showPre: false
   handleClickCheckbox: (index) ->
     {deckChecked} = @state
     if deckChecked isnt []
@@ -84,11 +97,28 @@ AddDataTab = React.createClass
       <div>
         <Button bsSize='small'
                 disabled={@state.saveDisable}
+                onClick={@handlePreClick}
+                block>
+          {__ 'Save'}
+        </Button>
+        <Button bsSize='small'
+                disabled={@state.saveDisable}
                 onClick={@handleSaveClick}
                 block>
           {__ 'Save'}
         </Button>
       </div>
+      <Modal show={@state.showPre} container={this}>
+        <Modal.Header>
+          <Modal.Title id='contained-modal-title'>Preview</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <HenseiItem deckItem={@state.deck}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={@close}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
 
 module.exports = AddDataTab
