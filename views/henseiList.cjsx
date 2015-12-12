@@ -18,7 +18,7 @@ HenseiList = React.createClass
     @setState
       activeTitle: title
   handleDelClick: ->
-    if confirm('确定删除？')
+    if confirm(__('Confirm?'))
       @props.handleDeleteData [@state.activeTitle]
     else
       return
@@ -64,13 +64,13 @@ HenseiList = React.createClass
                 <div className={if @state.edit then 'hidden' else 'show'}>
                   <div style={display: 'flex', justifyContent: 'space-around', margin: 10, marginBottom: 0}>
                     <Button bsSize='small' onClick={@handleDelClick}>
-                      <FontAwesome name='trash'  />删除记录
+                      <FontAwesome name='trash'  />{__('Delete Records')}
                     </Button>
                     <Button bsSize='small' onClick={@handleEditClick}>
-                      <FontAwesome name='pencil' />编辑tag
+                      <FontAwesome name='pencil' />{__('Edit tag')}
                     </Button>
                     <Button bsSize='small' onClick={@handleEditTitleClick}>
-                      <FontAwesome name='pencil' />编辑标题
+                      <FontAwesome name='pencil' />{__('Edit title')}
                     </Button>
                   </div>
                   <Panel collapsible expanded={@state.editTitle} style={marginBottom: 0}>

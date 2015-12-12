@@ -21,7 +21,9 @@
   "Import": "匯入",
   "Export": "匯出",
   "Delete": "刪除",
+  "Delete Records": "刪除記錄",
   "Edit tag": "編輯tag",
+  "Edit title": "編輯標題",
   "Select fleet": "選擇艦隊",
   "Incorrect code.": "代碼不正確，無法匯入。",
   "Import records file": "匯入記錄文件",
@@ -30,5 +32,6 @@
   "Import code": "匯入代碼",
   "Code": "代碼",
   "Tag": "Tag",
-  "Select title": "選擇標題"
+  "Select title": "選擇標題",
+  "Confirm?": "确定刪除？"
 }

@@ -21,7 +21,9 @@
   "Import": "導入",
   "Export": "導出",
   "Delete": "削除",
+  "Delete Records": "記録を削除します",
   "Edit tag": "タグを編集します",
+  "Edit title": "タイトルを編集します",
   "Select fleet": "艦隊を選択します",
   "Incorrect code.": "コードは間違っています。導入できません。",
   "Import records file": "导入记录文件",
@@ -30,5 +32,6 @@
   "Import code": "コードを導入します",
   "Code": "コード",
   "Tag": "タグ",
-  "Select title": "タイトルを選択します"
+  "Select title": "タイトルを選択します",
+  "Confirm?": "この記録を完全に消去してもよろしいですか？"
 }
