@@ -271,6 +271,8 @@ module.exports =
           <Tab eventKey={1} title={__ 'Records'}>
             <HenseiList indexKey={0}
                         selectedKey={@state.selectedKey}
+                        handleDeleteData={@handleDeleteData}
+                        saveData={@saveData}
                         henseiData={@state.henseiData} />
           </Tab>
           <Tab eventKey={2} title={__ 'Edit'}>

@@ -6,8 +6,8 @@ i18n = require '../node_modules/i18n'
 
 AddDataTab = require './addDataTab'
 ImportTab = require './importTab'
-DelDataTab = require './delDataTab'
-EditTagTab = require './editTagTab'
+#DelDataTab = require './delDataTab'
+#EditTagTab = require './editTagTab'
 
 EditDataTab = React.createClass
   getInitialState: ->
@@ -31,18 +31,20 @@ EditDataTab = React.createClass
                    handleAddData={@props.handleAddData}
                    saveData={@props.saveData} />
       </Tab>
-      <Tab eventKey={2} title={__ 'Delete'} >
-        <DelDataTab indexKey={2}
-                    selectedKey={@state.selectedKey}
-                    henseiData={@props.henseiData}
-                    handleDeleteData={@props.handleDeleteData} />
-      </Tab>
-      <Tab eventKey={3} title={__ 'Edit tag'} >
-        <EditTagTab indexKey={3}
-                    selectedKey={@state.selectedKey}
-                    henseiData={@props.henseiData}
-                    saveData={@props.saveData} />
-      </Tab>
     </Tabs>
 
 module.exports = EditDataTab
+###
+<Tab eventKey={2} title={__ 'Delete'} >
+  <DelDataTab indexKey={2}
+              selectedKey={@state.selectedKey}
+              henseiData={@props.henseiData}
+              handleDeleteData={@props.handleDeleteData} />
+</Tab>
+<Tab eventKey={3} title={__ 'Edit tag'} >
+  <EditTagTab indexKey={3}
+              selectedKey={@state.selectedKey}
+              henseiData={@props.henseiData}
+              saveData={@props.saveData} />
+</Tab>
+###
