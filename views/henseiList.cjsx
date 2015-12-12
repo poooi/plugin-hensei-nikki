@@ -15,8 +15,18 @@ HenseiList = React.createClass
     edit: false
     editTitle: false
   handleTitleChange: (title) ->
-    @setState
-      activeTitle: title
+    if @state.edit
+      @setState
+        edit: false
+        activeTitle: title
+    else if @state.editTitle
+      @setState
+        titleInput: ''
+        editTitle: false
+        activeTitle: title
+    else
+      @setState
+        activeTitle: title
   handleDelClick: ->
     if confirm(__('Confirm?'))
       @props.handleDeleteData [@state.activeTitle]
@@ -47,10 +57,16 @@ HenseiList = React.createClass
       titleInput: titleInput
       btnDisable: btnDisable
   handleTitleSaveClick: ->
-    @props.handleTitleChang @state.titleInput, @state.activeTitle
-    @setState
-      activeTitle: @state.titleInput
-      editTitle: false
+    flag = true
+    for title in @props.henseiData.titles
+      if title is @state.titleInput
+        toggleModal __('Error'), __('The title is already exist.')
+        flag = false
+    if flag
+      @props.handleTitleChang @state.titleInput, @state.activeTitle
+      @setState
+        activeTitle: @state.titleInput
+        editTitle: false
   render: ->
     <div className='hensei-list-container'>
       <TitlesList activeTitle={@state.activeTitle}

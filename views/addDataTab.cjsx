@@ -62,9 +62,20 @@ AddDataTab = React.createClass
         showPre: true
   handleClickCheckbox: (index) ->
     {deckChecked} = @state
-    if deckChecked isnt []
+    if deckChecked.length > 0
       deckChecked[index] = !deckChecked[index]
-      @setState {deckChecked}
+      flag = false
+      for deck in deckChecked
+        if deck
+          flag = true
+          break
+      if flag and @state.title.length > 0
+        saveDisable = false
+      else
+        saveDisable = true
+      @setState
+        deckChecked: deckChecked
+        saveDisable: saveDisable
   render: ->
     <div className='add-data-tab'>
       <div style={display: 'flex', padding: 7}>

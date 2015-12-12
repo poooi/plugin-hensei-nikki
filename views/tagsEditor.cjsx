@@ -22,6 +22,8 @@ TagsEditor = React.createClass
     if nextProps.edit and !@props.edit
       tagChecked = []
       tags = nextProps.henseiData[nextProps.title].tags
+      if tags.length <= 0
+        tags = []
       for item in tags
         tagChecked.push false
       @setState
