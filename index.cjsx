@@ -253,6 +253,13 @@ module.exports =
           if item is title
             henseiData.titles.splice(index, 1)
       @saveData henseiData
+    handleTitleChang: (newTitle, oldTitle) ->
+      {henseiData} = @state
+      henseiData[newTitle] = henseiData[oldTitle]
+      delete henseiData[oldTitle]
+      idx = henseiData.titles.indexOf oldTitle
+      henseiData.titles[idx] = newTitle
+      @saveData henseiData
     saveData: (data) ->
       try
         fs.writeJSONSync join(APPDATA_PATH, 'hensei-nikki', "#{@state.memberId}.json"), data
@@ -273,6 +280,7 @@ module.exports =
                         selectedKey={@state.selectedKey}
                         handleDeleteData={@handleDeleteData}
                         saveData={@saveData}
+                        handleTitleChang={@handleTitleChang}
                         henseiData={@state.henseiData} />
           </Tab>
           <Tab eventKey={2} title={__ 'Edit'}>
