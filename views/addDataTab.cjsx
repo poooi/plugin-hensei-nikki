@@ -1,5 +1,5 @@
 {React, ReactBootstrap} = window
-{Button, Input, Label, Modal} = ReactBootstrap
+{Button, Input, Label, Panel} = ReactBootstrap
 {relative, join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -21,6 +21,8 @@ AddDataTab = React.createClass
         saveDisable: true
         title: ''
         tags: []
+        deck: ''
+        showPre: false
   handleTitleChange: ->
     title = @refs.title.getValue()
     flag = false
@@ -49,14 +51,15 @@ AddDataTab = React.createClass
       title: ''
       tags: []
   handlePreClick: ->
-    {deckChecked, title, tags} = @state
-    deck = @props.getDeckDetail deckChecked, tags
-    @setState
-      deck: deck
-      showPre: true
-  close: ->
-    @setState
-      showPre: false
+    {deckChecked, title, tags, showPre} = @state
+    if showPre
+      @setState
+        showPre: false
+    else
+      deck = @props.getDeckDetail deckChecked, tags
+      @setState
+        deck: deck
+        showPre: true
   handleClickCheckbox: (index) ->
     {deckChecked} = @state
     if deckChecked isnt []
@@ -94,6 +97,12 @@ AddDataTab = React.createClass
               </Label>
         }
       </div>
+      <Panel collapsible expanded={@state.showPre}>
+        {
+          if @state.deck.ships?
+            <HenseiItem deckItem={@state.deck}/>
+        }
+      </Panel>
       <div style={display: 'flex'}>
         <Button bsSize='small'
                 disabled={@state.saveDisable}
@@ -108,17 +117,6 @@ AddDataTab = React.createClass
           {__ 'Save'}
         </Button>
       </div>
-      <Modal show={@state.showPre}>
-        <Modal.Header>
-          <Modal.Title id='contained-modal-title'>{__ 'Preview'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <HenseiItem deckItem={@state.deck}/>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={@close}>{__ 'Close'}</Button>
-        </Modal.Footer>
-      </Modal>
     </div>
 
 module.exports = AddDataTab
