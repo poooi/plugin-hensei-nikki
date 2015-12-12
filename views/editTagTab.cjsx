@@ -20,7 +20,7 @@ EditTagTab = React.createClass
     tags: []
     tagChecked: []
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.indexKey is nextProps.selectedKey and nextProps.henseiData.titles?
+    if nextProps.indexKey is nextProps.selectedKey and nextProps.henseiData?.titles?
       tagChecked = []
       title = nextProps.henseiData.titles[0]
       tags = nextProps.henseiData[title].tags

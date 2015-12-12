@@ -94,21 +94,21 @@ AddDataTab = React.createClass
               </Label>
         }
       </div>
-      <div>
+      <div style={display: 'flex'}>
         <Button bsSize='small'
                 disabled={@state.saveDisable}
                 onClick={@handlePreClick}
-                block>
+                style={width: '50%'}>
           {__ 'Preview'}
         </Button>
         <Button bsSize='small'
                 disabled={@state.saveDisable}
                 onClick={@handleSaveClick}
-                block>
+                style={width: '50%'}>
           {__ 'Save'}
         </Button>
       </div>
-      <Modal show={@state.showPre} container={this}>
+      <Modal show={@state.showPre}>
         <Modal.Header>
           <Modal.Title id='contained-modal-title'>{__ 'Preview'}</Modal.Title>
         </Modal.Header>

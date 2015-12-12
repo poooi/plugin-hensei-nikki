@@ -8,7 +8,7 @@ DelDataTab = React.createClass
     btnDisable: true
     deckChecked: []
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.indexKey is nextProps.selectedKey and nextProps.henseiData.titles?
+    if nextProps.indexKey is nextProps.selectedKey and nextProps.henseiData?.titles?
       deckChecked = []
       for index in nextProps.henseiData.titles
         deckChecked.push(false)
