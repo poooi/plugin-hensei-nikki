@@ -1,3 +1,2 @@
 module.exports =
-  HenseiList: require './henseiList'
-  EditDataTab: require './editDataTab'
+  Main: require './main'

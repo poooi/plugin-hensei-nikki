@@ -1,6 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
 {Button, Input, Label} = ReactBootstrap
-{openExternal} = require 'shell'
 {join} = require 'path-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
@@ -73,7 +72,7 @@ TagsEditor = React.createClass
     <div className='tab-container'>
       <Button bsSize='small'
               onClick={@props.handleBackClick}
-              style={width: '50%', margin: 10}>
+              style={margin: 10}>
         <FontAwesome name='arrow-left' />
       </Button>
       <div className='container-col'>

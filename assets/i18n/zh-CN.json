@@ -33,5 +33,7 @@
   "Code": "代码",
   "Tag": "标签",
   "Select title": "选择标题",
-  "Confirm?": "确定删除？"
+  "Confirm?": "确定删除？",
+  "Copy": "复制代码到剪贴板",
+  "The code has been copied to the clipboard.": "已将代码复制到剪贴板"
 }

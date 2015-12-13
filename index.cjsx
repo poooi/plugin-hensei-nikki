@@ -1,5 +1,4 @@
-{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, toggleModal, JSON} = window
-{Tabs, Tab} = ReactBootstrap
+{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, toggleModal} = window
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 i18n = require './node_modules/i18n'
@@ -16,7 +15,7 @@ i18n.configure({
 i18n.setLocale(window.language)
 {__} = i18n
 
-{HenseiList, EditDataTab} = require './views'
+{Main} = require './views'
 
 getTyku = (deck) ->
   {$ships, $slotitems, _ships, _slotitems} = window
@@ -253,7 +252,7 @@ module.exports =
           if item is title
             henseiData.titles.splice(index, 1)
       @saveData henseiData
-    handleTitleChang: (newTitle, oldTitle) ->
+    handleTitleChange: (newTitle, oldTitle) ->
       {henseiData} = @state
       henseiData[newTitle] = henseiData[oldTitle]
       delete henseiData[oldTitle]
@@ -267,30 +266,14 @@ module.exports =
         console.log "Write hensei error!#{e}"
       @setState
         henseiData: data
-    handleSelectTab: (selectedKey) ->
-      @setState
-        selectedKey: selectedKey
     render: ->
       <div>
-      <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
-      <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
-        <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
-          <Tab eventKey={1} title={__ 'Records'}>
-            <HenseiList indexKey={0}
-                        selectedKey={@state.selectedKey}
-                        handleDeleteData={@handleDeleteData}
-                        saveData={@saveData}
-                        handleTitleChang={@handleTitleChang}
-                        henseiData={@state.henseiData} />
-          </Tab>
-          <Tab eventKey={2} title={__ 'Edit'}>
-            <EditDataTab indexKey={1}
-                         selectedKey={@state.selectedKey}
-                         henseiData={@state.henseiData}
-                         getDeckDetail={getDeckDetail}
-                         handleAddData={@handleAddData}
-                         handleDeleteData={@handleDeleteData}
-                         saveData={@saveData} />
-          </Tab>
-        </Tabs>
+        <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
+        <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
+        <Main handleDeleteData={@handleDeleteData}
+              saveData={@saveData}
+              handleAddData={@handleAddData}
+              handleTitleChange={@handleTitleChange}
+              getDeckDetail={getDeckDetail}
+              henseiData={@state.henseiData} />
       </div>

@@ -1,5 +1,5 @@
-{React, ReactBootstrap} = window
-{Input, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label} = ReactBootstrap
+{React, ReactBootstrap, FontAwesome} = window
+{Input, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label, DropdownButton, MenuItem} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
@@ -9,7 +9,7 @@ TitlesList = React.createClass
     henseiData: {}
   showData: {}
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.henseiData isnt @state.henseiData
+    if (nextProps.henseiData isnt @state.henseiData) or (nextProps.status is 'list' and nextProps.status isnt @props.status)
       @setState
         henseiData: nextProps.henseiData
         showData: nextProps.henseiData
@@ -63,9 +63,18 @@ TitlesList = React.createClass
     valueData
   handleClick: (title) ->
     if title isnt @props.activeTitle
-      @props.handleTitleChange title
+      @props.handleTitleClick title
   render: ->
+    #dTitle = <span><FontAwesome name='plus-square-o' />{__('Add')}</span>
+    dTitle = <FontAwesome name='plus-square-o' />
     <div style={flex: '0 1', maxWidth: 80, minWidth: 50}>
+      <DropdownButton center title={dTitle} eventKey={0} id="henseinikki-add-dropdown">
+        <MenuItem eventKey='1' onSelect={@props.handleAddDataClick}>{__ 'Add'}</MenuItem>
+        <MenuItem eventKey='2' onSelect={@props.handleAddDataClick}>{__ 'Import'}</MenuItem>
+        <MenuItem divider />
+        <MenuItem eventKey='3' onSelect={@props.handleAddDataClick}>{__ 'Import records file'}</MenuItem>
+        <MenuItem eventKey='4' onSelect={@props.handleAddDataClick}>{__ 'Export records file'}</MenuItem>
+      </DropdownButton>
       <div style={flex: 1} className='titles-keywords'>
         <Input type='text'
                value={@state.filterKey}

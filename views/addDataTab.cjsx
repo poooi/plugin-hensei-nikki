@@ -16,7 +16,7 @@ AddDataTab = React.createClass
     showPre: false
     deck: ''
   componentWillReceiveProps: (nextProps)->
-    if nextProps.indexKey is nextProps.selectedKey
+    if nextProps.status isnt @props.status and nextProps.status is 'add'
       @setState
         saveDisable: true
         title: ''
@@ -78,6 +78,11 @@ AddDataTab = React.createClass
         saveDisable: saveDisable
   render: ->
     <div className='add-data-tab'>
+      <Button bsSize='small'
+              onClick={@props.handleBackClick}
+              style={margin: 10}>
+        <FontAwesome name='arrow-left' />
+      </Button>
       <div style={display: 'flex', padding: 7}>
       {
         if window._decks?

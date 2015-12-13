@@ -33,5 +33,7 @@
   "Code": "コード",
   "Tag": "タグ",
   "Select title": "タイトルを選択します",
-  "Confirm?": "この記録を完全に消去してもよろしいですか？"
+  "Confirm?": "この記録を完全に消去してもよろしいですか？",
+  "Copy": "コピー",
+  "The code has been copied to the clipboard.": "コードをクリップボードにコピーされました。"
 }

@@ -33,5 +33,7 @@
   "Code": "代碼",
   "Tag": "Tag",
   "Select title": "選擇標題",
-  "Confirm?": "确定刪除？"
+  "Confirm?": "确定刪除？",
+  "Copy": "複製代碼",
+  "The code has been copied to the clipboard.": "已複製代碼到剪貼板。"
 }

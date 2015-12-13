@@ -1,35 +1,27 @@
 {React, ReactBootstrap, FontAwesome} = window
-{Panel, Input, Button} = ReactBootstrap
+{Button, DropdownButton, MenuItem} = ReactBootstrap
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
-TitlesList = require './titlesList'
 HenseiItem = require './henseiItem'
 TagsEditor = require './tagsEditor'
+TitleEditor = require './titleEditor'
+ExportModule = require './exportModule'
 
 HenseiList = React.createClass
   getInitialState: ->
-    activeTitle: ''
-    titleInput: ''
-    btnDisable: true
     edit: false
     editTitle: false
-  handleTitleChange: (title) ->
-    if @state.edit
+    export: false
+  componentWillReceiveProps: (nextProps)->
+    if nextProps.activeTitle isnt @props.activeTitle
       @setState
         edit: false
-        activeTitle: title
-    else if @state.editTitle
-      @setState
-        titleInput: ''
         editTitle: false
-        activeTitle: title
-    else
-      @setState
-        activeTitle: title
+        export: false
   handleDelClick: ->
     if confirm(__('Confirm?'))
-      @props.handleDeleteData [@state.activeTitle]
+      @props.handleDeleteData [@props.activeTitle]
     else
       return
   handleEditClick: ->
@@ -38,85 +30,54 @@ HenseiList = React.createClass
   handleBackClick: ->
     @setState
       edit: false
+      export: false
   handleEditTitleClick: ->
-    if @state.editTitle
-      @setState
-        titleInput: ''
-        btnDisable: true
-        editTitle: !@state.editTitle
-    else
-      @setState
-        editTitle: !@state.editTitle
-  handleTitleInputChange: ->
-    titleInput = @refs.titleInput.getValue()
-    if titleInput? and titleInput.length > 0
-      btnDisable = false
-    else
-      btnDisable = true
     @setState
-      titleInput: titleInput
-      btnDisable: btnDisable
-  handleTitleSaveClick: ->
-    flag = true
-    for title in @props.henseiData.titles
-      if title is @state.titleInput
-        toggleModal __('Error'), __('The title is already exist.')
-        flag = false
-    if flag
-      @props.handleTitleChang @state.titleInput, @state.activeTitle
-      @setState
-        activeTitle: @state.titleInput
-        editTitle: false
+      editTitle: !@state.editTitle
+  handleExportClick: ->
+    @setState
+      export: true
   render: ->
-    <div className='hensei-list-container'>
-      <TitlesList activeTitle={@state.activeTitle}
-                  henseiData={@props.henseiData}
-                  handleTitleChange={@handleTitleChange} />
-      <div style={flex: 1}>
-        {
-          if @props.henseiData?
-            if @props.henseiData.titles? and @props.henseiData.titles.length >= 1 and @props.henseiData[@state.activeTitle]?
-              <div>
-                <div className={if @state.edit then 'hidden' else 'show'}>
-                  <div style={display: 'flex', justifyContent: 'space-around', margin: 10, marginBottom: 0}>
-                    <Button bsSize='small' onClick={@handleDelClick}>
-                      <FontAwesome name='trash'  />{__('Delete Records')}
-                    </Button>
-                    <Button bsSize='small' onClick={@handleEditClick}>
-                      <FontAwesome name='pencil' />{__('Edit tag')}
-                    </Button>
-                    <Button bsSize='small' onClick={@handleEditTitleClick}>
-                      <FontAwesome name='pencil' />{__('Edit title')}
-                    </Button>
-                  </div>
-                  <Panel collapsible expanded={@state.editTitle} style={marginBottom: 0}>
-                    <Input style={margin: 10}
-                           type='text'
-                           label={__ 'Title'}
-                           placeholder={__ 'Title'}
-                           value={@state.titleInput}
-                           hasFeedback
-                           ref='titleInput'
-                           onChange={@handleTitleInputChange} />
-                    <Button style={height: '50%', width: '50%', margin: 10}
-                            bsSize='small'
-                            disabled={@state.btnDisable}
-                            onClick={@handleTitleSaveClick}>
-                      {__ 'Save'}
-                    </Button>
-                  </Panel>
-                  <HenseiItem deckItem={@props.henseiData[@state.activeTitle]} />
+    <div style={flex: 1}>
+      {
+        if @props.henseiData?
+          if @props.henseiData.titles? and @props.henseiData.titles.length >= 1 and @props.henseiData[@props.activeTitle]?
+            dTitle = <span><FontAwesome name='pencil' /> {__('Edit')}</span>
+            <div>
+              <div className={if @state.edit or @state.export then 'hidden' else 'show'}>
+                <div style={display: 'flex', justifyContent: 'space-around', margin: 10, marginBottom: 0}>
+                  <Button bsSize='small' onClick={@handleDelClick}>
+                    <FontAwesome name='trash'  /> {__('Delete Records')}
+                  </Button>
+                  <DropdownButton center title={dTitle} eventKey={0} id="henseinikki-list-dropdown">
+                    <MenuItem eventKey='1' onSelect={@handleEditClick}>{__('Edit tag')}</MenuItem>
+                    <MenuItem eventKey='2' onSelect={@handleEditTitleClick}>{__('Edit title')}</MenuItem>
+                  </DropdownButton>
+                  <Button bsSize='small' onClick={@handleExportClick}>
+                    <FontAwesome name='share-square-o' /> {__('Export')}
+                  </Button>
                 </div>
-                <div className={if @state.edit then 'show' else 'hidden'}>
-                  <TagsEditor edit={@state.edit}
-                              title={@state.activeTitle}
-                              henseiData={@props.henseiData}
-                              handleBackClick={@handleBackClick}
-                              saveData={@props.saveData} />
-                </div>
+                <TitleEditor editTitle={@state.editTitle}
+                             henseiData={@props.henseiData}
+                             handleTitleSaveClick={@props.handleTitleSaveClick}
+                             activeTitle={@props.activeTitle} />
+                <HenseiItem deckItem={@props.henseiData[@props.activeTitle]} />
               </div>
-        }
-      </div>
+              <div className={if @state.edit then 'show' else 'hidden'}>
+                <TagsEditor edit={@state.edit}
+                            title={@props.activeTitle}
+                            henseiData={@props.henseiData}
+                            handleBackClick={@handleBackClick}
+                            saveData={@props.saveData} />
+              </div>
+              <div className={if @state.export then 'show' else 'hidden'}>
+                <ExportModule export={@state.export}
+                              title={@props.activeTitle}
+                              handleBackClick={@handleBackClick}
+                              henseiData={@props.henseiData} />
+              </div>
+            </div>
+      }
     </div>
 
 module.exports = HenseiList
