@@ -35,5 +35,6 @@
   "Select title": "タイトルを選択します",
   "Confirm?": "この記録を完全に消去してもよろしいですか？",
   "Copy": "コピー",
-  "The code has been copied to the clipboard.": "コードをクリップボードにコピーされました。"
+  "The code has been copied to the clipboard.": "コードをクリップボードにコピーされました。",
+  "The tag is already exist.": "このタグは既に存在しています。"
 }
