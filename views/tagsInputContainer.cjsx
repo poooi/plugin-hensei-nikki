@@ -21,6 +21,7 @@ TagsInputContainer = React.createClass
     @props.handleTagAddClick tagInput
     @setState
       tagInput: ''
+      tagDisable: true
   render: ->
     <div className='tags-input-container'>
       <Input style={margin: 10}
