@@ -46,15 +46,15 @@ HenseiList = React.createClass
             <div>
               <div className={if @state.edit or @state.export then 'hidden' else 'show'}>
                 <div style={display: 'flex', justifyContent: 'space-around', margin: 10, marginBottom: 0}>
-                  <Button bsSize='small' onClick={@handleDelClick}>
-                    <FontAwesome name='trash'  /> {__('Delete Records')}
+                  <Button bsSize='small' onClick={@handleExportClick}>
+                    <FontAwesome name='share-square-o' /> {__('Export')}
                   </Button>
                   <DropdownButton center title={dTitle} eventKey={0} id="henseinikki-list-dropdown">
                     <MenuItem eventKey='1' onSelect={@handleEditClick}>{__('Edit tag')}</MenuItem>
                     <MenuItem eventKey='2' onSelect={@handleEditTitleClick}>{__('Edit title')}</MenuItem>
                   </DropdownButton>
-                  <Button bsSize='small' onClick={@handleExportClick}>
-                    <FontAwesome name='share-square-o' /> {__('Export')}
+                  <Button bsSize='small' onClick={@handleDelClick}>
+                    <FontAwesome name='trash'  /> {__('Delete Records')}
                   </Button>
                 </div>
                 <TitleEditor editTitle={@state.editTitle}
