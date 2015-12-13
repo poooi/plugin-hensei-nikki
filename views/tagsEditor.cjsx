@@ -57,9 +57,15 @@ TagsEditor = React.createClass
       tags: tags
   handleTagAddClick: (tagInput) ->
     {tags} = @state
-    tags.push tagInput
-    @setState
-      tags: tags
+    flag = true
+    for tag in tags
+      if tag is tagInput
+        toggleModal __('Error'), __('The tag is already exist.')
+        flag = false
+    if flag
+      tags.push tagInput
+      @setState
+        tags: tags
   handleSaveClick: ->
     {tags} = @state
     henseiData = @props.henseiData
