@@ -83,7 +83,7 @@ AddDataTab = React.createClass
         deckChecked: deckChecked
         saveDisable: saveDisable
   render: ->
-    <div className='add-data-tab'>
+    <div className='tab-container'>
       <Button bsSize='small'
               onClick={@props.handleBackClick}
               style={margin: 10}>
