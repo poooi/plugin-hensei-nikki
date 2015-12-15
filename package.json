@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-hensei-nikki",
-  "version": "3.4.0",
+  "version": "3.4.9",
   "description": "a plugin which can save your fleet organize for poi",
   "main": "index.js",
   "dependencies": {
@@ -22,5 +22,7 @@
     "nikki"
   ],
   "author": "Rui",
-  "license": "MIT"
+  "license": "MIT",
+  "_shasum": "d3f1b30a707a83f93babd4c16053cab08f1f7b11",
+  "_from": "poi-plugin-hensei-nikki@3.4.0"
 }
