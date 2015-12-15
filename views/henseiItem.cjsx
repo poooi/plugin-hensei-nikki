@@ -6,6 +6,10 @@ fs = require 'fs-extra'
 i18n = require '../node_modules/i18n'
 {__} = i18n
 
+try
+  Translator = require 'poi-plugin-translator'
+catch err
+  console.log err
 
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
 # {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
