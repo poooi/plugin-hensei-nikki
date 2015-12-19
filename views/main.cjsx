@@ -2,8 +2,7 @@
 fs = require 'fs-extra'
 remote = require 'remote'
 dialog = remote.require 'dialog'
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 TitlesList = require './titlesList'
 HenseiList = require './henseiList'

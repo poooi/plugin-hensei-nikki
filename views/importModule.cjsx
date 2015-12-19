@@ -1,7 +1,6 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
 {Button, Input} = ReactBootstrap
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 emptyShip = [null, [null, -1], [], [], []]
 

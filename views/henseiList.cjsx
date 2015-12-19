@@ -1,7 +1,6 @@
 {React, ReactBootstrap, FontAwesome} = window
 {Button, DropdownButton, MenuItem} = ReactBootstrap
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 HenseiItem = require './henseiItem'
 TagsEditor = require './tagsEditor'

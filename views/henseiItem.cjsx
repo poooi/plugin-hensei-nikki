@@ -3,8 +3,7 @@
 # {join} = require 'path-extra'
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 try
   Translator = require 'poi-plugin-translator'
@@ -19,8 +18,8 @@ ShipItem = React.createClass
     <div className='ship-item'>
       {
         ship = window.$ships[@props.ship[0]]
-        name = ship.api_name
-        type = window.$shipTypes[ship.api_stype].api_name
+        name = window.i18n.resources.__ ship.api_name
+        type = window.i18n.resources.__ window.$shipTypes[ship.api_stype].api_name
         <div className='ship-detail'>
           <span className='ship-name'>{name}</span>
           <div className='ship-detail-group'>
@@ -34,7 +33,7 @@ ShipItem = React.createClass
           for slotId, index in @props.ship[2]
             continue if slotId is null
             slot = window.$slotitems[slotId]
-            name = slot.api_name
+            name = window.i18n.resources.__ slot.api_name
             type = slot.api_type[3]
             if @props.ship[3] isnt [] and @props.ship[3][index]?
               lv = @props.ship[3][index]
