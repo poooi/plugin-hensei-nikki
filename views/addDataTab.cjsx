@@ -1,8 +1,7 @@
 {React, ReactBootstrap} = window
 {Button, Input, Label, Panel} = ReactBootstrap
 {relative, join} = require 'path-extra'
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 TagsInputContainer = require './tagsInputContainer'
 HenseiItem = require './henseiItem'

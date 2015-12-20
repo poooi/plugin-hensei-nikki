@@ -1,7 +1,6 @@
 {React, ReactBootstrap, FontAwesome} = window
 {Input, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label, DropdownButton, MenuItem} = ReactBootstrap
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 TitlesList = React.createClass
   getInitialState: ->
@@ -54,12 +53,12 @@ TitlesList = React.createClass
       for sIdx in [1..6]
         index = 's' + sIdx
         break if !fleet[ship]?
-        valueData.push window.$ships[fleet[ship].id].api_name
+        valueData.push window.i18n.resources.__ window.$ships[fleet[ship].id].api_name
         valueData.push fleet[ship].lv if fleet[ship].lv isnt null
         for iIdx in [1..5]
           index = 'i' + iIdx
           break if !fleet[ship].items[index]?
-          valueData.push window.$slotitems[fleet[ship].items[index].id].api_name
+          valueData.push window.i18n.resources.__ window.$slotitems[fleet[ship].items[index].id].api_name
     valueData
   handleClick: (title) ->
     if title isnt @props.activeTitle

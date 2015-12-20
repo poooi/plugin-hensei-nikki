@@ -1,8 +1,7 @@
 {React, ReactBootstrap, FontAwesome} = window
 {Button, Input, Label} = ReactBootstrap
 {join} = require 'path-extra'
-i18n = require '../node_modules/i18n'
-{__} = i18n
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 getTags = (index, tag) ->
   <Label style={display: 'inline-block', margin: 5}

@@ -1,19 +1,19 @@
 {_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, toggleModal} = window
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
-i18n = require './node_modules/i18n'
 
 # i18n configure
-i18n.configure({
+window.i18n.compositionRecord = new(require 'i18n-2')({
     locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
     defaultLocale: 'zh-CN',
     directory: join(__dirname, 'assets', 'i18n'),
     updateFiles: false,
     indent: '\t',
     extension: '.json'
+    devMode: false
 })
-i18n.setLocale(window.language)
-{__} = i18n
+window.i18n.compositionRecord.setLocale(window.language)
+__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 {Main} = require './views'
 
