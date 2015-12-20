@@ -5,11 +5,6 @@ fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 __ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
-try
-  Translator = require 'poi-plugin-translator'
-catch err
-  console.log err
-
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
 # {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
 
