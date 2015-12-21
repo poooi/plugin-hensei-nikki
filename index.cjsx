@@ -9,7 +9,7 @@ window.i18n.compositionRecord = new(require 'i18n-2')({
     directory: join(__dirname, 'assets', 'i18n'),
     updateFiles: false,
     indent: '\t',
-    extension: '.json'
+    extension: '.json',
     devMode: false
 })
 window.i18n.compositionRecord.setLocale(window.language)
