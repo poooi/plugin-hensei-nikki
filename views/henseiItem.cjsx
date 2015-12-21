@@ -1,8 +1,6 @@
-{React, ReactBootstrap, FontAwesome} = window
+{React, ReactBootstrap} = window
 {OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
-# {join} = require 'path-extra'
-fs = require 'fs-extra'
-{relative, join} = require 'path-extra'
+{join} = require 'path-extra'
 __ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
 
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
@@ -51,19 +49,8 @@ ShipItem = React.createClass
               <span className='slot-improvment'>
                   &nbsp;&nbsp;{if lv? and lv isnt null then <strong style={color: '#45A9A5'}>★{lv}</strong> else ''}
                   {
-                    if alv? and alv >=1 and alv <= 3
-                      for j in [1..alv]
-                        <strong key={j} style={color: '#3EAEFF'}>|</strong>
-                    else if alv? and alv >= 4 and alv <= 6
-                      for j in [1..alv - 3]
-                        <strong key={j} style={color: '#F9C62F'}>\</strong>
-                    else if alv? and alv >= 7 and alv <= 9
-                      <strong key={j} style={color: '#F9C62F'}>
-                        <FontAwesome key={0} name='angle-double-right' />
-                      </strong>
-                    else if alv? and alv >= 9
-                      <strong key={j} style={color: '#F94D2F'}>★</strong>
-                    else ''
+                    if alv? and 1 <= alv <= 7
+                      <img className='alv-img' src={join(window.ROOT, 'assets', 'img', 'airplane', "alv#{alv}.png")} />
                   }
              </span>
           </div>
