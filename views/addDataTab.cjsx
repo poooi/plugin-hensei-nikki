@@ -10,6 +10,7 @@ AddDataTab = React.createClass
   getInitialState: ->
     title: ''
     saveDisable: true
+    preDisable: true
     tags: []
     deckChecked: [false, false, false, false]
     showPre: false
@@ -18,6 +19,7 @@ AddDataTab = React.createClass
     if nextProps.status isnt @props.status and nextProps.status is 'add'
       @setState
         saveDisable: true
+        preDisable: true
         title: ''
         tags: []
         deck: ''
@@ -52,6 +54,8 @@ AddDataTab = React.createClass
     @props.handleAddData title, deck
     @setState
       saveDisable: true
+      preDisable: true
+      showPre: false
       deckChecked: [false, false, false, false]
       title: ''
       tags: []
@@ -74,13 +78,17 @@ AddDataTab = React.createClass
         if deck
           flag = true
           break
-      if flag and @state.title.length > 0
-        saveDisable = false
-      else
-        saveDisable = true
+      saveDisable = true
+      preDisable = true
+      if flag
+        preDisable = false
+        if @state.title.length > 0
+          saveDisable = false
       @setState
         deckChecked: deckChecked
         saveDisable: saveDisable
+        preDisable: preDisable
+        showPre: false
   render: ->
     <div className='tab-container'>
       <Button bsSize='small'
@@ -126,7 +134,7 @@ AddDataTab = React.createClass
       </Panel>
       <div style={display: 'flex'}>
         <Button bsSize='small'
-                disabled={@state.saveDisable}
+                disabled={@state.preDisable}
                 onClick={@handlePreClick}
                 style={width: '50%'}>
           {__ 'Preview'}
