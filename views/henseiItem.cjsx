@@ -1,4 +1,4 @@
-{React, ReactBootstrap} = window
+{React, ReactBootstrap, useSVGIcon} = window
 {OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
 {join} = require 'path-extra'
 __ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
@@ -38,7 +38,12 @@ ShipItem = React.createClass
               alv = 0
 
             <div key={index} className='slotitem-container'>
-              <img src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
+              {
+                if useSVGIcon
+                  <img className='img-svg' src={join('assets', 'svg', 'slotitem', "#{type}.svg")} />
+                else
+                  <img className='img-img' src={join('assets', 'img', 'slotitem', "#{type + 100}.png")} />
+              }
               <OverlayTrigger placement='top' overlay={
                 <Tooltip id='name'>
                   <span>{name}</span>
