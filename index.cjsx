@@ -214,6 +214,9 @@ module.exports =
     componentDidMount: ->
       window.addEventListener 'game.response', @handleResponse
       window.addEventListener 'resize', @handleResize
+    componentWillUnmount: ->
+      window.removeEventListener 'game.response', @handleResponse
+      window.removeEventListener 'resize', @handleResize
     handleResize: ->
       @setState
         css: getCss()
