@@ -2,7 +2,7 @@
 {Button, Input} = ReactBootstrap
 {openExternal} = require 'shell'
 clipboard = require('electron').clipboard
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 ExportMoudle = React.createClass
   getInitialState: ->

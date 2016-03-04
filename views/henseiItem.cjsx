@@ -1,7 +1,7 @@
 {React, ReactBootstrap, useSVGIcon} = window
 {OverlayTrigger, Tooltip, Button, Input, Tabs, Tab} = ReactBootstrap
 {join} = require 'path-extra'
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 # [shipId, [lv, cond], [slotId], [slotLv], [slotALv]]
 # {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}

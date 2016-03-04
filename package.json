@@ -20,8 +20,15 @@
     "hensei",
     "nikki"
   ],
-  "author": "Rui",
+  "author": {
+    "name": "Rui",
+    "link": "https://github.com/ruiii"
+  },
   "license": "MIT",
-  "_shasum": "d3f1b30a707a83f93babd4c16053cab08f1f7b11",
-  "_from": "poi-plugin-hensei-nikki@3.4.0"
+  "poiPlugin": {
+    "title": "Display Name",
+    "description": "Description",
+    "icon": "fa/folder-open",
+    "priority": 7
+  }
 }

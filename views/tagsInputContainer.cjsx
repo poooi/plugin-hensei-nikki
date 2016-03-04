@@ -1,6 +1,6 @@
 {React, ReactBootstrap} = window
 {Button, Input, Label} = ReactBootstrap
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TagsInputContainer = React.createClass
   getInitialState: ->

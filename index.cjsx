@@ -2,18 +2,7 @@
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 
-# i18n configure
-window.i18n.compositionRecord = new(require 'i18n-2')({
-    locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
-    defaultLocale: 'zh-CN',
-    directory: join(__dirname, 'assets', 'i18n'),
-    updateFiles: false,
-    indent: '\t',
-    extension: '.json',
-    devMode: false
-})
-window.i18n.compositionRecord.setLocale(window.language)
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 {Main} = require './views'
 
@@ -199,13 +188,6 @@ getCss = ->
   css
 
 module.exports =
-  name: 'HenseiNikki'
-  displayName: <span><FontAwesome key={0} name='folder-open' /> {__ 'Display Name'}</span>
-  priority: 7
-  author: 'Rui'
-  link: 'https://github.com/ruiii'
-  description: __ 'Description'
-  version: '3.5.1'
   reactClass: React.createClass
     getInitialState: ->
       memberId: ''
@@ -270,7 +252,7 @@ module.exports =
       @setState
         henseiData: data
     render: ->
-      <div>
+      <div id='HenseiNikki' classname='HenseiNikki'>
         <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
         <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
         <Main handleDeleteData={@handleDeleteData}
