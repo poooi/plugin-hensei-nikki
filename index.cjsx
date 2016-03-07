@@ -252,7 +252,7 @@ module.exports =
       @setState
         henseiData: data
     render: ->
-      <div id='HenseiNikki' classname='HenseiNikki'>
+      <div id='HenseiNikki' className='HenseiNikki'>
         <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
         <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
         <Main handleDeleteData={@handleDeleteData}
