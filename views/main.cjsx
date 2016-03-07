@@ -2,7 +2,7 @@
 fs = require 'fs-extra'
 remote = require 'remote'
 dialog = remote.require 'dialog'
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TitlesList = require './titlesList'
 HenseiList = require './henseiList'

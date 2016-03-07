@@ -1,6 +1,6 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
 {Button, Input} = ReactBootstrap
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 emptyShip = [null, [null, -1], [], [], []]
 

@@ -1,7 +1,7 @@
 {React, ReactBootstrap} = window
 {Button, Input, Label, Panel} = ReactBootstrap
 {relative, join} = require 'path-extra'
-__ = window.i18n.compositionRecord.__.bind(window.i18n.compositionRecord)
+__ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TagsInputContainer = require './tagsInputContainer'
 HenseiItem = require './henseiItem'
