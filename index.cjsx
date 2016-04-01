@@ -205,8 +205,8 @@ module.exports =
     handleResponse: (e) ->
       {path, body} = e.detail
       switch path
-        when '/kcsapi/api_get_member/basic'
-          memberId = body.api_member_id
+        when '/kcsapi/api_get_member/require_info'
+          memberId = body.api_basic.api_member_id
           @getDataFromFile memberId
           window.removeEventListener 'game.response', @handleResponse
     getDataFromFile: (memberId) ->
