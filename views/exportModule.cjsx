@@ -1,6 +1,7 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
 {Button, Input} = ReactBootstrap
-{openExternal} = require 'shell'
+{shell} = require 'electron'
+{openExternal} = shell
 clipboard = require('electron').clipboard
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 

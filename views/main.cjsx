@@ -1,7 +1,7 @@
 {React, ReactBootstrap, JSON} = window
 fs = require 'fs-extra'
-remote = require('electron').remote;
-dialog = remote.require 'dialog'
+{remote} = require 'electron'
+{dialog} = remote.require 'electron'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TitlesList = require './titlesList'
