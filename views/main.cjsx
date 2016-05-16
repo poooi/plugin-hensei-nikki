@@ -1,6 +1,6 @@
 {React, ReactBootstrap, JSON} = window
 fs = require 'fs-extra'
-remote = require 'remote'
+remote = require('electron').remote;
 dialog = remote.require 'dialog'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
