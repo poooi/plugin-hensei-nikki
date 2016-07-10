@@ -89,25 +89,23 @@ aircraftLevelBonus = {
 getTyku = (deck) ->
   {$ships, $slotitems, _ships, _slotitems} = window
   minTyku = maxTyku = 0
-  for shipId in deck.api_ship
-    continue if shipId == -1
-    ship = _ships[shipId]
-    for itemId, slotId in ship.api_slot
-      continue unless itemId != -1 && _slotitems[itemId]?
-      item = _slotitems[itemId]
+  for shipDetail in deck
+    continue if shipDetail[0] is null
+    ship = $ships[shipDetail[0]]
+    for slotId, index in shipDetail[2]
+      slot = $slotitems[slotId]
       tempTyku = 0.0
       # Basic tyku
-
-      tempAlv = if item.api_alv? then item.api_alv else 0
-      if item.api_type[3] in [6, 7, 8]
-        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
-        tempTyku += aircraftLevelBonus[item.api_type[3]][tempAlv]
+      tempAlv = if shipDetail[3][index] then shipDetail[3][index] else 0
+      if slot.api_type[3] in [6, 7, 8]
+        tempTyku += Math.sqrt(ship.api_maxeq[index]) * slot.api_tyku
+        tempTyku += aircraftLevelBonus[slot.api_type[3]][tempAlv]
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
 
-      else if item.api_type[3] == 10 && (item.api_type[2] == 11 || item.api_type[2] == 45)
-        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
-        tempTyku += aircraftLevelBonus[item.api_type[2]][tempAlv]
+      else if slot.api_type[3] == 10 && (slot.api_type[2] == 11 || slot.api_type[2] == 45)
+        tempTyku += Math.sqrt(ship.api_maxeq[index]) * slot.api_tyku
+        tempTyku += aircraftLevelBonus[slot.api_type[2]][tempAlv]
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
 
@@ -212,7 +210,7 @@ ImportModule = React.createClass
       importCode: ''
   handleInputTitleChange: ->
     inputTitle = @refs.inputTitle.getValue()
-    if inputTitle? and inputTitle.length > 0 and @state.importCode.length > 0
+    if inputTitle? and inputTitle.length > 0 and @state.importCode?.length > 0
       btnDisable = false
     else
       btnDisable = true
