@@ -73,30 +73,47 @@ battleDetail2Code = (code) ->
       newCode[1].push newShip
   newCode
 
-getTyku = (deck) ->
-  {$ships, $slotitems} = window
-  basicTyku = alvTyku = totalTyku = 0
-  for shipDetail in deck
-    continue if shipDetail[0] is null
-    ship = $ships[shipDetail[0]]
-    for slotId, index in shipDetail[2]
-      slot = $slotitems[slotId]
-      # Basic tyku
-      if slot.api_type[3] in [6, 7, 8]
-        basicTyku += Math.floor(Math.sqrt(ship.api_maxeq[index]) * slot.api_tyku)
-      else if slot.api_type[3] is 10 and slot.api_type[2] is 11
-        basicTyku += Math.floor(Math.sqrt(ship.api_maxeq[index]) * slot.api_tyku)
-      # Alv
-      if shipDetail[4]? and shipDetail[4][index]? and shipDetail[4][index] isnt null
-        if slot.api_type[3] is 6  and shipDetail[4][index] > 0 and shipDetail[4][index] <= 7
-          alvTyku += [0, 1, 4, 6, 11, 16, 17, 25][shipDetail[4][index]]
-        else if slot.api_type[3] in [7, 8] and shipDetail[4][index] is 7
-          alvTyku += 3
-        else if slot.api_type[3] is 10 and slot.api_type[2] is 11 and shipDetail[4][index] is 7
-          alvTyku += 9
+# Tyku
+# 制空値= ∑ [艦載機の対空値 x √(搭載数) + √(熟練値/10) + 机种制空加值 ] ( [ ] 方括号代表取整)
 
-  basic: basicTyku
-  alv: alvTyku
+aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
+
+aircraftLevelBonus = {
+  '6': [0, 0, 2, 5, 9, 14, 14, 22, 22]   # 艦上戦闘機
+  '7': [0, 0, 0, 0, 0, 0, 0, 0, 0]       # 艦上爆撃機
+  '8': [0, 0, 0, 0, 0, 0, 0, 0, 0]       # 艦上攻撃機
+  '11': [0, 1, 1, 1, 1, 3, 3, 6, 6]      # 水上爆撃機
+  '45': [0, 0, 2, 5, 9, 14, 14, 22, 22]  # 水上戦闘機
+}
+
+getTyku = (deck) ->
+  {$ships, $slotitems, _ships, _slotitems} = window
+  minTyku = maxTyku = 0
+  for shipId in deck.api_ship
+    continue if shipId == -1
+    ship = _ships[shipId]
+    for itemId, slotId in ship.api_slot
+      continue unless itemId != -1 && _slotitems[itemId]?
+      item = _slotitems[itemId]
+      tempTyku = 0.0
+      # Basic tyku
+
+      tempAlv = if item.api_alv? then item.api_alv else 0
+      if item.api_type[3] in [6, 7, 8]
+        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
+        tempTyku += aircraftLevelBonus[item.api_type[3]][tempAlv]
+        minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+
+      else if item.api_type[3] == 10 && (item.api_type[2] == 11 || item.api_type[2] == 45)
+        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
+        tempTyku += aircraftLevelBonus[item.api_type[2]][tempAlv]
+        minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+
+  basic: minTyku
+  alv: maxTyku
+
 
 getDetails = (deck) ->
   totalLv = 0

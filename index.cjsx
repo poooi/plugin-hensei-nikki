@@ -6,7 +6,7 @@ __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hens
 
 {Main} = require './views'
 
-g# Tyku
+# Tyku
 # 制空値= ∑ [艦載機の対空値 x √(搭載数) + √(熟練値/10) + 机种制空加值 ] ( [ ] 方括号代表取整)
 
 aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
@@ -44,8 +44,8 @@ getTyku = (deck) ->
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
 
-  min: minTyku
-  max: maxTyku
+  basic: minTyku
+  alv: maxTyku
 
 # Saku (2-5 旧式)
 # 偵察機索敵値×2 ＋ 電探索敵値 ＋ √(艦隊の装備込み索敵値合計 - 偵察機索敵値 - 電探索敵値)

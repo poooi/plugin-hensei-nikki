@@ -81,7 +81,8 @@ FleetItem = React.createClass
             fpBasic = fpAlv = null
             los = @props.deckItem.details[3]
             losA = @props.deckItem.details[4]
-            los33 = @props.deckItem.details[5] if @props.deckItem.details[index][5]?
+            if @props.deckItem.details[index][5]?
+              los33 = @props.deckItem.details[5]
           else
             totalLv = @props.deckItem.details[0]
             fpTotal = @props.deckItem.details[1] + @props.deckItem.details[2]
@@ -112,10 +113,18 @@ FleetItem = React.createClass
                   <Tooltip id='los'>
                     <div>{losA}{__ ' Autumn'}</div>
                     <div>{los}{__ ' Old'}</div>
-                    <div>{los33}{__ ' 33'}</div>
+                    {
+                      if los33?
+                        <div>{los33}{__ ' 33'}</div>
+                    }
                   </Tooltip>
                 }>
-                  <span>{__ 'LOS '}: {los33}</span>
+                {
+                  if los33?
+                    <span>{__ 'LOS '}: {los33}</span>
+                  else
+                    <span>{__ 'LOS '}: {losA}</span>
+                }
                 </OverlayTrigger>
               </span>
           }
@@ -155,7 +164,8 @@ HenseiItem = React.createClass
             fpTotal = fpBasic + fpAlv
             los = @props.deckItem.details[index][3]
             losA = @props.deckItem.details[index][4]
-            los33 = @props.deckItem.details[index][5] if @props.deckItem.details[index][5]?
+            if @props.deckItem.details[index][5]?
+              los33 = @props.deckItem.details[index][5]
           else
             totalLv = @props.deckItem.details[index][0]
             fpTotal = @props.deckItem.details[index][1] + @props.deckItem.details[index][2]
@@ -188,10 +198,18 @@ HenseiItem = React.createClass
                       <Tooltip id='los'>
                         <div>{losA}{__ ' Autumn'}</div>
                         <div>{los}{__ ' Old'}</div>
-                        <div>{los33}{__ ' 33'}</div>
+                        {
+                          if los33?
+                            <div>{los33}{__ ' 33'}</div>
+                        }
                       </Tooltip>
                     }>
-                      <span>{__ 'LOS '}: {los33}</span>
+                    {
+                      if los33?
+                        <span>{__ 'LOS '}: {los33}</span>
+                      else
+                        <span>{__ 'LOS '}: {losA}</span>
+                    }
                     </OverlayTrigger>
                   </span>
               }
