@@ -2,7 +2,7 @@
   "Display Name": "編成日記",
   "Description": "編成を記録します",
   "Error": "エラー",
-  "The title is already exist.": "このタイトルは既に存在しています。",
+  "The title is already exist. Do you want to replace it?": "このタイトルは既に存在しています。追加の記録で置き換えますか？",
   "Records": "記録",
   "Edit": "編集",
   "Total Lv ": "合計 Lv ",

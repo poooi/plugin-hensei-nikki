@@ -2,7 +2,7 @@
   "Display Name": "編成日記",
   "Description": "記錄、匯入、匯出編成信息",
   "Error": "錯誤",
-  "The title is already exist.": "標題已存在。",
+  "The title is already exist. Do you want to replace it?": "標題已存在。是否替換舊資料？",
   "Records": "記錄",
   "Edit": "編輯",
   "Total Lv ": "總 Lv ",

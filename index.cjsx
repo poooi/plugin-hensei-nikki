@@ -301,14 +301,29 @@ module.exports =
       @setState
         henseiData: data
         memberId: memberId
+    addData: (title, deck, replace) ->
+      data = @state.henseiData
+      data[title] = deck
+      if !replace
+        data.titles.push title
+      @saveData data
     handleAddData: (title, deck) ->
       data = @state.henseiData
+      self = this
       if title in data.titles
-        toggleModal __('Error'), __('The title is already exist.')
+        toggleModal __('Error'), __('The title is already exist. Do you want to replace it?'), [
+          {
+            name: __ 'Yes'
+            func: -> self.addData title, deck, true
+            style: 'success'
+          },
+          {
+            name: __ 'No'
+            style: 'primary'
+          }
+        ]
       else
-        data[title] = deck
-        data.titles.push title
-        @saveData data
+        @addData title, deck, false
     handleDeleteData: (delTitle) ->
       {henseiData} = @state
       for title in delTitle

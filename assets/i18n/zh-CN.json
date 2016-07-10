@@ -2,7 +2,7 @@
   "Display Name": "编成日记",
   "Description": "记录、导入、导出编成信息",
   "Error": "错误",
-  "The title is already exist.": "标题已存在。",
+  "The title is already exist. Do you want to replace it?": "标题已存在。是否替换旧数据？",
   "Records": "记录",
   "Edit": "编辑",
   "Total Lv ": "总 Lv ",
@@ -37,5 +37,7 @@
   "Confirm?": "确定删除？",
   "Copy": "复制代码到剪贴板",
   "The code has been copied to the clipboard.": "已将代码复制到剪贴板",
-  "The tag is already exist.": "Tag已存在。"
+  "The tag is already exist.": "Tag已存在。",
+  "Yes": "是的",
+  "No": "不"
 }
