@@ -6,44 +6,58 @@ __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hens
 
 {Main} = require './views'
 
+g# Tyku
+# 制空値= ∑ [艦載機の対空値 x √(搭載数) + √(熟練値/10) + 机种制空加值 ] ( [ ] 方括号代表取整)
+
+aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
+
+aircraftLevelBonus = {
+  '6': [0, 0, 2, 5, 9, 14, 14, 22, 22]   # 艦上戦闘機
+  '7': [0, 0, 0, 0, 0, 0, 0, 0, 0]       # 艦上爆撃機
+  '8': [0, 0, 0, 0, 0, 0, 0, 0, 0]       # 艦上攻撃機
+  '11': [0, 1, 1, 1, 1, 3, 3, 6, 6]      # 水上爆撃機
+  '45': [0, 0, 2, 5, 9, 14, 14, 22, 22]  # 水上戦闘機
+}
+
 getTyku = (deck) ->
   {$ships, $slotitems, _ships, _slotitems} = window
-  basicTyku = alvTyku = totalTyku = 0
+  minTyku = maxTyku = 0
   for shipId in deck.api_ship
     continue if shipId == -1
     ship = _ships[shipId]
     for itemId, slotId in ship.api_slot
-      continue if itemId == -1
+      continue unless itemId != -1 && _slotitems[itemId]?
       item = _slotitems[itemId]
+      tempTyku = 0.0
       # Basic tyku
-      if item.api_type[3] in [6, 7, 8]
-        basicTyku += Math.floor(Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku)
-      else if item.api_type[3] == 10 && item.api_type[2] == 11
-        basicTyku += Math.floor(Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku)
-      # Alv
-      if item.api_type[3] == 6 && item.api_alv > 0 && item.api_alv <= 7
-        alvTyku += [0, 1, 4, 6, 11, 16, 17, 25][item.api_alv]
-      else if item.api_type[3] in [7, 8] && item.api_alv == 7
-        alvTyku += 3
-      else if item.api_type[3] == 10 && item.api_type[2] == 11 && item.api_alv == 7
-        alvTyku += 9
-  totalTyku = basicTyku + alvTyku
 
-  basic: basicTyku
-  alv: alvTyku
-  total: totalTyku
+      tempAlv = if item.api_alv? then item.api_alv else 0
+      if item.api_type[3] in [6, 7, 8]
+        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
+        tempTyku += aircraftLevelBonus[item.api_type[3]][tempAlv]
+        minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+
+      else if item.api_type[3] == 10 && (item.api_type[2] == 11 || item.api_type[2] == 45)
+        tempTyku += Math.sqrt(ship.api_onslot[slotId]) * item.api_tyku
+        tempTyku += aircraftLevelBonus[item.api_type[2]][tempAlv]
+        minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+
+  min: minTyku
+  max: maxTyku
 
 # Saku (2-5 旧式)
 # 偵察機索敵値×2 ＋ 電探索敵値 ＋ √(艦隊の装備込み索敵値合計 - 偵察機索敵値 - 電探索敵値)
 getSaku25 = (deck) ->
-  {_ships, _slotitems} = window
+  {$ships, $slotitems, _ships, _slotitems} = window
   reconSaku = shipSaku = radarSaku = 0
   for shipId in deck.api_ship
     continue if shipId == -1
     ship = _ships[shipId]
     shipSaku += ship.api_sakuteki[0]
     for itemId, slotId in ship.api_slot
-      continue if itemId == -1
+      continue unless itemId != -1 && _slotitems[itemId]?
       item = _slotitems[itemId]
       switch item.api_type[3]
         when 9
@@ -70,14 +84,14 @@ getSaku25 = (deck) ->
 #            + 水上爆撃機 × (1.78) + 小型電探 × (1.00) + 大型電探 × (0.99) + 探照灯 × (0.91)
 #            + √(各艦毎の素索敵) × (1.69) + (司令部レベルを5の倍数に切り上げ) × (-0.61)
 getSaku25a = (deck) ->
-  {_ships, _slotitems} = window
+  {$ships, $slotitems, _ships, _slotitems} = window
   totalSaku = shipSaku = itemSaku = teitokuSaku = 0
   for shipId in deck.api_ship
     continue if shipId == -1
     ship = _ships[shipId]
     shipPureSaku = ship.api_sakuteki[0]
     for itemId, slotId in ship.api_slot
-      continue if itemId == -1
+      continue unless itemId != -1 && _slotitems[itemId]?
       item = _slotitems[itemId]
       shipPureSaku -= item.api_saku
       switch item.api_type[3]
@@ -108,6 +122,70 @@ getSaku25a = (deck) ->
   teitoku: parseFloat(teitokuSaku.toFixed(2))
   total: parseFloat(totalSaku.toFixed(2))
 
+  # Saku (33)
+  # 索敵スコア = Sigma(CiSi) + Sigma(sqrt(s)) - Ceil(0.4H) + 2M
+  #     Si(改修): 電探(1.25 * Sqrt(Star)) 水上偵察機(1.2 * Sqrt(Star))
+  #     Ci(装備):
+  #              6 0.6 艦上戦闘機
+  #              7 0.6 艦上爆撃機
+  #              8 0.8 艦上攻撃機
+  #              9 1.0 艦上偵察機
+  #             10 1.2 水上偵察機
+  #             11 1.1 水上爆撃機
+  #             12 0.6 小型電探
+  #             13 0.6 大型電探
+  #             26 0.6 対潜哨戒機
+  #             29 0.6 探照灯
+  #             34 0.6 司令部施設
+  #             35 0.6 航空要員
+  #             39 0.6 水上艦要員
+  #             40 0.6 大型ソナー
+  #             41 0.6 大型飛行艇
+  #             42 0.6 大型探照灯
+	#             45 0.6 水上戦闘機
+  #             93 大型電探(II) null
+  #             94 艦上偵察機(II) null
+  #     S(各艦毎の素索敵)
+  #     H(レベル)
+  #     M(空き数)
+
+getSaku33 = (deck) ->
+  {$ships, $slotitems, _ships, _slotitems} = window
+  totalSaku = shipSaku = itemSaku = teitokuSaku = 0
+  shipCount = 6
+  for shipId in deck.api_ship
+    continue if shipId == -1
+    shipCount -= 1
+    ship = _ships[shipId]
+    shipPureSaku = ship.api_sakuteki[0]
+    for itemId, slotId in ship.api_slot
+      continue unless itemId != -1 && _slotitems[itemId]?
+      item = _slotitems[itemId]
+      shipPureSaku -= item.api_saku
+      switch item.api_type[2]
+        when 8
+          itemSaku += item.api_saku * 0.8
+        when 9
+          itemSaku += item.api_saku * 1.0
+        when 10
+          itemSaku += (item.api_saku + 1.2 * Math.sqrt(item.api_level)) * 1.2
+        when 11
+          itemSaku += item.api_saku * 1.1
+        when 12
+          itemSaku += (item.api_saku + 1.25 * Math.sqrt(item.api_level)) * 0.6
+        when 13
+          itemSaku += (item.api_saku + 1.25 * Math.sqrt(item.api_level)) * 0.6
+        else
+          itemSaku += item.api_saku * 0.6
+    shipSaku += Math.sqrt(shipPureSaku)
+  teitokuSaku = Math.ceil(window._teitokuLv * 0.4)
+  totalSaku = shipSaku + itemSaku - teitokuSaku + 2 * shipCount
+
+  ship: parseFloat(shipSaku.toFixed(4))
+  item: parseFloat(itemSaku.toFixed(4))
+  teitoku: parseFloat(teitokuSaku.toFixed(4))
+  total: parseFloat(totalSaku.toFixed(4))
+
 getDeckMessage = (deckId) ->
   {_ships, _decks} = window
   totalLv = totalShip = 0
@@ -123,6 +201,7 @@ getDeckMessage = (deckId) ->
   tyku: getTyku(_decks[deckId])
   saku25: getSaku25(_decks[deckId])
   saku25a: getSaku25a(_decks[deckId])
+  saku33: getSaku33(_decks[deckId])
 
 isNull = (item) ->
   item is null
@@ -173,7 +252,8 @@ getDeckDetail = (deckChecked, tags)->
                     message.tyku.basic,
                     message.tyku.alv,
                     message.saku25.total,
-                    message.saku25a.total
+                    message.saku25a.total,
+                    message.saku33.total
                   ]
 
   details: messages
