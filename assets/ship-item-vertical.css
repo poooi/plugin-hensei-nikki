@@ -45,7 +45,6 @@
 }
 #HenseiNikki .ship-item .ship-detail {
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-content: space-around;
   justify-content: center;
@@ -71,7 +70,6 @@
   /*-webkit-mask: -webkit-gradient(linear, 50% 50%, 90% 90%, from(rgba(222,187,71,1)), to(rgba(0,0,0,0.01)));*/
 }
 #HenseiNikki .ship-item .slot-detail {
-  flex: 4;
   overflow: hidden;
   flex-direction: column;
   align-content: center;
