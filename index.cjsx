@@ -44,8 +44,8 @@ getTyku = (deck) ->
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
 
-  basic: minTyku
-  alv: maxTyku
+  min: minTyku
+  max: maxTyku
 
 # Saku (2-5 旧式)
 # 偵察機索敵値×2 ＋ 電探索敵値 ＋ √(艦隊の装備込み索敵値合計 - 偵察機索敵値 - 電探索敵値)
@@ -249,8 +249,8 @@ getDeckDetail = (deckChecked, tags)->
     message = getDeckMessage deckId
     messages.push [
                     message.totalLv,
-                    message.tyku.basic,
-                    message.tyku.alv,
+                    message.tyku.min,
+                    message.tyku.max,
                     message.saku25.total,
                     message.saku25a.total,
                     message.saku33.total
@@ -323,6 +323,7 @@ module.exports =
           }
         ]
       else
+        deck.v = 'min'
         @addData title, deck, false
     handleDeleteData: (delTitle) ->
       {henseiData} = @state
