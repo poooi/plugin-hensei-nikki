@@ -178,7 +178,7 @@ HenseiItem = React.createClass
               <span>{__ 'Total Lv '}{totalLv}</span>
               {
                 if fpBasic isnt null
-                  if @props.deckItem.details.v?
+                  if @props.deckItem.v?
                     basicStr = __ 'Minimum FP'
                     alvStr = __ 'Maximum FP'
                     fp = fpTotal
