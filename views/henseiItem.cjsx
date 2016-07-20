@@ -181,11 +181,11 @@ HenseiItem = React.createClass
                   if @props.deckItem.v?
                     basicStr = __ 'Minimum FP'
                     alvStr = __ 'Maximum FP'
-                    fp = fpTotal
+                    fp = fpAlv
                   else
                     basicStr = __ 'Basic FP'
                     alvStr = __ 'Rank bonuses'
-                    fp = fpAlv
+                    fp = fpTotal
                   <span>
                     <OverlayTrigger placement='bottom' overlay={
                       <Tooltip id='fpbasic'>

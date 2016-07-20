@@ -129,7 +129,9 @@ AddDataTab = React.createClass
       <Panel collapsible expanded={@state.showPre}>
         {
           if @state.deck.ships?
-            <HenseiItem deckItem={@state.deck}/>
+            deck = @state.deck
+            deck.v = 'min'
+            <HenseiItem deckItem={deck}/>
         }
       </Panel>
       <div style={display: 'flex'}>
