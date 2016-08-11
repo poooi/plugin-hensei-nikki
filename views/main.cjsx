@@ -21,7 +21,7 @@ Main = React.createClass
     @setState
       activeTitle: title
   handleAddDataClick: (eventKey, selectedKey) ->
-    switch selectedKey
+    switch eventKey
       when '1'
         @setState
           status: 'add'
