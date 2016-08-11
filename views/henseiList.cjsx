@@ -48,7 +48,7 @@ HenseiList = React.createClass
                   <Button bsSize='small' onClick={@handleExportClick}>
                     <FontAwesome name='share-square-o' /> {__('Export')}
                   </Button>
-                  <DropdownButton center title={dTitle} eventKey={0} id="henseinikki-list-dropdown">
+                  <DropdownButton title={dTitle} key={0} id="henseinikki-list-dropdown">
                     <MenuItem eventKey='1' onSelect={@handleEditClick}>{__('Edit tag')}</MenuItem>
                     <MenuItem eventKey='2' onSelect={@handleEditTitleClick}>{__('Edit title')}</MenuItem>
                   </DropdownButton>

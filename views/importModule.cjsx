@@ -1,5 +1,5 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
-{Button, Input} = ReactBootstrap
+{Button, FormControl} = ReactBootstrap
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 emptyShip = [null, [null, -1], [], [], []]
@@ -208,8 +208,8 @@ ImportModule = React.createClass
     @setState
       inputTitle: ''
       importCode: ''
-  handleInputTitleChange: ->
-    inputTitle = @refs.inputTitle.getValue()
+  handleInputTitleChange: (e) ->
+    inputTitle = e.target.value
     if inputTitle? and inputTitle.length > 0 and @state.importCode?.length > 0
       btnDisable = false
     else
@@ -217,8 +217,8 @@ ImportModule = React.createClass
     @setState
       inputTitle: inputTitle
       btnDisable: btnDisable
-  handleImportCodeChange: ->
-    importCode = @refs.importCode.getValue()
+  handleImportCodeChange: (e) ->
+    importCode = e.target.value
     if importCode? and importCode.length > 0 and @state.inputTitle.length >0
       btnDisable = false
     else
@@ -233,21 +233,19 @@ ImportModule = React.createClass
               style={margin: 10}>
         <FontAwesome name='arrow-left' />
       </Button>
-      <Input type='text'
-             label={__ 'Title'}
-             placeholder={__ 'Title'}
-             value={@state.inputTitle}
-             hasFeedback
-             ref='inputTitle'
-             onChange={@handleInputTitleChange} />
-      <Input style={height: '250px'}
-             type='textarea'
-             label={__ 'Import code'}
-             placeholder={__ 'Import code'}
-             value={@state.importCode}
-             hasFeedback
-             ref='importCode'
-             onChange={@handleImportCodeChange} />
+      <FormControl type='text'
+                   label={__ 'Title'}
+                   placeholder={__ 'Title'}
+                   value={@state.inputTitle}
+                   ref='inputTitle'
+                   onChange={@handleInputTitleChange} />
+      <FormControl style={height: '250px'}
+                   componentClass='textarea'
+                   label={__ 'Import code'}
+                   placeholder={__ 'Import code'}
+                   value={@state.importCode}
+                   ref='importCode'
+                   onChange={@handleImportCodeChange} />
       <Button disabled={@state.btnDisable}
               onClick={@importHandler}
               block>

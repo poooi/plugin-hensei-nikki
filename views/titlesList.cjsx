@@ -1,5 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
-{Input, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label, DropdownButton, MenuItem} = ReactBootstrap
+{FormControl, ButtonGroup, Button, OverlayTrigger, Popover, Overlay, Label, DropdownButton, MenuItem} = ReactBootstrap
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TitlesList = React.createClass
@@ -12,8 +12,8 @@ TitlesList = React.createClass
       @setState
         henseiData: nextProps.henseiData
         showData: nextProps.henseiData
-  handleKeyWordChange: ->
-    key = @refs.keywords.getValue()
+  handleKeyWordChange: (e) ->
+    key = e.target.value
     @filterBuffer key
   filterBuffer: (key) ->
     {henseiData} = @state
@@ -67,7 +67,7 @@ TitlesList = React.createClass
     #dTitle = <span><FontAwesome name='plus-square-o' />{__('Add')}</span>
     dTitle = <FontAwesome name='plus-square-o' />
     <div style={flex: '0 1', maxWidth: 80, minWidth: 50}>
-      <DropdownButton center title={dTitle} eventKey={0} id="henseinikki-add-dropdown">
+      <DropdownButton title={dTitle} key={0} id="henseinikki-add-dropdown">
         <MenuItem eventKey='1' onSelect={@props.handleAddDataClick}>{__ 'Add'}</MenuItem>
         <MenuItem eventKey='2' onSelect={@props.handleAddDataClick}>{__ 'Import'}</MenuItem>
         <MenuItem divider />
@@ -75,12 +75,11 @@ TitlesList = React.createClass
         <MenuItem eventKey='4' onSelect={@props.handleAddDataClick}>{__ 'Export records file'}</MenuItem>
       </DropdownButton>
       <div style={flex: 1} className='titles-keywords'>
-        <Input type='text'
-               value={@state.filterKey}
-               placeholder={__ 'Keywords'}
-               hasFeedback
-               ref='keywords'
-               onChange={@handleKeyWordChange} />
+        <FormControl type='text'
+                     value={@state.filterKey}
+                     placeholder={__ 'Keywords'}
+                     ref='keywords'
+                     onChange={@handleKeyWordChange} />
       </div>
       <div>
         <ButtonGroup vertical bsSize='xsmall' className='titles-container'>

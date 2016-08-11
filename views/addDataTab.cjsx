@@ -1,5 +1,5 @@
 {React, ReactBootstrap} = window
-{Button, Input, Label, Panel} = ReactBootstrap
+{Button, FormControl, Checkbox, Label, Panel} = ReactBootstrap
 {relative, join} = require 'path-extra'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
@@ -24,8 +24,8 @@ AddDataTab = React.createClass
         tags: []
         deck: ''
         showPre: false
-  handleTitleChange: ->
-    title = @refs.title.getValue()
+  handleTitleChange: (e) ->
+    title = e.target.value
     flag = false
     for item in @state.deckChecked
       if item
@@ -96,24 +96,23 @@ AddDataTab = React.createClass
               style={margin: 10}>
         <FontAwesome name='arrow-left' />
       </Button>
-      <div style={display: 'flex', padding: 7}>
+      <div style={display: 'flex', padding: 7, alignItems: 'baseline', justifyContent: 'space-around'}>
       {
         if window._decks?
           for deck, index in window._decks
-            <Input type='checkbox'
-                   label={deck.api_name}
-                   key={index}
-                   onChange={@handleClickCheckbox.bind(@, index)}
-                   checked={@state.deckChecked[index]}/>
+            <Checkbox key={index}
+                      onChange={@handleClickCheckbox.bind(@, index)}
+                      checked={@state.deckChecked[index]}>
+              {deck.api_name}
+            </Checkbox>
       }
       </div>
-      <Input type='text'
-             label={__ 'Title'}
-             placeholder={__ 'Title'}
-             value={@state.title}
-             hasFeedback
-             ref='title'
-             onChange={@handleTitleChange} />
+      <FormControl type='text'
+                   label={__ 'Title'}
+                   placeholder={__ 'Title'}
+                   value={@state.title}
+                   ref='title'
+                   onChange={@handleTitleChange} />
       <TagsInputContainer handleTagAddClick={@handleTagAddClick} />
       <div style={display: 'flex', padding: 5}>
         {

@@ -1,5 +1,5 @@
 {React, ReactBootstrap, FontAwesome} = window
-{Button, Input, Label} = ReactBootstrap
+{Button, Checkbox, Label} = ReactBootstrap
 {join} = require 'path-extra'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
@@ -55,7 +55,7 @@ TagsEditor = React.createClass
       tagChecked: tagChecked
       tags: tags
   handleTagAddClick: (tagInput) ->
-    {tags} = @state
+    {tags, tagChecked} = @state
     flag = true
     for tag in tags
       if tag is tagInput
@@ -63,8 +63,10 @@ TagsEditor = React.createClass
         flag = false
     if flag
       tags.push tagInput
+      tagChecked.push false
       @setState
         tags: tags
+        tagChecked: tagChecked
   handleSaveClick: ->
     {tags} = @state
     henseiData = @props.henseiData
@@ -85,11 +87,11 @@ TagsEditor = React.createClass
           {
             for tag, index in @state.tags
               label = getTags index, tag
-              <Input type='checkbox'
-                     label={label}
-                     key={index}
-                     onChange={@handleClickCheckbox.bind(@, index)}
-                     checked={@state.tagChecked[index]}/>
+              <Checkbox key={index}
+                       onChange={@handleClickCheckbox.bind(@, index)}
+                       checked={@state.tagChecked[index]}>
+                {label}
+              </Checkbox>
           }
           <Button style={alignItems: 'flex-end'}
                   bsSize='small'

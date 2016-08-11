@@ -1,5 +1,5 @@
 {React, ReactBootstrap} = window
-{Panel, Input, Button} = ReactBootstrap
+{Panel, FormControl, Button} = ReactBootstrap
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TitleEditor = React.createClass
@@ -11,8 +11,8 @@ TitleEditor = React.createClass
       @setState
         titleInput: @props.activeTitle
         btnDisable: true
-  handleTitleInputChange: ->
-    titleInput = @refs.titleInput.getValue()
+  handleTitleInputChange: (e) ->
+    titleInput = e.target.value
     if titleInput? and titleInput.length > 0 and titleInput isnt @props.activeTitle
       btnDisable = false
     else
@@ -30,14 +30,13 @@ TitleEditor = React.createClass
       @props.handleTitleSaveClick @state.titleInput
   render: ->
     <Panel collapsible expanded={@props.editTitle} style={marginTop: 10, marginBottom: 0}>
-      <Input style={margin: 10}
-             type='text'
-             label={__ 'Title'}
-             placeholder={__ 'Title'}
-             value={@state.titleInput}
-             hasFeedback
-             ref='titleInput'
-             onChange={@handleTitleInputChange} />
+      <FormControl style={margin: 10}
+                   type='text'
+                   label={__ 'Title'}
+                   placeholder={__ 'Title'}
+                   value={@state.titleInput}
+                   ref='titleInput'
+                   onChange={@handleTitleInputChange} />
       <Button style={height: '50%', width: '50%', margin: 10}
               bsSize='small'
               disabled={@state.btnDisable}

@@ -153,7 +153,7 @@ HenseiItem = React.createClass
       selectedKey: selectedKey
   render: ->
     if @props.deckItem.ships[0][0][0]?
-      <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false}>
+      <Tabs activeKey={@state.selectedKey} onSelect={@handleSelectTab} animation={false} id="hensei-list-tabs">
       {
         for fleet, index in @props.deckItem.ships
           break if !fleet[0]?

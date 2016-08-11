@@ -1,13 +1,13 @@
 {React, ReactBootstrap} = window
-{Button, Input, Label} = ReactBootstrap
+{Button, FormControl, Label} = ReactBootstrap
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
 
 TagsInputContainer = React.createClass
   getInitialState: ->
     tagDisable: true
     tagInput: ''
-  handleTagInputChange: ->
-    tagInput = @refs.tagInput.getValue()
+  handleTagInputChange: (e) ->
+    tagInput = e.target.value
     if tagInput? and tagInput.length > 0
       tagDisable = false
     else
@@ -23,14 +23,13 @@ TagsInputContainer = React.createClass
       tagDisable: true
   render: ->
     <div className='tags-input-container'>
-      <Input style={margin: 10}
-             type='text'
-             label={__ 'Tag'}
-             placeholder={__ 'Tag'}
-             value={@state.tagInput}
-             hasFeedback
-             ref='tagInput'
-             onChange={@handleTagInputChange} />
+      <FormControl style={margin: 10}
+                   type='text'
+                   label={__ 'Tag'}
+                   placeholder={__ 'Tag'}
+                   value={@state.tagInput}
+                   ref='tagInput'
+                   onChange={@handleTagInputChange} />
       <Button style={height: '50%', width: '20%', margin: 10}
               bsSize='small'
               disabled={@state.tagDisable}
