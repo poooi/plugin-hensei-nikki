@@ -1,5 +1,5 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
-{Button, Input} = ReactBootstrap
+{Button, FormControl} = ReactBootstrap
 {shell} = require 'electron'
 {openExternal} = shell
 clipboard = require('electron').clipboard
@@ -18,7 +18,7 @@ ExportMoudle = React.createClass
       @setState
         code: code
   handleCopyClick: ->
-    clipboard.writeText @state.code, 'selection'
+    clipboard.writeText @state.code
     toggleModal __('Copy'), __('The code has been copied to the clipboard.')
   render: ->
     <div className='tab-container'>
@@ -36,11 +36,11 @@ ExportMoudle = React.createClass
         <Button bsSize='small' onClick={@handleCopyClick}>
           {__('Copy')}
         </Button>
-        <Input style={height: '250px'}
-               type='textarea'
-               label={__ 'Code'}
-               placeholder={__ 'Code'}
-               value={@state.code} />
+        <FormControl style={height: '250px'}
+                     componentClass='textarea'
+                     label={__ 'Code'}
+                     placeholder={__ 'Code'}
+                     value={@state.code} />
       </div>
     </div>
 
