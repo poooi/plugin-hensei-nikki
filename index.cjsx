@@ -351,7 +351,7 @@ module.exports =
     render: ->
       <div id='HenseiNikki' className='HenseiNikki'>
         <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'hensei-nikki.css')} />
-        <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', @state.css)} />
+        <link rel='stylesheet' href={join(relative(ROOT, __dirname), 'assets', 'ship-item.css')} />
         <Main handleDeleteData={@handleDeleteData}
               saveData={@saveData}
               handleAddData={@handleAddData}
