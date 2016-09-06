@@ -9,9 +9,9 @@ import ImportModule from './containers/import-module'
 export const reactClass = class HenseiNikki extends Component {
   render() {
     return (
-      <div id='HenseiNikki' className='HenseiNikki'>
-        <link rel='stylesheet' href={join(__dirname , 'assets', 'hensei-nikki.css')} />
-        <link rel='stylesheet' href={join(__dirname, 'assets', 'ship-item.css')} />
+      <div id="HenseiNikki">
+        <link rel="stylesheet" href={join(__dirname , 'assets', 'hensei-nikki.css')} />
+        <link rel="stylesheet" href={join(__dirname, 'assets', 'ship-item.css')} />
         <HenseiList />
         <AddDataTab />
         <ImportModule />

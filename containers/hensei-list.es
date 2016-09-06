@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { tabStatusSelector } from '../redux/selectors'
+import { topStateSelector } from '../redux/selectors'
 
 import TitleList from '../components/title-list'
-import HeiseiItem from '../components/heisei-item'
+import HenseiItem from '../components/hensei-item'
 
 export default connect(
-  tabStatusSelector,
-)(class HeiseiList extends Component {
+  topStateSelector,
+)(class HenseiList extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,13 +21,13 @@ export default connect(
   }
   render() {
     const { activeTitle } = this.state
-    const { status } = this.props
+    const { topState } = this.props
     return (
-      <div className={`hensei-list${status === 'list' ? '' : ' hidden'}`}>
+      <div className={`hensei-list${topState === 'list' ? '' : ' hidden'}`}>
         <TitleList activeTitle={activeTitle}
-                   status={status}
+                   topState={topState}
                    onSelectTitle={this.onSelectTitle} />
-        <HeiseiItem activeTitle={activeTitle} />
+        <HenseiItem activeTitle={activeTitle} />
       </div>
     )
   }

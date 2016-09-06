@@ -107,8 +107,7 @@ function getValue(data) {
   return values
 }
 
-export function dataFilter(keyword) {
-  const { data } = getStore(henseiDataSelector())
+export function dataFilter(keyword, data) {
   const allData = []
 
   if (isEmpty(data)) {

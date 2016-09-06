@@ -1,7 +1,7 @@
 
 export const HENSEI_SAVE_DATA = '@@HENSEI_SAVE_DATA'
-export const HENSEI_SWITCH_STATE = '@@HENSEI_SWITCH_STATE'
-
+export const HENSEI_SWITCH_TOP_STATE = '@@HENSEI_SWITCH_TOP_STATE'
+export const HENSEI_SWITCH_SUB_STATE = '@@HENSEI_SWITCH_SUB_STATE'
 
 export function onSaveData() {
   return {
@@ -9,9 +9,16 @@ export function onSaveData() {
   }
 }
 
-export function onSwitchState(name) {
+export function onSwitchTopState(name) {
   return {
-    type: HENSEI_SWITCH_STATE,
+    type: HENSEI_SWITCH_TOP_STATE,
+    name,
+  }
+}
+
+export function onSwitchSubState(name) {
+  return {
+    type: HENSEI_SWITCH_SUB_STATE,
     name,
   }
 }

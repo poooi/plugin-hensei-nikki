@@ -10,5 +10,19 @@ export const initStatusSelector = createSelector(
 
 export const henseiDataSelector = createSelector(
   extensionSelectorFactory(REDUCER_EXTENSION_KEY),
-  state => ({ data: (state.henseiData || {data: {}}).data })
+  state => state.henseiData
+)
+
+export topStateSelector = createSelector(
+  extensionSelectorFactory(REDUCER_EXTENSION_KEY),
+  state => ({ topState: state.opts.top })
+)
+export subStateSelector = createSelector(
+  extensionSelectorFactory(REDUCER_EXTENSION_KEY),
+  state => ({ subState: state.opts.sub })
+)
+
+export optsSelector = createSelector(
+  extensionSelectorFactory(REDUCER_EXTENSION_KEY),
+  state => state.opts
 )
