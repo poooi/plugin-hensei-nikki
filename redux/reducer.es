@@ -1,5 +1,9 @@
 import { combineReducers } from 'redux'
 import { loadData } fron '../utils'
+import {
+  HENSEI_SWITCH_TOP_STATE,
+  HENSEI_SWITCH_SUB_STATE,
+} from './actions'
 
 const initialState = {
   "initStatus": {
@@ -7,6 +11,10 @@ const initialState = {
   },
   "henseiData": {
     "data": {},
+  },
+  "opts": {
+    "top": "list",
+    "sub": "data",
   },
 }
 
@@ -29,6 +37,22 @@ function dataReducer(state = initialState.henseiData, action) {
     return {
       ...state,
       data: loadData(),
+    }
+  }
+  return state
+}
+
+function optsReducer(state = initStatusSelector.opts, action) {
+  switch (action.type) {
+  case HENSEI_SWITCH_TOP_STATE:
+    return {
+      ...state,
+      top: action.name,
+    }
+  case HENSEI_SWITCH_SUB_STATE:
+    return {
+      ...state,
+      sub: action.name,
     }
   }
   return state

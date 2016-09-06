@@ -5,18 +5,9 @@
   padding-left: 15px;
   padding-right: 15px;
 }
-#HenseiNikki .hidden {
-  display: none;
-}
-#HenseiNikki .show {
-  display: flex;
-}
 #HenseiNikki .btn-group .btn {
   width: 100%;
   overflow: hidden;
-}
-#HenseiNikki ::-webkit-scrollbar {
-  width: 10px;
 }
 #HenseiNikki .tab-container {
   padding: 15px;
@@ -43,24 +34,6 @@
   display: flex;
   flex-flow: row wrap;
   padding: 10px 0 0 15px;
-}
-#HenseiNikki .titles-container {
-  display: flex;
-  flex-direction: column;
-}
-#HenseiNikki .titles-container button{
-  overflow: hidden;
-}
-#HenseiNikki .titles-keywords {
-  padding: 0px;
-}
-#HenseiNikki .titles-keywords input {
-  height: 100%;
-  padding: 0px;
-}
-#HenseiNikki .titles-keywords .form-group {
-  height: 100%;
-  padding: 0px;
 }
 #HenseiNikki .details-container{
   display: flex;
