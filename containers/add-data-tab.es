@@ -35,7 +35,7 @@ export default connect(
     const title = e.target.value
     const { deckChecked, saveDisable } = this.state
 
-    if (title && !title.length && includes(deckChecked, true)) {
+    if (title && title.length && includes(deckChecked, true)) {
       saveDisable = false
     } else {
       saveDisable = true
