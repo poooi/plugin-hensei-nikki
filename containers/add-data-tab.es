@@ -13,7 +13,7 @@ const initialState = {
   deck: '',
 }
 
-export default Opts = connect(
+export default connect(
   createSelector([
     topStateSelector,
     henseiDataSelector,
