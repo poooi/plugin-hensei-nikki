@@ -29,13 +29,9 @@ export default connect(
   }
   checkState(state) {
     const newState = { ...this.state, ...state }
-    const { importCode, inputTitle, btnDisable } = newState
+    const { importCode, inputTitle } = newState
 
-    if (inputTitle && inputTitle.length && importCode && importCode.length) {
-      btnDisable = false
-    } else {
-      btnDisable = true
-    }
+    let btnDisable = !(inputTitle && inputTitle.length && importCode && importCode.length)
 
     this.setState({
       ...newState,
