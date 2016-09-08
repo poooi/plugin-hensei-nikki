@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { forEach } from 'lodash'
-import { henseiDataSelector } from '../redux/selectors'
+import { subStateSelector, henseiDataSelector } from '../redux/selectors'
 
 import FleetItem from './fleet-item'
+import TitleEditor from './title-editor'
 
 export default connect(
-  henseiDataSelector
+  createSelector([
+    subStateSelector,
+    henseiDataSelector,
+  ], ({ subState }, data) => { subState, data})
 )(class HenseiItem extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      deckId: 0,
       selectedKey: 0,
       tabs: ['I', 'II', 'III', 'IV'],
       data: {},
@@ -48,6 +51,9 @@ export default connect(
             onSelect={onTabSelected}
             animation={false}
             id="hensei-list-tabs">
+        <TitleEditor data={data}
+                     title={this.props.activeTitle}
+                     subState={this.props.subState} />
         { tabs }
       </Tabs>
     )
