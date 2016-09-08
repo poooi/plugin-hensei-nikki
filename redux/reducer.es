@@ -31,6 +31,7 @@ function initStatusReducer(state = initialState.initStatus, action) {
 }
 
 function dataReducer(state = initialState.henseiData, action) {
+  const { data } = this.state
   switch (action.type) {
   case '@@Response/kcsapi/api_get_member/require_info':
   case '@@poi-plugin-senka-calc@init':
@@ -38,6 +39,31 @@ function dataReducer(state = initialState.henseiData, action) {
       ...state,
       data: loadData(),
     }
+  case HENSEI_SAVE_DATA: {
+    const { title, fleets } = this.action
+    data[title] = fleets
+    return {
+      ...state,
+      data,
+    }
+  }
+  case HENSEI_SAVE_TITLE: {
+    const { oldTitle, newTitle } = this.action
+    data[newTitle] = data[oldTitle]
+    delete data[oldTitle]
+    return {
+      ...state,
+      data,
+    }
+  }
+  case HENSEI_SAVE_TAGS: {
+    const { title, tags } = this.action
+    data[title].tags = tags
+    return {
+      ...state,
+      data,
+    }
+  }
   }
   return state
 }

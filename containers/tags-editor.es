@@ -76,7 +76,8 @@ export default connect(
     }
   }
   onSave = () => {
-    this.props.onSaveData(this.state.tags)
+    const { onSaveTags, title } = this.props
+    onSaveTags(title, this.state.tags)
   }
   render() {
     const { delShow, delDisable, tags } = this.state

@@ -18,7 +18,7 @@ export default connect(
     topStateSelector,
     henseiDataSelector,
   ], ({ topState }, data) => ({ topState, data })),
-  { onSwitchTopState, onSwitchSubState }
+  { onSaveData, onSwitchSubState }
 )(class AddDataTab extends Component {
   constructor(props) {
     super(props)
@@ -54,11 +54,11 @@ export default connect(
       tags,
     })
   }
-  onSaveData = (e) => {
+  onSave = (e) => {
     const { deckChecked, title, tags } = this.state
     const { getDeckDetail, handleAddData } = this.props
 
-    handleAddData(title, getDeckDetail(deckChecked, tags))
+    onSaveData(title, getDeckDetail(deckChecked, tags))
 
     this.setState({
       ...initialState,
@@ -136,7 +136,7 @@ export default connect(
           </Button>
           <Button bsSize="small"
                   disabled={saveDisable}
-                  onClick={this.onSaveData}
+                  onClick={this.onSave}
                   style={width: '50%'}>
             {__('Save')}
           </Button>
