@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Panel, FormControl, Button } from 'react-bootstrap'
-import { onSaveTags, onSwitchSubState } from '../redux/actions'
+import { onSaveTitle, onSwitchSubState } from '../redux/actions'
 
 const initialState = {
   inputTitle: '',
@@ -11,7 +11,7 @@ const initialState = {
 
 export default connect(
   state => ({}),
-  { onSaveTags, onSwitchSubState }
+  { onSaveTitle, onSwitchSubState }
 )(class TitleEditor extends Component {
   constructor(props) {
     super(props)
