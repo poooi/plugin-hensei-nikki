@@ -33,13 +33,9 @@ export default connect(
   }
   onTitileChange = (e) => {
     const title = e.target.value
-    const { deckChecked, saveDisable } = this.state
+    const { deckChecked } = this.state
 
-    if (title && title.length && includes(deckChecked, true)) {
-      saveDisable = false
-    } else {
-      saveDisable = true
-    }
+    let saveDisable = !(title && title.length && includes(deckChecked, true))
 
     this.setState({
       title,
@@ -86,14 +82,9 @@ export default connect(
     const { deckChecked, title } = this.state
     deckChecked[index] = !deckChecked[index]
 
-    let saveDisable = true
-    let preDisable = true
-    if (includes(deckChecked, true)) {
-      preDisable = false
-      if (title && title.length) {
-        saveDisable = false
-      }
-    }
+    let preDisable = !includes(deckChecked, true)
+    let saveDisable = !(!preDisable && title && title.length)
+
     this.setState({
       deckChecked,
       saveDisable,
