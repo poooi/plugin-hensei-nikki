@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Panel, FormControl, Button } from 'react-bootstrap'
 import { onSaveTitle, onSwitchSubState } from '../redux/actions'
+import { toggleModal, _ } from '../../utils'
 
 const initialState = {
   inputTitle: '',
@@ -37,6 +38,7 @@ export default connect(
   onSave = () => {
     const { data, title, onSaveTitle } = this.props
     const { inputTitle } = this.state
+
     if (includes(Object.keys(data), inputTitle)) {
       toggleModal(__('Error'), __('The title is already exist.'))
     } else {
@@ -47,16 +49,14 @@ export default connect(
   render() {
     const { inputTitle, saveDisable, show } = this.state
     return (
-      <Panel collapsible expanded={show} style={marginTop: 10, marginBottom: 0}>
-        <FormControl style={margin: 10}
-                     type="text"
+      <Panel collapsible expanded={show} className="title-editor">
+        <FormControl type="text"
                      label={__('Title')}
                      placeholder={__('Title')}
                      value={inputTitle}
                      ref="inputTitle"
                      onChange={this.onInputTitleChange} />
-        <Button style={height: '50%', width: '50%', margin: 10}
-                bsSize="small"
+        <Button bsSize="small"
                 disabled={saveDisable}
                 onClick={this.onSave}>
           {__('Save')}
