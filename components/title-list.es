@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Label, FormControl, ButtonGroup, OverlayTrigger, Popover, Button } from 'react-bootstrap'
 import { forEach } from 'lodash'
-import { filterBuffer, __ } from '../utils'
+import { dataFilter, __ } from '../utils'
 import { henseiDataSelector } from '../redux/selectors'
 
 export default connect(
@@ -18,9 +18,9 @@ export default connect(
   }
   componentWillReceiveProps(nextProps) {
     const { data, topState } = nextProps
-    const { _data, _topState } = this.state
+    const { _data, _topState, filterKey } = this.state
     if ((data !== _data) || (status === 'list' && topState !== _topState)) {
-      const showTitles = Object.keys(data)
+      const showTitles = dataFilter(filterKey, data)
       this.setState({
         data,
         showTitles,
@@ -28,11 +28,11 @@ export default connect(
     }
   }
   onKeywordChange = (e) => {
-    const key = e.target.value
-    const matchedTitles = filterBuffer(key, this.state.data)
+    const filterKey = e.target.value
+    const showTitles = dataFilter(filterKey, this.state.data)
     this.setState({
-      filterKey: key,
-      showTitles: matchedTitles,
+      filterKey,
+      showTitles,
     })
   }
   onTitileClick = (title) => {
