@@ -48,6 +48,14 @@
             font-size: 14px;
           }
         }
+        .details-container{
+          display: flex;
+          justify-content: center;
+          padding: 0 0 0 25px;
+          & > span {
+            margin-right: 15px;
+          }
+        }
       }
     }
     .title-editor {

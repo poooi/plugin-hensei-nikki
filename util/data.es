@@ -1,4 +1,4 @@
-import { isEmpty, forEach, reject, unzip } from 'lodash'
+import { isEmpty, forEach, unzip } from 'lodash'
 import {
   shipDataSelectorFactory,
   constSelector,
@@ -61,22 +61,6 @@ export function getDecksData(deckChecked, tags) {
   return data
 }
 
-function _filter(keyword, data) {
-  if (!keyword) {
-    return data
-  }
-
-  return unzip(data.filter((d) => {
-    let match = false
-    forEach(d, (value) => {
-      key = String(value).toLowerCase().trim().indexOf(String(keyword).toLowerCase().trim())
-      if (key >= 0) {
-        match = true
-      }
-    })
-    return match
-  }))[0]
-}
 
 // {"version":4,
 //   "f1":{
@@ -105,6 +89,24 @@ function getValue(data) {
     })
   })
   return values
+}
+
+
+function _filter(keyword, data) {
+  if (!keyword) {
+    return data
+  }
+
+  return unzip(data.filter((d) => {
+    let match = false
+    forEach(d, (value) => {
+      key = String(value).toLowerCase().trim().indexOf(String(keyword).toLowerCase().trim())
+      if (key >= 0) {
+        match = true
+      }
+    })
+    return match
+  }))[0]
 }
 
 export function dataFilter(keyword, data) {
