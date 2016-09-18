@@ -50,5 +50,17 @@
         }
       }
     }
+    .title-editor {
+      margin-top: 10px;
+      margin-bottom: 0;
+      .form-control {
+        margin: 10px;
+        button {
+          height: 50%;
+          width: 50%;
+          margin: 10px;
+        }
+      }
+    }
   }
 }
