@@ -1,5 +1,25 @@
+import { chunk, fromPairs } from 'lodash'
 import { getTyku, getSaku25, getSaku25a, getSaku33 } from 'views/utils/game-utils'
 
+const f = (p, a) => {
+  return Math.max(p, a instanceof Array ? a.reduce(f, 0) + 1 : 0)
+}
+
+const getShipItem = (ship) => {
+  switch (Object.prototype.toString.call(ship)) {
+  case "[object Array]":
+    return [
+      fromPairs([ ship[0], { lv: ship[1][0], slots } ]),
+      fromPairs([ ship[0], { lv: ship[1][0], slots } ]),
+    ]
+  case "[object Object]":
+    return { [ship.id]: { lv: ship.lv, slots: [ ...Object.keys(ship.item) ] } }
+  }
+}
+
+const getEquipsItem = (slot) => {
+
+}
 /*
   code types
   thirdparty (support: 艦載機厨デッキビルダー(old, v3, v4))
@@ -32,6 +52,7 @@ function oldVer(data) {
   tags: [ tag, ... ]
   "" for empty
 */
+
 /*
   v2
   ships: [ [ [ id, [ lv(null), cond(-1) ], [ ...slotId ], [ ...slotLv(null) ], [ ...slotALv(null) ] ] ] ]
@@ -41,6 +62,7 @@ function oldVer(data) {
   tags: [ tag, ... ]
   [] for empty
 */
+
 /*
   v3
   v: "min"
@@ -51,10 +73,11 @@ function oldVer(data) {
   tags: [ tag, ... ]
   [] for empty
 */
+
 /*
   latest
   version: poi-henseinikki-v1
-  fleets: [ [ { id, lv, slots: [ id, .. ], exSlot: { id } }, ... ], ... ]
+  fleets: [ [ id: { lv, slots: [ id, .. ], exSlot: { id } }, ... ], ... ]
   ignore empty
   details: { equipsData, shipsData, teitokuLv }
   ignore empty
