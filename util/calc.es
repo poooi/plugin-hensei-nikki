@@ -1,24 +1,30 @@
-import { chunk, fromPairs } from 'lodash'
+import { chunk, fromPairs, map, unzip, concat, fill } from 'lodash'
 import { getTyku, getSaku25, getSaku25a, getSaku33 } from 'views/utils/game-utils'
 
-const f = (p, a) => {
-  return Math.max(p, a instanceof Array ? a.reduce(f, 0) + 1 : 0)
+const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
+const fillIfEmpty = (arr, length) => concat(arr, fill(Array(length - arr.length), undefined))
+
+const getEquipsItem = (id, { lv, alv }) => {
+  const { api_type, api_tyku, api_saku } = getShip(id)
+  const data = [ {}, { api_type, api_tyku, api_saku } ]
+  if (lv) {
+    data[0].api_level = lv
+  }
+  if ([ 6, 7, 10 ].includes(api_type[2]) && alv) {
+    data[0].api_alv = alv
+  }
+  return data
 }
 
-const getShipItem = (ship) => {
+const getSlots = (data, num) => checkEmpty(map(data, [id, lv] => fromPairs([id, getEquipsItem(id, lv)])), num)
+
+const getShipItem = ship => {
   switch (Object.prototype.toString.call(ship)) {
   case "[object Array]":
-    return [
-      fromPairs([ ship[0], { lv: ship[1][0], slots } ]),
-      fromPairs([ ship[0], { lv: ship[1][0], slots } ]),
-    ]
+    return fromPairs([ship[0], { lv: ship[1][0], slots: getSlots(unzip([ship[2], ship[3]]), $ship.api_slot_num) }])
   case "[object Object]":
     return { [ship.id]: { lv: ship.lv, slots: [ ...Object.keys(ship.item) ] } }
   }
-}
-
-const getEquipsItem = (slot) => {
-
 }
 /*
   code types
@@ -77,7 +83,7 @@ function oldVer(data) {
 /*
   latest
   version: poi-henseinikki-v1
-  fleets: [ [ id: { lv, slots: [ id, .. ], exSlot: { id } }, ... ], ... ]
+  fleets: [ [ id: { lv, slots: { id: { ...equipsData }, .. }, exSlot: { id } }, ... ], ... ]
   ignore empty
   details: { equipsData, shipsData, teitokuLv }
   ignore empty
