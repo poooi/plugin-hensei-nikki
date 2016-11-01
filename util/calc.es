@@ -2,29 +2,22 @@ import { chunk, fromPairs, map, unzip, concat, fill } from 'lodash'
 import { getTyku, getSaku25, getSaku25a, getSaku33 } from 'views/utils/game-utils'
 
 const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
-const fillIfEmpty = (arr, length) => concat(arr, fill(Array(length - arr.length), undefined))
+const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
 
 const getEquipsItem = (id, { lv, alv }) => {
   const { api_type, api_tyku, api_saku } = getShip(id)
   const data = [ {}, { api_type, api_tyku, api_saku } ]
-  if (lv) {
-    data[0].api_level = lv
-  }
-  if ([ 6, 7, 10 ].includes(api_type[2]) && alv) {
-    data[0].api_alv = alv
-  }
+  if (lv) data[0].api_level = lv
+  if ([ 6, 7, 10 ].includes(api_type[2])) data[0].api_alv = alv || 0
   return data
 }
 
-const getSlots = (data, num) => checkEmpty(map(data, [id, lv] => fromPairs([id, getEquipsItem(id, lv)])), num)
+const getSlots = (data, num) => fillIfEmpty(data.map(([id, lv]) => ({ [id]: getEquipsItem(id, { lv }) })), num)
 
 const getShipItem = ship => {
-  switch (Object.prototype.toString.call(ship)) {
-  case "[object Array]":
-    return fromPairs([ship[0], { lv: ship[1][0], slots: getSlots(unzip([ship[2], ship[3]]), $ship.api_slot_num) }])
-  case "[object Object]":
-    return { [ship.id]: { lv: ship.lv, slots: [ ...Object.keys(ship.item) ] } }
-  }
+  if (ship instanceof Array) return { [ship[0]]: { lv: ship[1][0], slots: getSlots(unzip([ship[2], ship[3], ship[4]]), $ship.api_slot_num) } }
+  if (ship instanceof Object) return { [ship.id]: { lv: ship.lv, slots: [ ...Object.keys(ship.item) ] } }
+  return false
 }
 /*
   code types
@@ -38,7 +31,16 @@ const getShipItem = ship => {
   code: [ (fleet)[ shipItem, ... ], ... ]
 */
 function oldVer(data) {
-
+  const depth = arrDepth(data)
+  const fleets = []
+  if (depth === 3) {
+    fleets.push(data.map(ship => getShipItem(ship)))
+  } else if (depth === 4) {
+    data.forEach(fleet => fleets.push(fleet.map(ship => getShipItem(ship))))
+  } else {
+    return false
+  }
+  return fleets
 }
 /*
   v3
@@ -48,7 +50,22 @@ function oldVer(data) {
   v4
   {version: 4, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, mas:7},{i2:{id:3, rf: 0}}...,ix:{id:43}}}, s2:{}...},...}
 */
-
+function newVer(data, ver) {
+  const fleets = []
+  const alvStr = ver === 3 ? 'rp' : 'mas'
+  for (let index in data) {
+    if (index.includes('f')) {
+      let fleet = data[index]
+      fleets.push(fleet.map(ship => {
+        for (let slot in ship.items) {
+          ship.items[slot].alv = ship.items[slot][alvStr]
+        }
+        getShipItem(ship)
+      }))
+    }
+  }
+  return fleets
+}
 /*
   v1
   ships: [ [ [ id, [ lv(null), cond(-1) ], [ ...slotId ], [ ...slotLv(null) ], [ ...slotALv(null) ] ], ... ], ... ]
