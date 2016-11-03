@@ -39,7 +39,7 @@ function oldVer(data) {
   } else if (depth === 4) {
     data.forEach(fleet => fleets.push(oldFleet(fleet)))
   } else {
-    return
+    throw 'TypeError'
   }
   return fleets
 }
@@ -158,18 +158,13 @@ function checkData(data) {
 
 function codeConversion(data) {
   let fleets
-  if (data instanceof Array) { // thirdparty old version
-    fleets = oldVer(data)
-  } else if (data instanceof Object) {
-    if ([ 3, 4 ].indexOf(data.version) > 0) { // thirdparty new version
-      fleets = newVer(data)
-    } else if (data.ships && data.details) { // HenseiNikki old version
-      fleets = oldVer(data.ships)
-    }
+  if (data instanceof Array) {
+    fleets = oldVer(data) // thirdparty & HenseiNikki old version
+  } else if (data instanceof Object && [ 3, 4 ].indexOf(data.version) > 0) {
+    fleets = newVer(data) // thirdparty new version
   }
   return fleets
 }
-
 /*
   details: {
     equipsData: [
@@ -438,22 +433,31 @@ function getSaku33(data, $equipsData, teitokuLv) {
   }
 }
 
-function getDetails(details) {
-  const { equipsData, shipsData, teitokuLv } = details
-
-  getTyku(equipsData)
-  getSaku25(shipsData, equipsData)
-  getSaku25a(equipsData, shipsData, teitokuLv)
-  getSaku33(equipsData, shipsData, teitokuLv)
-}
-
-function getFleets(fleets) {
-
-}
-
-export function getHenseiData(data) {
+export function getDetails({ fleets, $equipsData, $shipsData, teitokuLv }) {
   return {
-    details: getDetails(data.detail),
-    fleets: getFleets(data.fleets),
+    tyku: getTyku(fleets, $equipsData, $shipsData),
+    saku25: getSaku25(fleets, $equipsData),
+    saku25a: getSaku25a(fleets, $equipsData, teitokuLv),
+    saku33: getSaku33(fleets, $equipsData, teitokuLv),
   }
+}
+export function transSavedData(oldData) {
+  const newData = {}
+  for (let title in oldData) {
+    try {
+      const { version, ships, fleets, tags } = oldData[title]
+      let tempData = {}
+      if (version !== 'poi-h-v1') {
+        tempData.fleets = codeConversion(ships)
+        tempData.tags = tags || []
+        tempData.version = 'poi-h-v1'
+      } else {
+        tempData = oldData[title]
+      }
+      newData[title] = tempData
+    } catch (e) {
+      continue
+    }
+  }
+  return newData
 }
