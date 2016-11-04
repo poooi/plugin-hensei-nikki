@@ -112,16 +112,12 @@ function _filter(keyword, data) {
 export function dataFilter(keyword, data) {
   const allData = []
 
-  if (isEmpty(data)) {
-    return
-  }
+  if (isEmpty(data)) return
 
   forEach(data, (d, title) => {
     if (d.fleets.length > 1) {
       const fleets = []
-      forEach(d.fleets, (fleet) => {
-        fleets.push(fleet)
-      })
+      forEach(d.fleets, fleet => fleets.push(fleet))
       allData.push([title, getValue(fleets)])
     } else {
       allData.push([title, getValue(d.fleets)])

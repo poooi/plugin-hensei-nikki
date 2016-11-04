@@ -1,78 +1,103 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { FormControl, Button } from 'react-bootstrap'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
+import { remote } from 'electron'
+import { _ } from '../utils'
+import DataPreviewModule from './data-preview-module'
+import DataEditModule from './data-edit-module'
 
-const { toggleModal } = window
-const initialState = {
-  importCode: '',
-  inputTitle: '',
-  btnDisable: true,
-}
+const { dialog } = remote.require('electron')
 
-export default connect(
-  createSelector([
-    subStateSelector,
-    henseiDataSelector,
-  ], ({ subState }, data) => ({ subState, data })),
-  { onSwitchTopState, onSwitchSubState }
-)(class ImportModule extends Component {
+// TODO: move actions to action file
+export default class ImportModule extends Component {
   constructor(props) {
     super(props)
-    this.state = initialState
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.subState === 'import' && this.props.subState !== 'import') {
-      this.setState({
-        ...initialState
-      })
+    this.state ={
+      active: 'preview',
+      type: 'none',
+      data: ''
     }
   }
-  checkState(state) {
-    const newState = { ...this.state, ...state }
-    const { importCode, inputTitle } = newState
-
-    let btnDisable = !(inputTitle && inputTitle.length && importCode && importCode.length)
-
-    this.setState({
-      ...newState,
-      btnDisable,
+  onMenuSelected = eventKey => {
+    if (eventKey === 'importFile') {
+      onFileImportSelected()
+    } else if (eventKey === 'exportFile') {
+      onFileExportSelected()
+    }
+    this.setState({ active: eventKey })
+  }
+  onFileImportSelected = () => {
+    const saveData =  []
+    let sum = 0
+    const filename = dialog.showOpenDialog({
+      title: __('Import records file'),
+      filters: [{ name: "json file", extensions: ['json'] }],
+      properties: ['openFile'],
     })
+    if (filename && filename[0]) {
+      try {
+        fs.accessSync(filename[0], fs.R_OK)
+        const fileContentBuffer = fs.readJSONSync(filename[0])
+        for (let title in fileContentBuffer) {
+          if (Object.keys(saveData).includes(title)) continue
+          saveData[title] = fileContentBuffer[title]
+          sum += 1
+        }
+      } catch (e) {
+        console.log(e.message)
+        throw e
+      }
+    }
+    // TODO: showModal if sum > 0 success import sum
   }
-  onInputTitleChange = (e) => {
-    this.checkState({ inputTitle: e.target.value })
+  onFileExportSelected = () => {
+    const filename = dialog.showSaveDialog({
+      title: __('Export records file'),
+      defaultPath: "HenseiNikki.json",
+    })
+    if (filename) {
+      fs.writeFile(filename, JSON.stringify(saveData), err => {
+        if (err) console.log(err)
+      }
+    }
   }
-  onImportCodeChange = (e) => {
-    this.checkState({ importCode: e.target.value })
+  onGoBack = (e) => {
+    this.setState({ active: 'preview' })
   }
-  onImportCode() {
-    let { importCode, inputTitle } = this.state
-    importCode = JSON.parse(importCode)
-    // TODO: codeConversion
+  onCancel = (e) => {
+    this.setState({ type: 'none', active: 'preview' })
+  }
+  onAddData = (data) => {
+    this.setState({ data, active: 'edit' })
+  }
+  onSaveData = (title, note) => {
+    this.props.saveData(title, note, data)
   }
   render() {
-    const { importCode, inputTitle, btnDisable } = this.state
-
-    return (
-      <div style={width: '99%'}>
-        <FormControl type="text"
-                     label={__('Title')}
-                     placeholder={__('Title')}
-                     value={inputTitle}
-                     ref="inputTitle"
-                     onChange={this.onInputTitleChange} />
-        <FormControl style={height: '250px'}
-                     componentClass="textarea"
-                     label={__('Import code')}
-                     placeholder={__('Import code')}
-                     value={importCode}
-                     ref="importCode"
-                     onChange={this.onImportCodeChange} />
-        <Button disabled={btnDisable}
-                onClick={this.onImportCode}
-                block>
-          {__('Import')}
-        </Button>
-      </div>
-    )
+    const { active } = this.state
+    if ([ 'add', 'import' ].includes(active)) {
+      const activePre = active === 'preview'
+      return(
+        <div className="import-module">
+          {
+            !activePre
+            ? <Button bsSize="small" onClick={this.onGoBack}><FontAwesome name='arrow-left' /></Button>
+            : ''
+          }
+          <Button bsSize="small" onClick={this.onCancel}>X</Button>
+          <DataPreviewModule type={active} onAddData={this.onAddData} show={activePre} />
+          <DataEditModule onSaveData={this.onSaveData} show={!activePre} />
+        </div>
+      )
+    } else {
+      return (
+        <DropdownButton title={<FontAwesome name="plus-square-o" />} key={0} id="henseinikki-add-dropdown">
+          <MenuItem eventKey="add" onSelect={this.onMenuSelected}>{__('Add')}</MenuItem>
+          <MenuItem eventKey="import" onSelect={this.onMenuSelected}>{__('Import')}</MenuItem>
+          <MenuItem divider />
+          <MenuItem eventKey="importFile" onSelect={this.onMenuSelected}>{__('Import records file')}</MenuItem>
+          <MenuItem eventKey="exportFile" onSelect={this.onMenuSelected}>{__('Export records file')}</MenuItem>
+        </DropdownButton>
+      )
+    }
   }
-})
+}
