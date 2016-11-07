@@ -27,15 +27,3 @@ export function loadData() {
   }
   return data
 }
-
-export function getImagePath(useSVGIcon, type) {
-  let path
-  if (useSVGIcon === 'air') {
-    path = join(ROOT, 'assets', 'img', 'airplane', `alv${type}.png`)
-  } else {
-    path = useSVGIcon
-           ? join('assets', 'svg', 'slotitem', `${type}.svg`)
-           : join('assets', 'img', 'slotitem', `${type + 100}.png`)
-  }
-  return path
-}
