@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import { remote } from 'electron'
+import fs from 'fs-extra'
 import { _ } from '../utils'
+import { saveData } from '../redux/actions'
 import DataPreviewModule from './data-preview-module'
 import DataEditModule from './data-edit-module'
 
 const { dialog } = remote.require('electron')
 
 // TODO: move actions to action file
-export default class ImportModule extends Component {
+export default connect(
+  '',
+  { saveData }
+)(class ImportModule extends Component {
   constructor(props) {
     super(props)
     this.state ={
@@ -70,7 +76,7 @@ export default class ImportModule extends Component {
     this.setState({ data, active: 'edit' })
   }
   onSaveData = (title, note) => {
-    this.props.saveData(title, note, data)
+    this.props.saveData(title, { fleets: data, note })
   }
   render() {
     const { active } = this.state
@@ -100,4 +106,4 @@ export default class ImportModule extends Component {
       )
     }
   }
-}
+})

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Panel, Button, Checkbox } from 'react-bootstrap'
 
-
-
 export default connect(
   createSelector([
     deckSelector,
