@@ -19,9 +19,9 @@ export default class ImportModule extends Component {
   }
   onMenuSelected = eventKey => {
     if (eventKey === 'importFile') {
-      onFileImportSelected()
+      this.onFileImportSelected()
     } else if (eventKey === 'exportFile') {
-      onFileExportSelected()
+      this.onFileExportSelected()
     }
     this.setState({ active: eventKey })
   }
@@ -47,7 +47,7 @@ export default class ImportModule extends Component {
         throw e
       }
     }
-    // TODO: showModal if sum > 0 success import sum
+    window.toggleModal(sum ? `成功导入${sum}条数据` : '导入失败')
   }
   onFileExportSelected = () => {
     const filename = dialog.showSaveDialog({
