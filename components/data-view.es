@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import DataList from '../components/data-list'
-import DataView from '../components/data-view'
+import DataOpts from './data-opts'
+import FleetsView from './hensei-part'
 
 export default connect(
 
-)(class DataModule extends Component {
+)(class DataView extends Component {
   constructor() {
 
   }
   render() {
     return (
       <div>
-        <DataList />
-        <DataView />
+        <DataOpts />
+        <FleetsView />
       </div>
     )
   }

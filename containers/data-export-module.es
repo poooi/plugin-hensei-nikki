@@ -1,19 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FormControl, Button } from 'react-bootstrap'
-import { forEach, includes } from 'lodash'
-import { shell, clipboard } from 'electron'
-
-const { toggleModal } = window
-const { openExternal } = shell
+import { codeConversion } from '../utils'
 
 export default connect(
-  createSelector([
-    subStateSelector,
-    henseiDataSelector,
-  ], ({ subState }, data) => ({ subState, data })),
-  { onSwitchTopState, onSwitchSubState }
-)(class ExportMoudle extends Component {
+  (state, { title }) => ({ code: state.data[title].fleets })
+})(class DataExportModule extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -22,15 +14,14 @@ export default connect(
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.subState === 'export' && this.props.subState !== 'export') {
-      const code = JSON.stringify(nextProps.data[nextProps.title].fleets)
-      this.setState({
-        code,
-      })
+      const { fleets } = nextProps.data[nextProps.title]
+      const code = JSON.stringify(codeConversion(fleets))
+      this.setState({ code })
     }
   }
   onCopy = (e) => {
     clipboard.writeText(this.state.code)
-    toggleModal(__('Copy'), __('The code has been copied to the clipboard.'))
+    window.toggleModal(__('Copy'), __('The code has been copied to the clipboard.'))
   }
   render() {
     return (
@@ -45,10 +36,8 @@ export default connect(
             </a>。
         </span>
         <div className="container-col">
-          <Button bsSize="small" onClick={this.onCopy}>
-            {__('Copy')}
-          </Button>
-          <FormControl style={height: '250px'}
+          <Button bsSize="small" onClick={this.onCopy}>{__('Copy')}</Button>
+          <FormControl style={height: 250}
                        componentClass="textarea"
                        label={__('Code')}
                        placeholder={__('Code')}
