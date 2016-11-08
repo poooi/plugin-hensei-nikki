@@ -10,7 +10,7 @@ const Fleet = fleet => (
   <div>
     <Details fleetId={fleetId} />
     <div className="ships-container">
-      { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} _ship={ship} />) }
+      { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
     </div>
   </div>
 )
