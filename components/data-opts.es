@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { createSelector } from 'reselect'
 import { Button } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
-import { optsSelector, henseiDataSelector } from '../redux/selectors'
 import { __ } from '../utils'
-
 import DataEditModule from '../containers/data-edit-module'
 import DataExportModule from '../containers/data-export-module'
 
-export default connect(
-
-)(class DataOpts extends Component {
+export default class DataOpts extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,12 +21,12 @@ export default connect(
   }
   render() {
     const { active } = this.state
-    const { opts, data, onSwitchTopState, onSwitchSubState } = this.props
+    const { title } = this.props
     switch (active) {
     case 'export':
-      return <DataExportModule />
+      return <DataExportModule title={title} />
     case 'edit':
-      return <DataEditModule />
+      return <DataEditModule title={title} />
     }
     return (
       <div className="data-opts">
