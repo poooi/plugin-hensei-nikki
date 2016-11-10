@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { createSelector } from 'reselect'
 import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import { showData } from '../redux/actions'
-import { __, dataFilter } from '../utils'
+import { __, henseiDataSelector, dataFilter } from '../utils'
 
 export default connect(
-  state => ({ data }),
+  createSelector([
+    constSelector,
+    henseiDataSelector,
+  ], ({ $ships, $equips }, data) =>
+  ({ $ships, $equips, data })),
   { showData }
 )(class DataList extends Component {
   constructor(props) {
@@ -22,9 +27,11 @@ export default connect(
     }
   }
   onKeywordChange = (e) => {
-    const { data } = this.props
+    const { data, $ships, $equips } = this.props
     const keywords = e.target.value
-    const showData = dataFilter(keywords, data)
+    const showData = keywords
+                   ? dataFilter(keywords, data, $ships, $equips)
+                   : data
     this.setState({
       keywords,
       showData,
