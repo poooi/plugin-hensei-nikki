@@ -7,7 +7,8 @@ import {
 } from 'views/utils/selectors'
 import { getTyku, getSaku25, getSaku25a, getSaku33 } from 'views/utils/game-utils'
 import { henseiDataSelector } from '../redux/selectors'
-const { getStore } = window
+
+const getI18n = window.i18n.resources.__
 
 export function getSlotInfo(id) {
   const equipsData = getStore(shipEquipDataSelectorFactory(id))
@@ -76,8 +77,14 @@ export function getDecksData(deckChecked, tags) {
 // f(leet)*は艦隊、s(hip)*は船、i(item)*は装備でixは拡張スロット、rfは改修、masは熟練度
 
 
-function getValue(data) {
+function getValue(fleets) {
   const values = []
+  fleets.forEach(fleet => {
+    fleet.forEach(ship => {
+      const shipValues = []
+      shipValues.push()
+    })
+  })
   forEach(data, (ship, idx) => {
     const ship = getShipInfo(ship.id)
     forEach(ship, (value, key) => {
@@ -92,37 +99,27 @@ function getValue(data) {
 }
 
 
-function _filter(keyword, data) {
-  if (!keyword) {
-    return data
-  }
 
-  return unzip(data.filter((d) => {
-    let match = false
-    forEach(d, (value) => {
-      key = String(value).toLowerCase().trim().indexOf(String(keyword).toLowerCase().trim())
-      if (key >= 0) {
-        match = true
-      }
-    })
-    return match
-  }))[0]
+function isMacth(keyword, value) {
+  const k = String(keyword).toLowerCase().trim()
+  const v = String(value).toLowerCase().trim()
+  return v.indexOf(k) > 0
 }
 
-export function dataFilter(keyword, data) {
-  const allData = []
-
-  if (isEmpty(data)) return
-
-  forEach(data, (d, title) => {
-    if (d.fleets.length > 1) {
-      const fleets = []
-      forEach(d.fleets, fleet => fleets.push(fleet))
-      allData.push([title, getValue(fleets)])
-    } else {
-      allData.push([title, getValue(d.fleets)])
-    }
-  })
-
-  return _filter(keyword, allData)
+export function dataFilter(keyword, data, $ships, $equips) {
+  const allData = {}
+  for (let title in data) {
+    const fleetMatch = data[title].fleets.filter(fleet => {
+      const shipMatch = fleet.filter(ship => {
+        const slotsMacth = ship.slots.filter(slot => {
+          return isMacth(keyword, getI18n($equips[slot.id].api_name))
+        })
+        return isMacth(keyword, getI18n($ships[ship.id].api_name))
+               || slotsMacth.length
+      })
+      return shipMatch.length
+    })
+    if (match.length) allData[title] = data[title]
+  }
+  return allData
 }
