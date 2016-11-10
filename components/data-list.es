@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
-import { showData } from '../redux/actions'
 import { __, henseiDataSelector, dataFilter } from '../utils'
 
 export default connect(
@@ -10,14 +9,12 @@ export default connect(
     constSelector,
     henseiDataSelector,
   ], ({ $ships, $equips }, data) =>
-  ({ $ships, $equips, data })),
-  { showData }
+  ({ $ships, $equips, data }))
 )(class DataList extends Component {
   constructor(props) {
     super(props)
     this.state = {
       keywords: '',
-      active: '',
       showData: '',
     }
   }
@@ -38,13 +35,13 @@ export default connect(
     })
   }
   onTitleSelected = (title) => {
-    if (title !== this.state.active) {
-      this.props.showData(title)
-      this.setState({ active: title })
+    if (title !== this.props.activeTitle) {
+      this.props.onShowData(title)
     }
   }
   render() {
-    const { keywords, active, showData } = this.state
+    const { activeTitle } = this.props
+    const { keywords, showData } = this.state
     const { onKeywordChange, onTitleSelected } = this
 
     if (!showData) return <div></div>
@@ -67,7 +64,7 @@ export default connect(
               }>
                 <Button style={{margin: 0}}
                         onClick={onTitleSelected.bind(this, title)}
-                        className={active === title ? 'active' : ''}>
+                        className={activeTitle === title ? 'active' : ''}>
                   {title}
                 </Button>
               </OverlayTrigger>
