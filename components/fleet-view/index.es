@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { createSelector } from 'reselect'
 import { Tab, Tabs } from 'react-bootstrap'
-import { memoize } from 'lodash'
+import { fleetsByTitleSelector } from '../utils'
 import Details from './details'
 import Ship from './ship'
 
 const Fleet = fleet => (
   <div>
-    <Details fleetId={fleetId} />
+    <Details fleet={fleet} />
     <div className="ships-container">
       { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
     </div>
   </div>
 )
 
-export default const FleetsView = class FleetsView extends Component {
+export default connect(
+  (state, { title }) => fleetsByTitleSelector(title)
+)(class FleetsView extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -51,3 +52,4 @@ export default const FleetsView = class FleetsView extends Component {
     }
   }
 }
+)

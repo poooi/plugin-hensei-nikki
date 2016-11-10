@@ -397,12 +397,12 @@ function getSaku33(data, $equipsData, teitokuLv) {
   }
 }
 
-export function getDetails({ fleets, $equipsData, $shipsData, teitokuLv }) {
+export function getDetails(fleets, $equips, $ships, teitokuLv) {
   return {
-    tyku: getTyku(fleets, $equipsData, $shipsData),
-    saku25: getSaku25(fleets, $equipsData),
-    saku25a: getSaku25a(fleets, $equipsData, teitokuLv),
-    saku33: getSaku33(fleets, $equipsData, teitokuLv),
+    tyku: getTyku(fleets, $equips, $ships),
+    saku25: getSaku25(fleets, $equips),
+    saku25a: getSaku25a(fleets, $equips, teitokuLv),
+    saku33: getSaku33(fleets, $equips, teitokuLv),
   }
 }
 export function transSavedData(oldData) {
