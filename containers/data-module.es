@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import DataList from '../components/data-list'
 import DataView from '../components/data-view'
 
-export default connect(
-
-)(class DataModule extends Component {
-  constructor() {
-
+export default class DataModule extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeTitle: '',
+    }
+  }
+  onShowData = (title) => {
+    this.setState({ activeTitle: title })
   }
   render() {
+    const { activeTitle } = this.state
     return (
       <div>
-        <DataList />
-        <DataView />
+        <DataList onShowData={this.onShowData} activeTitle={activeTitle} />
+        <DataView title={activeTitle} />
       </div>
     )
   }
