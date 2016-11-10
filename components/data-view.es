@@ -1,20 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
 import DataOpts from './data-opts'
 import FleetsView from './hensei-part'
 
-export default connect(
-
-)(class DataView extends Component {
-  constructor() {
-
-  }
-  render() {
-    return (
-      <div>
-        <DataOpts />
-        <FleetsView />
-      </div>
-    )
-  }
-})
+export default const DataView = ({ title }) => (
+  <div>
+    <DataOpts title={title} />
+    <FleetsView title={title} />
+  </div>
+)
