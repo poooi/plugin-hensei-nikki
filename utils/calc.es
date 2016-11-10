@@ -165,43 +165,7 @@ function codeConversion(data) {
   }
   return fleets
 }
-/*
-  details: {
-    equipsData: [
-      [
-        { _equip.api_alv, _equip.api_level },
-        { $equip.api_type, $equip.api_tyku, $equip.api_saku },
-      ],
-      ...
-    ],
-    shipsData: [
-      [ { _ship.api_sakuteki: [ api_sakuteki[0] ] } ],
-      ...
-    ],
-    teitokuLv: 0,
-  }
 
-  forTyku
-  equipsData [ [ { _equip.api_alv, _equip.api_level }, { $equip.api_type, $equip.api_tyku } ], ... ]
-  return { min, max }
-
-  forSaku25
-  shipsData [ [ { _ship.api_sakuteki: [ api_sakuteki[0] ] } ], ... ]
-  equipsData [ [ [], { $equip.api_type, $equip.api_saku } ], ... ]
-  return { recon, radar, ship, total } ship + recon + radar = total
-
-  forSaku25a
-  shipsData [ [ { _ship.api_sakuteki: [ api_sakuteki[0] ] } ], ... ]
-  equipsData [ [ [], { $equip.api_type, $equip.api_saku } ], ... ]
-  teitokuLv
-  return { ship, item, teitoku, total } ship + item - teitoku = total
-
-  forSaku33
-  shipsData [ [ { _ship.api_sakuteki: [ api_sakuteki[0] ] } ], ... ]
-  equipsData [ [ {  _equip.api_level } , { $equip.api_type, $equip.api_saku } ], ... ]
-  teitokuLv
-  return { ship, item, teitoku, total } ship + item - teitoku + 2 * shipCount = total
-*/
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
 const aircraftLevelBonus = {
   '6': [0, 0, 2, 5, 9, 14, 14, 22, 22],   // 艦上戦闘機
@@ -459,5 +423,24 @@ export function transSavedData(oldData) {
       continue
     }
   }
+  return newData
+}
+
+export function dataToThirdparty(oldData) {
+  const newData = {}
+  oldData.forEach((fleet, fi) => {
+    const f = {}
+    fleet.forEach((ship, si) => {
+      const { id, lv, slots } = ship
+      const s = { id, lv, luck: -1, items: {} }
+      slots.forEach((slot, ei) => {
+        const e = { id: slot.id, rf: slot.lv }
+        if (slot.alv) e.mas = slot.alv
+        s.items[`i${ei}`] = e
+      })
+      f[`s${si}`] = s
+    })
+    newData[`f${fi}`] = f
+  })
   return newData
 }
