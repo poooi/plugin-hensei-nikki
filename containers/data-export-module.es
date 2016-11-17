@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
-import { fleetsByTitleSelector, dataToThirdparty } from '../utils'
+import { shell, clipboard } from 'electron'
+import { __, fleetsByTitleSelector, dataToThirdparty } from '../utils'
 
 export default connect(
   (state, { title }) => fleetsByTitleSelector(title)
-})(class DataExportModule extends Component {
+)(class DataExportModule extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,10 +43,10 @@ export default connect(
       <div className="tab-container">
         <span>
           {__('Support')}:
-            <a onClick={openExternal.bind(this, 'http://fleet.diablohu.com')}>
+            <a onClick={shell.openExternal.bind(this, 'http://fleet.diablohu.com')}>
               是谁呼叫舰队
             </a>,
-            <a onClick={openExternal.bind(this, 'http://www.kancolle-calc.net/')}>
+            <a onClick={shell.openExternal.bind(this, 'http://www.kancolle-calc.net/')}>
               艦載機厨デッキビルダー
             </a>。
         </span>
@@ -58,7 +59,7 @@ export default connect(
         </FormGroup>
         <div className="container-col">
           <Button bsSize="small" onClick={this.onCopy}>{__('Copy')}</Button>
-          <FormControl style={height: 250}
+          <FormControl style={{height: 250}}
                        componentClass="textarea"
                        label={__('Code')}
                        placeholder={__('Code')}

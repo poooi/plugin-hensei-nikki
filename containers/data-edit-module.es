@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { FormControl, Button } from 'react-bootstrap'
+import { __, fleetsByTitleSelector, saveData } from '../utils'
 
 export default connect(
   (state, { title }) =>
@@ -19,12 +20,10 @@ export default connect(
     }
   }
   onTitileChange = (e) => {
-    const title = e.target.value
-    const saveDisable = this.checkChanges(title, this.state.note)
+    this.checkChanges(e.target.value, this.state.note)
   }
   onNoteChange = (e) => {
-    const note = e.target.value
-    const saveDisable = this.checkChanges(this.state.title, note)
+    this.checkChanges(this.state.title, e.target.value)
   }
   onSave = (e) => {
     const { title, note } = this.state
@@ -37,7 +36,6 @@ export default connect(
     this.setState({ newTitle, newNote, saveDisable })
   }
   render() {
-    const { fleets, type } = this.props
     const { saveDisable, title, note } = this.state
 
     return(

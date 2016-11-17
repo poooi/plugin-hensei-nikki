@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Checkbox } from 'react-bootstrap'
 import { fleetsSelector } from 'views/utils/selectors'
-import { __, getHenseiDataByFleet, getHenseiDataByCode } from '../utils'
+import { __, getHenseiDataByFleets, getHenseiDataByCode } from '../utils'
 
 class CodeInput extends Component {
   constructor(props) {
@@ -68,7 +68,7 @@ const SelectInput = connect(
   getHenseiData = () => {
     const { fleets } = this.props
     const { deckChecked } = this.state
-    return getHenseiDataByFleet(fleets.filter((f, i) => deckChecked[i]))
+    return getHenseiDataByFleets(fleets.filter((f, i) => deckChecked[i]))
   }
   render() {
     const { fleets } = this.props

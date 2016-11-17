@@ -425,7 +425,14 @@ export function transSavedData(oldData) {
   }
   return newData
 }
-
+export function getHenseiDataByCode(code) {
+  return codeConversion(data)
+}
+export function getHenseiDataByFleets(fleets) {
+  return fleets.map(fleet => {
+    
+  })
+}
 export function dataToThirdparty(oldData) {
   const newData = {}
   oldData.forEach((fleet, fi) => {
