@@ -9,7 +9,7 @@ export default class DataOpts extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      active: 'opts'
+      active: 'opts',
     }
   }
   onOptsClick = (opt) => {
@@ -42,4 +42,4 @@ export default class DataOpts extends Component {
       </div>
     )
   }
-})
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs } from 'react-bootstrap'
-import { fleetsByTitleSelector } from '../utils'
+import { fleetsByTitleSelector } from '../../utils'
 import Details from './details'
 import Ship from './ship'
 
@@ -31,7 +31,7 @@ export default connect(
   }
   render() {
     const { fleets } = this.props
-    const { tabName } = this.state
+    const { tabName, selectedKey } = this.state
     if (fleets.length > 1) {
       return (
         <Tabs activeKey={selectedKey}

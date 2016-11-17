@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
+import memoize from 'fast-memoize'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { join } from 'path-extra'
 import { constSelector } from 'views/utils/selectors'
 import { SlotitemIcon } from 'views/components/etc/icon'
 
-const { i18n } = window
+const { i18n, ROOT } = window
 
 const slotDetailSelector = memoize(slotId =>
   createSelector([ constSelector ], ({ $equips }) => ({ $equip: $equips[slotId] }))
@@ -26,7 +27,7 @@ const Slot = connect(
         <span className="slot-name">{ name }</span>
       </OverlayTrigger>
       <span className="slot-improvment">
-          &nbsp;&nbsp;{ lv ? <strong style={color: '#45A9A5'}>★{ lv }</strong> : ''}
+          &nbsp;&nbsp;{ lv ? <strong style={{color: '#45A9A5'}}>★{ lv }</strong> : ''}
           {
             alv && 1<= alv && alv <= 7
             ? <img className="alv-img" src={join(ROOT, 'assets', 'img', 'airplane', `alv${alv}.png`)} />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
+import { constSelector } from 'views/utils/selectors'
 import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import { __, henseiDataSelector, dataFilter } from '../utils'
 
@@ -57,9 +58,9 @@ export default connect(
           {
             Object.keys(showData).forEach((title, i) => (
               <OverlayTrigger key={i} placement="right" overlay={
-                <Popover id={`note-${title}`} style={padding: 7}>
+                <Popover id={`note-${title}`} style={{padding: 7}}>
                     <div>{ title }</div>
-                    <div>{ data[title].note }</div>
+                    <div>{ showData[title].note }</div>
                 </Popover>
               }>
                 <Button style={{margin: 0}}
