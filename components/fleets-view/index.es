@@ -15,7 +15,8 @@ const Fleet = fleet => (
 )
 
 export default connect(
-  (state, { title }) => fleetsByTitleSelector(title)
+  (state, { title, code }) =>
+    title ? fleetsByTitleSelector(title) : { code }
 )(class FleetsView extends Component {
   constructor(props) {
     super(props)
@@ -30,16 +31,17 @@ export default connect(
     }
   }
   render() {
-    const { fleets } = this.props
+    const { fleets, code } = this.props
     const { tabName, selectedKey } = this.state
-    if (fleets.length > 1) {
+    const data = fleets || code
+    if (data.length > 1) {
       return (
         <Tabs activeKey={selectedKey}
               onSelect={this.onTabSelected}
               animation={false}
               id="hensei-list-tabs">
           {
-            fleets.map((fleet, i) => {
+            data.map((fleet, i) => {
               <Tab eventKey={i} title={tabName[i]} key={i}>
                 <Fleet fleet={fleet} />
               </Tab>
@@ -48,7 +50,7 @@ export default connect(
         </Tabs>
       )
     } else {
-      return <Fleet fleet={fleets[0]} />
+      return <Fleet fleet={data[0]} />
     }
   }
 }
