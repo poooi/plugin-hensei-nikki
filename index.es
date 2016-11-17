@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { observer, observe } from 'redux-observers'
 import { join } from 'path-extra'
 import { store } from 'views/createStore'
 
+import { henseiDataSelector, saveData } from './utils'
 import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
 
@@ -18,6 +20,22 @@ export const reactClass = class HenseiNikki extends Component {
   }
 }
 
+let unsubHenseiDataObserve
+
 export function pluginDidLoad() {
+
   store.dispatch({ type: '@@poi-plugin-hensei-nikki@init' })
+
+  unsubHenseiDataObserve = observe(store, [observer(
+    henseiDataSelector,
+    (dispatch, current, previous) => {
+      if (!current.data) return
+      saveData(current.data)
+    }
+  )])
+
+}
+
+export function pluginWillUnload() {
+  unsubHenseiDataObserve()
 }
