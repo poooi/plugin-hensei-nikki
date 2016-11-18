@@ -5,9 +5,6 @@ import DataView from '../components/data-view'
 export default class DataModule extends Component {
   constructor(props) {
     super(props)
-  }
-  constructor(props) {
-    super(props)
     this.state = {
       activeTitle: '',
     }

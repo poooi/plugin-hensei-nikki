@@ -4,7 +4,7 @@ import { DropdownButton, Button, MenuItem } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { remote } from 'electron'
 import fs from 'fs-extra'
-import { __, henseiDataSelector } from '../utils'
+import { __, henseiDataSelector, loadImportFile } from '../utils'
 import { onSaveData, onImportFile } from '../redux'
 import DataPreviewModule from './data-preview-module'
 import DataEditModule from './data-edit-module'
@@ -12,7 +12,8 @@ import DataEditModule from './data-edit-module'
 const { dialog } = remote.require('electron')
 
 const Menu = connect(
-  '', { onImportFile }
+  henseiDataSelector,
+  { onImportFile }
 )(class Menu extends Component {
   constructor(props) {
     super(props)
@@ -20,16 +21,16 @@ const Menu = connect(
   onMenuSelected = (eventKey) => {
     let key
     switch (eventKey) {
-      case 'importFile':
-        this.onFileImportSelected()
-        key = 'menu'
-        break
-      case 'exportFile':
-        this.onFileExportSelected()
-        key = 'menu'
-        break
-      default:
-        key = eventKey
+    case 'importFile':
+      this.onFileImportSelected()
+      key = 'menu'
+      break
+    case 'exportFile':
+      this.onFileExportSelected()
+      key = 'menu'
+      break
+    default:
+      key = eventKey
     }
     this.props.switchState(key)
   }
@@ -104,7 +105,7 @@ const ImportModule = connect(
       return (
         <div className="import-module">
           <Button bsSize="small" onClick={this.onCancel}>X</Button>
-          <DataPreviewModule type={active} onAddData={this.onAddData} />
+          <DataPreviewModule type={this.props.type} onAddData={this.onAddData} />
         </div>
       )
     } else {
@@ -119,7 +120,6 @@ const ImportModule = connect(
   }
 })
 
-// TODO: move actions to action file
 export default class ImportMenu extends Component {
   constructor(props) {
     super(props)
@@ -136,7 +136,7 @@ export default class ImportMenu extends Component {
     if (active === 'menu') {
       return <Menu switchState={this.switchState} />
     } else {
-      return <ImportModule switchState={this.switchState} />
+      return <ImportModule type={active} switchState={this.switchState} />
     }
   }
 }
