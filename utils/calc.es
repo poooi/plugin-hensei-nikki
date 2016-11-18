@@ -16,20 +16,20 @@ const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
 */
 function oldSlots(idArr, lvArr, alvArr) {
   if (!idArr.length) return
-  const slots = []
-  idArr.forEach((id, i) => {
-    slot = { id }
+  return idArr.map((id, i) => {
+    const slot = { id }
     if (lvArr[i]) slot.lv = lvArr[i]
     if (alvArr[i]) slot.alv = alvArr[i]
-    slots.push(slot)
+    return slot
   })
-  return slots
 }
 function oldFleet(data) {
   if (!data.length) return
-  const fleet = []
-  data.forEach(s => fleet.push({ id: s[0], lv: s[1][0], slots: oldSlots(s[2], s[3], s[4]) }))
-  return fleet
+  return data.map(s => ({
+    id: s[0],
+    lv: s[1][0],
+    slots: oldSlots(s[2], s[3], s[4]),
+  }))
 }
 function oldVer(data) {
   const depth = arrDepth(0, data)
@@ -52,8 +52,7 @@ function oldVer(data) {
   {version: 4, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, mas:7},{i2:{id:3, rf: 0}}...,ix:{id:43}}}, s2:{}...},...}
 */
 function newSlots(data) {
-  const slots = []
-  range(1, 5).forEach(i => {
+  const slots = range(1, 5).map(i => {
     const s = data['i' + i]
     if (s && s.id) {
       const { id, rf, rp, mas } = s
@@ -61,32 +60,28 @@ function newSlots(data) {
       if (rf) slot.lv = rf
       if (rp) slot.alv = rp
       if (mas) slot.alv = mas
-      slots.push(slot)
+      return slot
     } else {
-      slots.push([])
+      return []
     }
   })
-  if (data.ix) slots.ex = data.ix
+  // if (data.ix) slots.ex = data.ix
   return slots
 }
 function newFleet(data) {
-  const fleet = []
-  range(1, 7).forEach(i => {
+  return range(1, 7).map(i => {
     const ship = data['s' + i]
     if (ship && Object.keys(ship).length) {
       const { id, lv, items } = ship
-      fleet.push({ id, lv, slots: newSlots(items) })
+      return { id, lv, slots: newSlots(items) }
     }
   })
-  return fleet
 }
 function newVer(data) {
-  const fleets = []
-  range(1, 5).forEach(i => {
+  return range(1, 5).map(i => {
     const fleet = data['f' + i]
-    if (fleet && Object.keys(fleet).length) fleets.push(newFleet(fleet))
+    if (fleet && Object.keys(fleet).length) return newFleet(fleet)
   })
-  return fleets
 }
 /*
   v1
@@ -157,13 +152,11 @@ function checkData(data) {
 }
 
 function codeConversion(data) {
-  let fleets
   if (data instanceof Array) {
-    fleets = oldVer(data) // thirdparty & HenseiNikki old version
+    return oldVer(data) // thirdparty & HenseiNikki old version
   } else if (data instanceof Object && [ 3, 4 ].indexOf(data.version) > 0) {
-    fleets = newVer(data) // thirdparty new version
+    return newVer(data) // thirdparty new version
   }
-  return fleets
 }
 
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
@@ -430,7 +423,7 @@ export function getHenseiDataByCode(code) {
 }
 export function getHenseiDataByFleets(fleets) {
   return fleets.map(fleet => {
-    
+
   })
 }
 export function dataToThirdparty(oldData) {
