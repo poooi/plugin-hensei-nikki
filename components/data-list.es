@@ -41,11 +41,11 @@ export default connect(
     }
   }
   render() {
-    const { activeTitle } = this.props
+    const { activeTitle, data } = this.props
     const { keywords, showData } = this.state
     const { onKeywordChange, onTitleSelected } = this
 
-    if (!showData) return <div></div>
+    if (!data) return <div></div>
 
     return (
       <div>
