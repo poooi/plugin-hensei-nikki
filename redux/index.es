@@ -40,7 +40,7 @@ const initialState = {
   },
   "henseiData": {
     "data": {},
-  }
+  },
 }
 
 function initStatusReducer(state = initialState.initStatus, action) {

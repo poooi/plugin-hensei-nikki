@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Checkbox } from 'react-bootstrap'
+import { createSelector } from 'reselect'
+import { FormControl, Button, Checkbox } from 'react-bootstrap'
 import { fleetsSelector } from 'views/utils/selectors'
 import { __, getHenseiDataByFleets, getHenseiDataByCode } from '../utils'
+import FleetsView from '../components/fleets-view'
 
 class CodeInput extends Component {
   constructor(props) {

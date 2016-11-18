@@ -8,7 +8,7 @@ function isMacth(keyword, value) {
 
 export function dataFilter(keyword, data, $ships, $equips) {
   const allData = {}
-  for (let title in data) {
+  for (const title in data) {
     const fleetMatch = data[title].fleets.filter(fleet => {
       const shipMatch = fleet.filter(ship => {
         const slotsMacth = ship.slots.filter(slot => {
@@ -19,7 +19,7 @@ export function dataFilter(keyword, data, $ships, $equips) {
       })
       return shipMatch.length
     })
-    if (match.length) allData[title] = data[title]
+    if (fleetMatch.length) allData[title] = data[title]
   }
   return allData
 }

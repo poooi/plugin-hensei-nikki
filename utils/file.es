@@ -2,7 +2,7 @@ import fs from 'fs-extra'
 import { join } from 'path-extra'
 import FileWriter from 'views/utils/fileWriter'
 
-const { APPDATA_PATH, ROOT, getStore } = window
+const { APPDATA_PATH, getStore } = window
 const PLUGIN_PATH = join(APPDATA_PATH, 'hensei-nikki')
 const DATA_PATH = join(PLUGIN_PATH, `${getStore('info.basic.api_member_id')}.json`)
 const fileWriter = new FileWriter()
