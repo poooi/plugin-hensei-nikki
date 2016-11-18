@@ -1,7 +1,8 @@
-{React, ReactBootstrap, FontAwesome} = window
+{React, ReactBootstrap} = window
 {Button, Checkbox, Label} = ReactBootstrap
 {join} = require 'path-extra'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
+FontAwesome = if require('react-fontawesome')?.default? then require('react-fontawesome').default else require('react-fontawesome')
 
 getTags = (index, tag) ->
   <Label style={display: 'inline-block', margin: 5}

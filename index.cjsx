@@ -1,8 +1,9 @@
-{_, APPDATA_PATH, ROOT, React, ReactBootstrap, FontAwesome, toggleModal} = window
+{_, APPDATA_PATH, ROOT, React, ReactBootstrap, toggleModal} = window
 fs = require 'fs-extra'
 {relative, join} = require 'path-extra'
 
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
+FontAwesome = if require('react-fontawesome')?.default? then require('react-fontawesome').default else require('react-fontawesome')
 
 {Main} = require './views'
 

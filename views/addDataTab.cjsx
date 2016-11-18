@@ -2,6 +2,7 @@
 {Button, FormControl, Checkbox, Label, Panel} = ReactBootstrap
 {relative, join} = require 'path-extra'
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
+FontAwesome = if require('react-fontawesome')?.default? then require('react-fontawesome').default else require('react-fontawesome')
 
 TagsInputContainer = require './tagsInputContainer'
 HenseiItem = require './henseiItem'

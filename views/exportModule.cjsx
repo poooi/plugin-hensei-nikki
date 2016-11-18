@@ -4,6 +4,7 @@
 {openExternal} = shell
 clipboard = require('electron').clipboard
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
+FontAwesome = if require('react-fontawesome')?.default? then require('react-fontawesome').default else require('react-fontawesome')
 
 ExportMoudle = React.createClass
   getInitialState: ->

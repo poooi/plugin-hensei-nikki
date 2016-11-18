@@ -1,6 +1,7 @@
 {React, ReactBootstrap, JSON, toggleModal} = window
 {Button, FormControl} = ReactBootstrap
 __ = window.i18n["poi-plugin-hensei-nikki"].__.bind(window.i18n["poi-plugin-hensei-nikki"])
+FontAwesome = if require('react-fontawesome')?.default? then require('react-fontawesome').default else require('react-fontawesome')
 
 emptyShip = [null, [null, -1], [], [], []]
 
