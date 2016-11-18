@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
+import { onDeleteData } from '../redux'
 import { __ } from '../utils'
 import DataEditModule from '../containers/data-edit-module'
 import DataExportModule from '../containers/data-export-module'
 
-export default class DataOpts extends Component {
+export default connect(
+  '', { onDeleteData }
+)(class DataOpts extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,7 +20,9 @@ export default class DataOpts extends Component {
     this.setState({ active: opt })
   }
   onDeleteClick = () => {
-    // TODO: toggleModal
+    window.toggleModal("真的要删除人家吗！？嘤嘤嘤～～/残忍拒绝/好吧不删")
+    // const { onDeleteData, title } = this.props
+    // onDeleteData(title)
     this.setState({ active: 'opts' })
   }
   render() {
@@ -43,3 +49,4 @@ export default class DataOpts extends Component {
     )
   }
 }
+)

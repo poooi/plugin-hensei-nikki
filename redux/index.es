@@ -34,6 +34,12 @@ export function onImportFile(fileBuffer) {
     fileBuffer,
   }
 }
+export function onDeleteData(title) {
+  return {
+    type: '@@HENSEI_DELETE_DATA',
+    title,
+  }
+}
 const initialState = {
   "initStatus": {
     "init": false,
@@ -113,7 +119,14 @@ function dataReducer(state = initialState.henseiData, action) {
       data,
     }
   }
-
+  case '@@HENSEI_DELETE_DATA': {
+    const { title } = this.action
+    delete data[title]
+    return {
+      ...state,
+      data,
+    }
+  }
   }
   return state
 }
