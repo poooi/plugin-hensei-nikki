@@ -24,9 +24,6 @@ export function loadData() {
   return data
 }
 
-export function save() {
-
-}
 export function loadImportFile(filename) {
   let data
   try {
