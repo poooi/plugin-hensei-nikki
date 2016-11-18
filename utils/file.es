@@ -23,3 +23,19 @@ export function loadData() {
   }
   return data
 }
+
+export function save() {
+
+}
+export function loadImportFile(filename) {
+  let data
+  try {
+    fs.accessSync(filename, fs.R_OK)
+    data = fs.readJSONSync(filename)
+    if (!(data instanceof Object)) data = {}
+  } catch (e) {
+    data = {}
+    throw e
+  }
+  return data
+}
