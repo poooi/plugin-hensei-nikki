@@ -3,25 +3,21 @@ import { join } from 'path-extra'
 import FileWriter from 'views/utils/fileWriter'
 
 const { APPDATA_PATH, ROOT, getStore } = window
-
+const PLUGIN_PATH = join(APPDATA_PATH, 'hensei-nikki')
+const DATA_PATH = join(PLUGIN_PATH, `${getStore('info.basic.api_member_id')}.json`)
 const fileWriter = new FileWriter()
-function getFilePath() {
-  return join(APPDATA_PATH, 'hensei-nikki', `${getStore('info.basic.api_member_id')}.json`)
-}
+
 export function saveData(data) {
-  fileWriter.write(
-    getFilePath(),
-    JSON.stringify(data)
-  )
+  if (!data || !Object.keys(data).length) return
+  fileWriter.write(DATA_PATH, JSON.stringify(data))
 }
+
 export function loadData() {
   let data = {}
   try {
-    fs.ensureDirSync(join(APPDATA_PATH, 'hensei-nikki'))
-    data = fs.readJSONSync(getFilePath())
-    if (!(data instanceof Object)) {
-      data = {}
-    }
+    fs.ensureDirSync(PLUGIN_PATH)
+    data = fs.readJSONSync(DATA_PATH)
+    if (!(data instanceof Object)) data = {}
   } catch (e) {
     data = {}
   }
