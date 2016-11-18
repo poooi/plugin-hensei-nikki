@@ -14,6 +14,7 @@ export default class DataModule extends Component {
   }
   render() {
     const { activeTitle } = this.state
+    if (!activeTitle) return <div></div>
     return (
       <div>
         <DataList onShowData={this.onShowData} activeTitle={activeTitle} />
