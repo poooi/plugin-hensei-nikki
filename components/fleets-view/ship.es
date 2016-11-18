@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { join } from 'path-extra'
 import { SlotitemIcon } from 'views/components/etc/icon'
-import { slotInfoSelector, shipInfoSelector } from '../../utils'
+import { equipInfoSelector, shipInfoSelector } from '../../utils'
 
 const Slot = connect(
-  (state, { slotId, slot }) => slotInfoSelector(slotId, slot)
+  (state, { slotId, slot }) => equipInfoSelector(slotId, slot)
 )((slotId, slot, { name, iconId, lv, alv }) => {
   const overlay = <Tooltip id="name">{ name }</Tooltip>
   return (

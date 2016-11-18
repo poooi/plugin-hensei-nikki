@@ -1,6 +1,11 @@
 import { createSelector } from 'reselect'
 import memoize from 'fast-memoize'
-import { constSelector, shipDataSelectorFactory, extensionSelectorFactory } from 'views/utils/selectors'
+import {
+  constSelector,
+  equipDataSelectorFactory,
+  shipDataSelectorFactory,
+  extensionSelectorFactory,
+} from 'views/utils/selectors'
 
 const REDUCER_EXTENSION_KEY = 'poi-plugin-hensei-nikki'
 const getI18n = window.i18n.resources.__
@@ -28,7 +33,7 @@ export const constShipInfoSelector = memoize(id =>
 export const constEquipInfoSelector = memoize(id =>
   createSelector(constSelector, ({ $equips }) => ({
     name: getI18n(($equips[id] || { api_name: '' }).api_name),
-    iconId: $equips[id] ? $equips[id].api_type[3] : 0
+    iconId: $equips[id] ? $equips[id].api_type[3] : 0,
   }))
 )
 // { name, lv, type, slots }

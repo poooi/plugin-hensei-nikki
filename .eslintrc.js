@@ -62,7 +62,8 @@ module.exports = {
       'path-extra',
       'fs-extra',
       'lodash',
-      'cson'
+      'cson',
+      'fast-memoize',
     ],
   },
 }

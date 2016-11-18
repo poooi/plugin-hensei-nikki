@@ -1,5 +1,4 @@
-import { chunk, fromPairs, map, unzip, concat, fill, range } from 'lodash'
-import { getTyku, getSaku25, getSaku25a, getSaku33 } from 'views/utils/game-utils'
+import { range } from 'lodash'
 
 const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
 const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
@@ -180,14 +179,14 @@ function getShipSaku(id, lv) {
 function getTyku(data, $equipsData, $shipsData) {
   let minTyku = 0
   let maxTyku = 0
-  for (let shipId in data) {
-    let maxeq = $shipsData[shipId].api_maxeq
-    let { slots } = data[shipId]
+  for (const shipId in data) {
+    const maxeq = $shipsData[shipId].api_maxeq
+    const { slots } = data[shipId]
     slots.forEach((slot, i) => {
-      let { id, lv, alv } = slot
+      const { id, lv, alv } = slot
       let tempTyku = 0.0
-      let tempAlv = alv || 0
-      let $equip = $equipsData[id]
+      const tempAlv = alv || 0
+      const $equip = $equipsData[id]
       if ([6, 7, 8].includes($equip.api_type[3])) {
         // 艦载機
         tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * 0.2)
@@ -216,8 +215,8 @@ function getSaku25(data, $equipsData) {
   let shipSaku = 0
   let radarSaku = 0
   let totalSaku = 0
-  for (let shipId in data) {
-    let { slots, lv } = data[shipId]
+  for (const shipId in data) {
+    const { slots, lv } = data[shipId]
     shipSaku += getShipSaku(shipId, lv)
     slots.forEach(slot => {
       const $equip = $equipsData[slot.id]
@@ -262,8 +261,8 @@ function getSaku25a(data, $equipsData, teitokuLv) {
   let shipSaku = 0
   let equipSaku = 0
   let teitokuSaku = 0
-  for (let shipId in data) {
-    let { slots, lv } = data[shipId]
+  for (const shipId in data) {
+    const { slots, lv } = data[shipId]
     let shipPureSaku = getShipSaku(shipId, lv)
     slots.forEach(slot => {
       const $equip = $equipsData[slot.id]
@@ -345,9 +344,9 @@ function getSaku33(data, $equipsData, teitokuLv) {
   let equipSaku = 0
   let teitokuSaku = 0
   let shipCount = 6
-  for (let shipId in data) {
+  for (const shipId in data) {
     shipCount -= 1
-    let { slots, lv } = data[shipId]
+    const { slots, lv } = data[shipId]
     let shipPureSaku = getShipSaku(shipId, lv)
     slots.forEach(slot => {
       const { id, lv } = slot
@@ -400,9 +399,9 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
 }
 export function transSavedData(oldData) {
   const newData = {}
-  for (let title in oldData) {
+  for (const title in oldData) {
     try {
-      const { version, ships, fleets, tags } = oldData[title]
+      const { version, ships, tags } = oldData[title]
       let tempData = {}
       if (version !== 'poi-h-v1') {
         tempData.fleets = codeConversion(ships)
@@ -419,12 +418,7 @@ export function transSavedData(oldData) {
   return newData
 }
 export function getHenseiDataByCode(code) {
-  return codeConversion(data)
-}
-export function getHenseiDataByFleets(fleets) {
-  return fleets.map(fleet => {
-
-  })
+  return codeConversion(code)
 }
 export function dataToThirdparty(oldData) {
   const newData = {}
