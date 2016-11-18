@@ -4,7 +4,7 @@ import { join } from 'path-extra'
 import { store } from 'views/createStore'
 
 import { henseiDataSelector, saveData } from './utils'
-import ImportModule from './containers/import-module'
+import ImportMenu from './containers/import-menu'
 import DataModule from './containers/data-module'
 
 export const reactClass = class HenseiNikki extends Component {
@@ -13,7 +13,7 @@ export const reactClass = class HenseiNikki extends Component {
       <div id="HenseiNikki">
         <link rel="stylesheet" href={join(__dirname , 'assets', 'hensei-nikki.css')} />
         <link rel="stylesheet" href={join(__dirname, 'assets', 'ship-item.css')} />
-        <ImportModule />
+        <ImportMenu />
         <DataModule />
       </div>
     )

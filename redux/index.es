@@ -22,7 +22,18 @@ export function onSaveNote(title, note) {
     note,
   }
 }
-
+export function onImportData(importData) {
+  return {
+    type: '@@HENSEI_IMPORT_DATA',
+    importData,
+  }
+}
+export function onImportFile(fileBuffer) {
+  return {
+    type: '@@HENSEI_IMPORT_FILE',
+    fileBuffer,
+  }
+}
 const initialState = {
   "initStatus": {
     "init": false,
@@ -78,6 +89,31 @@ function dataReducer(state = initialState.henseiData, action) {
       data,
     }
   }
+  case '@@HENSEI_IMPORT_FILE': {
+    const { fileBuffer } = this.action
+    let msg
+    if (!(typeof fileBuffer === 'object')) {
+      msg = "文件内容格式错误"
+    } else {
+      for (const title in fileBuffer) {
+        if (Object.keys(data).includes(title)) {
+          if (data[title] != fileBuffer[title]) {
+            data[`${title}_1`] = fileBuffer[title]
+          }
+        } else {
+          data[title] = fileBuffer[title]
+        }
+      }
+      const sum = Object.keys(data).length - Object.keys(this.state.data).length
+      msg = sum ? `成功导入${sum}条数据` : "无可用数据"
+    }
+    if (msg) window.toggleModal(msg)
+    return {
+      ...state,
+      data,
+    }
+  }
+
   }
   return state
 }

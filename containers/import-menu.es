@@ -5,13 +5,15 @@ import FontAwesome from 'react-fontawesome'
 import { remote } from 'electron'
 import fs from 'fs-extra'
 import { __, henseiDataSelector } from '../utils'
-import { onSaveData, onImportData } from '../redux'
+import { onSaveData, onImportFile } from '../redux'
 import DataPreviewModule from './data-preview-module'
 import DataEditModule from './data-edit-module'
 
 const { dialog } = remote.require('electron')
 
-class Menu extends Component {
+const Menu = connect(
+  '', { onImportFile }
+)(class Menu extends Component {
   constructor(props) {
     super(props)
   }
@@ -32,48 +34,17 @@ class Menu extends Component {
     this.props.switchState(key)
   }
   onFileImportSelected = (e) => {
-    const { data } = this.props
+    const { onImportFile } = this.props
     const filename = dialog.showOpenDialog({
       title: __('Import records file'),
       filters: [{ name: "json file", extensions: ['json'] }],
       properties: ['openFile'],
     })
-    let msg
     if (filename && filename[0]) {
-      try {
-        fs.accessSync(filename[0], fs.R_OK)
-        const fileContentBuffer = fs.readJSONSync(filename[0])
-        if (!(typeof fileContentBuffer === 'object')) {
-          msg = "文件内容格式错误"
-        } else {
-          for (const title in fileContentBuffer) {
-            if (Object.keys(saveData).includes(title)) {
-              if (saveData[title] != fileContentBuffer[title]) {
-                saveData[`${title}_1`] = fileContentBuffer[title]
-              }
-            } else {
-              saveData[title] = fileContentBuffer[title]
-            }
-          }
-        }
-      } catch (e) {
-        console.log(e.message)
-        msg = "文件读取错误"
-        throw e
-      }
-
-      const sum = Object.keys(data).length - Object.keys(this.porps.data).length
-      if (sum) {
-        this.props.onImportData(saveData)
-        msg = `成功导入${sum}条数据`
-      } else {
-        msg = "无可用数据"
-      }
+      onImportFile(loadImportFile(filename[0]))
     } else {
-      msg = "文件为空或读取数据失败"
+      window.toggleModal("找不到该文件")
     }
-
-    if (msg) window.toggleModal(msg)
   }
   onFileExportSelected = (e) => {
     const filename = dialog.showSaveDialog({
@@ -104,7 +75,7 @@ class Menu extends Component {
       </DropdownButton>
     )
   }
-}
+})
 
 const ImportModule = connect(
   '', { onSaveData }
@@ -165,7 +136,7 @@ export default class ImportMenu extends Component {
     if (active === 'menu') {
       return <Menu switchState={this.switchState} />
     } else {
-      return <ImportModule switchState={this.switchState} title={this.props.title} />
+      return <ImportModule switchState={this.switchState} />
     }
   }
 }
