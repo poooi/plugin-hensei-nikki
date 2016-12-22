@@ -17,7 +17,7 @@ export const initStatusSelector = createSelector(
 
 export const henseiDataSelector = createSelector(
   extensionSelectorFactory(REDUCER_EXTENSION_KEY),
-  state => state.henseiData
+  state => state.henseiData || {}
 )
 
 export const fleetsByTitleSelector = memoize(title => {

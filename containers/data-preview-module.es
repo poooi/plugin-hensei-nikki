@@ -20,10 +20,10 @@ class CodeInput extends Component {
     this.setState({ code, btnDisable })
   }
   onShowPreview = () => {
-    this.props.onShowPreview(getHenseiDataByCode(this.state.code))
+    this.props.onShowPreview(getHenseiDataByCode(JSON.parse(this.state.code)))
   }
   onNext = () => {
-    this.props.onNext(getHenseiDataByCode(this.state.code))
+    this.props.onNext(getHenseiDataByCode(JSON.parse(this.state.code)))
   }
   render() {
     const { code, btnDisable } = this.state

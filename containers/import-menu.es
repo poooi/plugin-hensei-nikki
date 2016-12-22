@@ -35,14 +35,13 @@ const Menu = connect(
     this.props.switchState(key)
   }
   onFileImportSelected = (e) => {
-    const { onImportFile } = this.props
     const filename = dialog.showOpenDialog({
       title: __('Import records file'),
       filters: [{ name: "json file", extensions: ['json'] }],
       properties: ['openFile'],
     })
     if (filename && filename[0]) {
-      onImportFile(loadImportFile(filename[0]))
+      this.props.onImportFile(loadImportFile(filename[0]))
     } else {
       window.toggleModal("找不到该文件")
     }
@@ -100,7 +99,7 @@ const ImportModule = connect(
   onCancel = (e) => {
     this.props.switchState('menu')
   }
-  reder() {
+  render() {
     if (this.state.active === 'preview') {
       return (
         <div className="import-module">
