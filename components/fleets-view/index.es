@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs } from 'react-bootstrap'
+import { map } from 'lodash'
 import { fleetsByTitleSelector } from '../../utils'
 import Details from './details'
 import Ship from './ship'
@@ -9,7 +10,7 @@ const Fleet = fleet => (
   <div>
     <Details fleet={fleet} />
     <div className="ships-container">
-      { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
+      { map(fleet, (ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
     </div>
   </div>
 )
@@ -34,7 +35,7 @@ export default connect(
     const { fleets, code } = this.props
     const { tabName, selectedKey } = this.state
     const data = fleets || code
-    if (data.length > 1) {
+    if (data.length > 1 && data[1] !== undefined) {
       return (
         <Tabs activeKey={selectedKey}
               onSelect={this.onTabSelected}

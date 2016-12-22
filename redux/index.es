@@ -97,10 +97,13 @@ function dataReducer(state = initialState.henseiData, action) {
   }
   case '@@HENSEI_IMPORT_FILE': {
     const { fileBuffer } = this.action
+    console.log('reducer');
     let msg
+    console.log(fileBuffer);
     if (!(typeof fileBuffer === 'object')) {
       msg = "文件内容格式错误"
     } else {
+      console.log('file ok');
       for (const title in fileBuffer) {
         if (Object.keys(data).includes(title)) {
           if (data[title] != fileBuffer[title]) {
@@ -110,6 +113,7 @@ function dataReducer(state = initialState.henseiData, action) {
           data[title] = fileBuffer[title]
         }
       }
+      console.log('exit loop');
       const sum = Object.keys(data).length - Object.keys(this.state.data).length
       msg = sum ? `成功导入${sum}条数据` : "无可用数据"
     }
