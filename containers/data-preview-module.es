@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { FormControl, Button, Checkbox } from 'react-bootstrap'
-import { fleetsSelector } from 'views/utils/selectors'
-import { __, getHenseiDataByCode } from '../utils'
+import { fleetsSelector, shipsSelector, equipsSelector } from 'views/utils/selectors'
+import { __, getHenseiDataByApi, getHenseiDataByCode } from '../utils'
 import FleetsView from '../components/fleets-view'
 
 class CodeInput extends Component {
@@ -46,7 +46,11 @@ class CodeInput extends Component {
 }
 
 const SelectInput = connect(
-  createSelector(fleetsSelector, fleets => ({ fleets }))
+  createSelector([
+    fleetsSelector,
+    shipsSelector,
+    equipsSelector,
+  ], (fleets, ships, equips) => ({ fleets, ships, equips }))
 )(class SelectInput extends Component {
   constructor(props) {
     super(props)
@@ -65,7 +69,10 @@ const SelectInput = connect(
     this.props.onShowPreview(this.getHenseiData())
   }
   onNext = () => {
-    this.props.onNext(this.getHenseiData())
+    const { onNext, ships, equips } = this.props
+    let data = this.getHenseiData()
+    if (!data[0][0].lv) data = getHenseiDataByApi(data, ships, equips)
+    this.props.onNext(data)
   }
   getHenseiData = () => {
     const { fleets } = this.props

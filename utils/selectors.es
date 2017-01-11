@@ -20,9 +20,9 @@ export const henseiDataSelector = createSelector(
   state => state.henseiData || {}
 )
 
-export const fleetsByTitleSelector = memoize(title => {
+export const fleetsByTitleSelector = memoize(title => 
   createSelector(henseiDataSelector, ({ data }) => ({ fleets: data[title].fleets }))
-})
+)
 
 export const constShipInfoSelector = memoize(id =>
   createSelector(constSelector, ({ $ships, $shipTypes }) => ({

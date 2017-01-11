@@ -1,4 +1,4 @@
-import { range } from 'lodash'
+import { range, compact } from 'lodash'
 
 const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
 const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
@@ -419,6 +419,35 @@ export function transSavedData(oldData) {
 }
 export function getHenseiDataByCode(code) {
   return codeConversion(code)
+}
+export function getHenseiDataByApi(fleets, ships, equips) {
+  return fleets.map(fleet =>
+    fleet.map(ship => {
+      const s = ships[ship.id]
+      const e = s.api_slot                // arr
+      const ex = s.api_slot_ex            // int
+
+      const id = s.api_ship_id
+      const lv = s.api_lv
+      const saku = s.api_sakuteki[0]
+      const slots = compact(e.map(slotId => {
+        if (slotId > 0) {
+          const slot = equips[slotId]
+          const sData = { id: slot.api_slotitem_id, lv: slot.api_level }
+          if (slot.api_alv) sData.alv = slot.api_alv
+          return sData
+        }
+      }))
+      if (ex > 0) slots.ex = { id: ex }
+
+      return {
+        id,
+        lv,
+        saku,
+        slots,
+      }
+    })
+  )
 }
 export function dataToThirdparty(oldData) {
   const newData = {}

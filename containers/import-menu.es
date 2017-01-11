@@ -91,7 +91,14 @@ const ImportModule = connect(
     this.setState({ data, active: 'edit' })
   }
   onSaveData = (title, note) => {
-    this.props.onSaveData(title, { fleets: this.state.data, note })
+    this.props.onSaveData(
+      title,
+      {
+        fleets: this.state.data,
+        note,
+        version: "poi-h-v1",
+      },
+    )
   }
   onGoBack = (e) => {
     this.setState({ active: 'preview' })
