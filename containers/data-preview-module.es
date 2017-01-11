@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { FormControl, Button, Checkbox } from 'react-bootstrap'
 import { fleetsSelector } from 'views/utils/selectors'
-import { __, getHenseiDataByFleets, getHenseiDataByCode } from '../utils'
+import { __, getHenseiDataByCode } from '../utils'
 import FleetsView from '../components/fleets-view'
 
 class CodeInput extends Component {
@@ -70,17 +70,17 @@ const SelectInput = connect(
   getHenseiData = () => {
     const { fleets } = this.props
     const { deckChecked } = this.state
-    return getHenseiDataByFleets(fleets.filter((f, i) => deckChecked[i]))
+    return fleets.filter((f, i) => deckChecked[i]).map(f => f.api_ship.map(s => ({ id: s })))
   }
   render() {
     const { fleets } = this.props
     const { deckChecked, btnDisable } = this.state
     const { onCheck } = this
-    const checkbox = fleets.map((fleet, i) => {
+    const checkbox = fleets.map((fleet, i) =>
       <Checkbox key={i} onChange={onCheck.bind(this, i)} checked={deckChecked[i]}>
-        { fleets.api_name }
+        { fleet.api_name }
       </Checkbox>
-    })
+    )
     return (
       <div>
         <div className="fleets-checkzone">{ checkbox }</div>

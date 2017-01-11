@@ -47,12 +47,12 @@ export const getShipInfoByApi = memoize(id =>
   ], ([ship, $ship], { $shipTypes }) => ({
     name: getI18n(($ship || { api_name: '' }).api_name),
     lv: ship ? ship.api_lv : 0,
-    type: getI18n($shipTypes[$ship ? $ship.api_stype : 0]),
+    type: getI18n($shipTypes[$ship ? $ship.api_stype : 0].api_name),
     slots: ship ? ship.api_slot : [],
   }))
 )
 export const shipInfoSelector = (id, ship) =>
-  ship ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
+  ship.lv ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
 
 
 export const getEquipInfoByData = memoize((id, { lv, alv }) =>

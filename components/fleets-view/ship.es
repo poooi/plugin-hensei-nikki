@@ -7,7 +7,7 @@ import { equipInfoSelector, shipInfoSelector } from '../../utils'
 
 const Slot = connect(
   (state, { slotId, slot }) => equipInfoSelector(slotId, slot)
-)((slotId, slot, { name, iconId, lv, alv }) => {
+)(({ name, iconId, lv, alv }) => {
   const overlay = <Tooltip id="name">{ name }</Tooltip>
   return (
     <div className="slotitem-container">
@@ -29,7 +29,7 @@ const Slot = connect(
 
 const Ship = connect(
   (state, { shipId, ship }) => shipInfoSelector(shipId, ship)
-)((shipId, ship, { name, lv, type, slots }) => (
+)(({ name, lv, type, slots }) => (
   <div className="ship-item">
     <span className="ship-name">{ name }</span>
     <div className="ship-detail">
@@ -37,7 +37,7 @@ const Ship = connect(
       <span className="ship-type">{ type }</span>
     </div>
     <div className="slot-detail">
-      { slots.map((s, i) => <Slot key={i} slotId={s.id} slot={s} />) }
+      { slots.map((s, i) => s === -1 ? undefined : <Slot key={i} slotId={s.id} slot={s} />) }
     </div>
   </div>
 ))
