@@ -41,11 +41,11 @@ export default connect(
               animation={false}
               id="hensei-list-tabs">
           {
-            data.map((fleet, i) => {
+            data.map((fleet, i) =>
               <Tab eventKey={i} title={tabName[i]} key={i}>
                 <Fleet fleet={fleet} />
               </Tab>
-            })
+            )
           }
         </Tabs>
       )

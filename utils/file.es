@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 import { join } from 'path-extra'
 import FileWriter from 'views/utils/fileWriter'
+import { transSavedData } from './calc'
 
 const { APPDATA_PATH, getStore } = window
 const PLUGIN_PATH = join(APPDATA_PATH, 'hensei-nikki')
@@ -21,7 +22,7 @@ export function loadData() {
   } catch (e) {
     data = {}
   }
-  return data
+  return transSavedData(data)
 }
 
 export function loadImportFile(filename) {

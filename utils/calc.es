@@ -405,11 +405,12 @@ export function transSavedData(oldData) {
       let tempData = {}
       if (version !== 'poi-h-v1') {
         tempData.fleets = codeConversion(ships)
-        tempData.tags = tags || []
+        tempData.notes = tags || []
         tempData.version = 'poi-h-v1'
       } else {
         tempData = oldData[title]
       }
+      if (!tempData.fleets) continue
       newData[title] = tempData
     } catch (e) {
       continue
