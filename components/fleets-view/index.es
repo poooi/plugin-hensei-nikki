@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs } from 'react-bootstrap'
-import { map } from 'lodash'
 import { fleetsByTitleSelector } from '../../utils'
 import Details from './details'
 import Ship from './ship'
 
-const Fleet = fleet => (
+const Fleet = ({ fleet }) => (
   <div>
     <Details fleet={fleet} />
     <div className="ships-container">
-      { map(fleet, (ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
+      { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
     </div>
   </div>
 )

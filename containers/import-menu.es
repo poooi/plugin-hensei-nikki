@@ -42,7 +42,7 @@ const Menu = connect(
     })
     if (filename && filename[0]) {
       this.props.onImportFile(loadImportFile(filename[0]))
-    } else {
+    } else if(filename && !filename[0]) {
       window.toggleModal("找不到该文件")
     }
   }
