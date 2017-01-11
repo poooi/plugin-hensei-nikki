@@ -62,7 +62,7 @@ function initStatusReducer(state = initialState.initStatus, action) {
 }
 
 function dataReducer(state = initialState.henseiData, action) {
-  const { data } = this.state
+  const { data } = state
   switch (action.type) {
   case '@@Response/kcsapi/api_get_member/require_info':
   case '@@poi-plugin-hensei-nikki@init':
@@ -71,7 +71,7 @@ function dataReducer(state = initialState.henseiData, action) {
       data: loadData(),
     }
   case '@@HENSEI_SAVE_DATA': {
-    const { title, fleets } = this.action
+    const { title, fleets } = action
     data[title] = fleets
     return {
       ...state,
@@ -79,7 +79,7 @@ function dataReducer(state = initialState.henseiData, action) {
     }
   }
   case '@@HENSEI_REPLACE_TITLE': {
-    const { oldTitle, newTitle } = this.action
+    const { oldTitle, newTitle } = action
     data[newTitle] = data[oldTitle]
     delete data[oldTitle]
     return {
@@ -88,7 +88,7 @@ function dataReducer(state = initialState.henseiData, action) {
     }
   }
   case '@@HENSEI_REPLACE_NOTE': {
-    const { title, note } = this.action
+    const { title, note } = action
     data[title].note = note
     return {
       ...state,
@@ -96,7 +96,7 @@ function dataReducer(state = initialState.henseiData, action) {
     }
   }
   case '@@HENSEI_IMPORT_FILE': {
-    const { fileBuffer } = this.action
+    const { fileBuffer } = action
     console.log('reducer');
     let msg
     console.log(fileBuffer);
@@ -124,7 +124,7 @@ function dataReducer(state = initialState.henseiData, action) {
     }
   }
   case '@@HENSEI_DELETE_DATA': {
-    const { title } = this.action
+    const { title } = action
     delete data[title]
     return {
       ...state,

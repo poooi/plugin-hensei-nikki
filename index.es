@@ -3,6 +3,7 @@ import { observer, observe } from 'redux-observers'
 import { join } from 'path-extra'
 import { store } from 'views/createStore'
 
+import { reducer } from './redux'
 import { henseiDataSelector, saveData } from './utils'
 import ImportMenu from './containers/import-menu'
 import DataModule from './containers/data-module'
@@ -19,6 +20,8 @@ export const reactClass = class HenseiNikki extends Component {
     )
   }
 }
+
+export { reducer }
 
 let unsubHenseiDataObserve
 

@@ -6,9 +6,11 @@ import { __, fleetsByTitleSelector, saveData } from '../utils'
 
 export default connect(
   (state, { title }) =>
-    createSelector([
-      fleetsByTitleSelector(title),
-    ], fleets => ({ note: fleets.note })),
+    !title
+    ? { note: "" }
+    : createSelector([
+        fleetsByTitleSelector(title),
+      ], fleets => ({ note: fleets.note })),
   { saveData }
 )(class DataEditModule extends Component {
   constructor(props) {
@@ -16,7 +18,15 @@ export default connect(
     this.state = {
       title: '',
       note: '',
-      saveDisable: false,
+      saveDisable: true,
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.title !== this.props.title) {
+      this.setState({
+        title: nextProps.title,
+        note: nextProps.note,
+      })
     }
   }
   onTitileChange = (e) => {
@@ -32,8 +42,13 @@ export default connect(
   }
   checkChanges(newTitle, newNote) {
     const { title, note } = this.props
-    const saveDisable = !(newTitle === title || newNote === note)
-    this.setState({ newTitle, newNote, saveDisable })
+    const saveDisable = (newTitle === title && newNote === note)
+                        || !newTitle.length
+    this.setState({
+      title: newTitle,
+      note: newNote,
+      saveDisable,
+    })
   }
   render() {
     const { saveDisable, title, note } = this.state
