@@ -9,7 +9,7 @@ export default connect(
   createSelector([
     constSelector,
     henseiDataSelector,
-  ], ({ $ships, $equips }, data) =>
+  ], ({ $ships, $equips }, { data }) =>
   ({ $ships, $equips, data }))
 )(class DataList extends Component {
   constructor(props) {
@@ -19,9 +19,12 @@ export default connect(
       showData: '',
     }
   }
+  componentDidMount() {
+    this.setState({ showData: this.props.data })
+  }
   componentWillReceiveProps(nextProps) {
-    if (!this.props.data && nextProps.data) {
-      this.setState({ data: nextProps.data })
+    if (this.props.data != nextProps.data) {
+      this.setState({ showData: nextProps.data })
     }
   }
   onKeywordChange = (e) => {
@@ -56,14 +59,14 @@ export default connect(
                      onChange={onKeywordChange} />
         <ButtonGroup vertical bsSize="xsmall" className="titles-container">
           {
-            Object.keys(showData).forEach((title, i) => (
+            Object.keys(showData).map((title, i) => (
               <OverlayTrigger key={i} placement="right" overlay={
                 <Popover id={`note-${title}`} style={{padding: 7}}>
                     <div>{ title }</div>
                     <div>{ showData[title].note }</div>
                 </Popover>
               }>
-                <Button style={{margin: 0}}
+                <Button style={{ margin: 0 }}
                         onClick={onTitleSelected.bind(this, title)}
                         className={activeTitle === title ? 'active' : ''}>
                   {title}
