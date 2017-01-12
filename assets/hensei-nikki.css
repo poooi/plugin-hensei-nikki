@@ -1,59 +1,101 @@
-#HenseiNikki .container {
-  margin-top: 15px;
-}
-#HenseiNikki .form-group {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-#HenseiNikki .btn-group .btn {
-  width: 100%;
-  overflow: hidden;
-}
-#HenseiNikki .tab-container {
-  padding: 15px;
-}
-#HenseiNikki .add-data-tab {
+#HenseiNikki .hidden {
+  display: none; }
+#HenseiNikki ::-webkit-scrollbar {
+  width: 10px; }
+#HenseiNikki #henseinikki-add-dropdown {
+  display: block;
+  position: absolute;
+  margin-top: 7px; }
+#HenseiNikki .opts .back {
+  margin: 10px; }
+#HenseiNikki .opts .sub-opts {
   display: flex;
-  flex-direction: column;
-  padding: 15px;
-}
-#HenseiNikki .hensei-list-container {
-  display: flex;
-  flex: none;
-}
+  justify-content: space-around;
+  margin: 10px;
+  margin-bottom: 0; }
+#HenseiNikki .data-opts {
+  width: 90%;
+  margin-left: 20px;
+  margin-top: -3px; }
+#HenseiNikki .import-module {
+  display: block;
+  padding: 15px; }
 #HenseiNikki .container-col {
   display: flex;
-  flex-direction: column;
-}
-#HenseiNikki .tags-input-container {
+  flex-direction: column; }
+#HenseiNikki .hensei-list {
   display: flex;
-  align-items: center;
-  padding: 5px;
-}
-#HenseiNikki .ships-container {
-  display: flex;
-  flex-flow: row wrap;
-  padding: 10px 0 0 15px;
-}
-#HenseiNikki .details-container{
-  display: flex;
-  justify-content: center;
-  padding: 0 0 0 25px;
-}
-#HenseiNikki .details-container > span{
-  margin-right: 15px;
-}
-#HenseiNikki .tab-content {
-  overflow: hidden;
-}
-#HenseiNikki .alv-img{
-  height: 14px !important;
-  width: 14px !important;
-  margin-bottom: 2px !important;
-  margin-top: 1px !important;
-  margin-left: 0 !important;
-}
-#HenseiNikki .img-svg {
-  width: 20px;
-  height: 20px;
-}
+  flex: none; }
+  #HenseiNikki .hensei-list .ships-container {
+    display: flex;
+    flex-flow: row wrap;
+    padding-top: 10px; }
+    #HenseiNikki .hensei-list .ships-container .details-container {
+      display: flex;
+      justify-content: center;
+      padding: 0 0 0 25px; }
+      #HenseiNikki .hensei-list .ships-container .details-container > span {
+        margin-right: 15px; }
+    #HenseiNikki .hensei-list .ships-container .alv-img {
+      height: 14px !important;
+      width: 14px !important;
+      margin-bottom: 2px !important;
+      margin-top: 1px !important;
+      margin-left: 0 !important; }
+    #HenseiNikki .hensei-list .ships-container .img-svg {
+      width: 20px;
+      height: 20px; }
+  #HenseiNikki .hensei-list .title-list {
+    flex: 0 1;
+    max-width: 80px;
+    min-width: 50px;
+    margin-top: 30px; }
+    #HenseiNikki .hensei-list .title-list .title-keywords {
+      flex: 1;
+      padding: 0; }
+      #HenseiNikki .hensei-list .title-list .title-keywords input, #HenseiNikki .hensei-list .title-list .title-keywords .form-group {
+        height: 100%;
+        padding: 0; }
+    #HenseiNikki .hensei-list .title-list .titles-container {
+      display: flex;
+      flex-direction: column; }
+      #HenseiNikki .hensei-list .title-list .titles-container button {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        white-space: nowrap;
+        margin: 0; }
+      #HenseiNikki .hensei-list .title-list .titles-container #titles {
+        padding: 7px; }
+        #HenseiNikki .hensei-list .title-list .titles-container #titles .tag {
+          display: inline-block;
+          margin: 5px;
+          font-size: 14px; }
+      #HenseiNikki .hensei-list .title-list .titles-container .details-container {
+        display: flex;
+        justify-content: center;
+        padding: 0 0 0 25px; }
+        #HenseiNikki .hensei-list .title-list .titles-container .details-container > span {
+          margin-right: 15px; }
+  #HenseiNikki .hensei-list .title-editor {
+    margin-top: 10px;
+    margin-bottom: 0; }
+    #HenseiNikki .hensei-list .title-editor .form-control {
+      margin: 10px; }
+      #HenseiNikki .hensei-list .title-editor .form-control button {
+        height: 50%;
+        width: 50%;
+        margin: 10px; }
+#HenseiNikki .data-export-module {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  padding-top: 50px; }
+  #HenseiNikki .data-export-module .exit-btn {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    margin: 0; }
+
+/*# sourceMappingURL=hensei-nikki.css.map */

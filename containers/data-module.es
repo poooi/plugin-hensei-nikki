@@ -15,7 +15,7 @@ export default class DataModule extends Component {
   render() {
     const { activeTitle } = this.state
     return (
-      <div>
+      <div className="hensei-list">
         <DataList onShowData={this.onShowData} activeTitle={activeTitle} />
         { activeTitle ? <DataView title={activeTitle} /> : undefined }
       </div>

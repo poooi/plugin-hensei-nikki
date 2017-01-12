@@ -5,6 +5,11 @@
   ::-webkit-scrollbar {
     width: 10px;
   }
+  #henseinikki-add-dropdown {
+    display: block;
+    position: absolute;
+    margin-top: 7px;
+  }
   .opts {
     .back {
       margin: 10px;
@@ -16,12 +21,51 @@
       margin-bottom: 0;
     }
   }
+  .data-opts {
+    width: 90%;
+    margin-left: 20px;
+    margin-top: -3px;
+  }
+  .import-module {
+    display: block;
+    padding: 15px;
+  }
+  .container-col {
+    display: flex;
+    flex-direction: column;
+  }
   .hensei-list {
     display: flex;
+    flex: none;
+    .ships-container {
+      display: flex;
+      flex-flow: row wrap;
+      padding-top: 10px;
+      .details-container {
+        display: flex;
+        justify-content: center;
+        padding: 0 0 0 25px;
+        > span {
+          margin-right: 15px;
+        }
+      }
+      .alv-img {
+        height: 14px !important;
+        width: 14px !important;
+        margin-bottom: 2px !important;
+        margin-top: 1px !important;
+        margin-left: 0 !important;
+      }
+      .img-svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
     .title-list {
       flex: 0 1;
       max-width: 80px;
       min-width: 50px;
+      margin-top: 30px;
       .title-keywords {
         flex: 1;
         padding: 0;
@@ -69,6 +113,20 @@
           margin: 10px;
         }
       }
+    }
+  }
+  .data-export-module {
+    display: block;
+    position: absolute;
+    z-index: 10;
+    padding-top: 50px;
+    margin-left: 10px;
+    .exit-btn {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
     }
   }
 }

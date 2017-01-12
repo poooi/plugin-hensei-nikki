@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { onDeleteData } from '../redux'
 import { __ } from '../utils'
@@ -30,22 +30,22 @@ export default connect(
     const { title } = this.props
     switch (active) {
     case 'export':
-      return <DataExportModule title={title} />
+      return <DataExportModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
     case 'edit':
-      return <DataEditModule title={title} />
+      return <DataEditModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
     }
     return (
-      <div className="data-opts">
-        <Button bsSize="small" onClick={this.onOptsClick.bind(this, 'export')}>
+      <ButtonGroup className="data-opts">
+        <Button style={{ width: '33%' }} onClick={this.onOptsClick.bind(this, 'export')}>
           <FontAwesome name="share-square-o" /> {__('Export')}
         </Button>
-        <Button bsSize="small" onClick={this.onOptsClick.bind(this, 'edit')}>
+        <Button style={{ width: '33%' }} onClick={this.onOptsClick.bind(this, 'edit')}>
           <FontAwesome name="plus-square-o" /> {__('Edit')}
         </Button>
-        <Button bsSize="small" onClick={this.onDeleteClick}>
+        <Button style={{ width: '33%' }} onClick={this.onDeleteClick}>
           <FontAwesome name="trash"  /> {__('Delete Records')}
         </Button>
-      </div>
+      </ButtonGroup>
     )
   }
 }
