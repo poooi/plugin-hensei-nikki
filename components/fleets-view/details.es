@@ -31,7 +31,7 @@ export default connect(
     if (!details || !Object.keys(details).length) return <div></div>
     const { tyku, saku25, saku25a, saku33 } = details
     return (
-      <div style={{display: "flex"}}>
+      <div  className="details-container" style={{display: "flex"}}>
         <span style={{flex: 1}}>
           <OverlayTrigger placement='bottom' overlay={
             <Tooltip id="hensei-nikki-details-FP">

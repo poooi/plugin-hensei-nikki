@@ -51,9 +51,9 @@ export default connect(
     if (!data) return <div></div>
 
     return (
-      <div>
+      <div className="title-list">
         <FormControl type="text"
-                     className="titles-keywords"
+                     className="title-keywords"
                      value={keywords}
                      placeholder={__("Keywords")}
                      onChange={onKeywordChange} />

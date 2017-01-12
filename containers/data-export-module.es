@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
+import { FormGroup, FormControl, ControlLabel, Button, Well } from 'react-bootstrap'
 import { shell, clipboard } from 'electron'
 import { __, fleetsByTitleSelector, dataToThirdparty } from '../utils'
 
@@ -13,6 +13,9 @@ export default connect(
       code: '',
       type: 'poi',
     }
+  }
+  componentDidMount() {
+    this.setState({ code: JSON.stringify(this.props.fleets) })
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.fleets !== this.props.fleets) {
@@ -40,7 +43,8 @@ export default connect(
   }
   render() {
     return (
-      <div className="tab-container">
+      <Well className="data-export-module tab-container">
+        <Button className="exit-btn" onClick={this.props.onCancel}>X</Button>
         <span>
           {__('Support')}:
             <a onClick={shell.openExternal.bind(this, 'http://fleet.diablohu.com')}>
@@ -65,7 +69,7 @@ export default connect(
                        placeholder={__('Code')}
                        value={this.state.code} />
         </div>
-      </div>
+      </Well>
     )
   }
 })
