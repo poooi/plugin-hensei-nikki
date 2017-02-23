@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { loadData } from '../utils'
+import { loadData, getHenseiDataByCode } from '../utils'
 
 export function onSaveData(title, fleets) {
   return {
@@ -97,23 +97,21 @@ function dataReducer(state = initialState.henseiData, action) {
   }
   case '@@HENSEI_IMPORT_FILE': {
     const { fileBuffer } = action
-    console.log('reducer');
     let msg
-    console.log(fileBuffer);
     if (!(typeof fileBuffer === 'object')) {
       msg = "文件内容格式错误"
     } else {
-      console.log('file ok');
       for (const title in fileBuffer) {
+        const tempData = getHenseiDataByCode(fileBuffer[title])
+        if (!tempData) continue
         if (Object.keys(data).includes(title)) {
-          if (data[title] != fileBuffer[title]) {
-            data[`${title}_1`] = fileBuffer[title]
+          if (data[title] != tempData) {
+            data[`${title}_1`] = tempData
           }
         } else {
-          data[title] = fileBuffer[title]
+          data[title] = tempData
         }
       }
-      console.log('exit loop');
       const sum = Object.keys(data).length - Object.keys(state.data).length
       msg = sum ? `成功导入${sum}条数据` : "无可用数据"
     }

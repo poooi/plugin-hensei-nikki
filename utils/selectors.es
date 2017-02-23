@@ -36,8 +36,8 @@ export const constEquipInfoSelector = memoize(id =>
   }))
 )
 // { name, lv, type, saku, slots }
-export const getShipInfoByData = memoize((id, { lv, saku, slots }) =>
-  createSelector(
+export const getShipInfoByData = memoize((id, { lv, saku, slots }) => {
+  return createSelector(
     constShipInfoSelector(id),
     ({ name, type }) => ({
       name,
@@ -46,7 +46,7 @@ export const getShipInfoByData = memoize((id, { lv, saku, slots }) =>
       lv,
       slots,
     }))
-)
+})
 export const getShipInfoByApi = memoize(id =>
   createSelector([
     shipDataSelectorFactory(id),
@@ -67,8 +67,9 @@ export const getShipInfoByApi = memoize(id =>
       type: getI18n($shipTypes[$ship ? $ship.api_stype : 0].api_name),
       slots,
     }
-  }
+  })
 )
+
 export const shipInfoSelector = (id, ship) =>
   ship.lv ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
 
