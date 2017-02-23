@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
-import { FormControl, Button } from 'react-bootstrap'
-import { __, fleetsByTitleSelector, saveData } from '../utils'
+import { FormControl, Button, Well } from 'react-bootstrap'
+import { __, fleetsByTitleSelector } from '../utils'
+import { onSaveTitle, onSaveNote } from '../redux'
 
 export default connect(
   (state, { title }) =>
@@ -11,7 +12,7 @@ export default connect(
     : createSelector([
         fleetsByTitleSelector(title),
       ], fleets => ({ note: fleets.note })),
-  { saveData }
+  { onSaveTitle, onSaveNote }
 )(class DataEditModule extends Component {
   constructor(props) {
     super(props)
@@ -20,6 +21,10 @@ export default connect(
       note: '',
       saveDisable: true,
     }
+  }
+  componentDidMount() {
+    const { title, note } = this.props
+    this.setState({ title, note })
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.title !== this.props.title) {
@@ -37,8 +42,14 @@ export default connect(
   }
   onSave = (e) => {
     const { title, note } = this.state
-    const { onSaveData } = this.props
-    onSaveData(title, note)
+    const { onSaveTitle, onSaveNote, onCancel, type, onSaveData } = this.props
+    if (type === 'add') {
+      onSaveData(title, note)
+    } else {
+      if (this.props.title !== title) onSaveTitle(this.props.title, title)
+      if (this.props.note !== note) onSaveNote(title, note)
+    }
+    onCancel()
   }
   checkChanges(newTitle, newNote) {
     const { title, note } = this.props
@@ -54,7 +65,8 @@ export default connect(
     const { saveDisable, title, note } = this.state
 
     return(
-      <div className="data-edit-module">
+      <Well className="data-edit-module">
+        <Button className="exit-btn" onClick={this.props.onCancel}>X</Button>
         <FormControl type="text"
                      label={__('Title')}
                      placeholder={__('Title')}
@@ -68,7 +80,7 @@ export default connect(
         <Button bsSize="small" disabled={saveDisable} onClick={this.onSave}>
           {__('Save')}
         </Button>
-      </div>
+      </Well>
     )
   }
 })

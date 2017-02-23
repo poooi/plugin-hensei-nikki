@@ -20,9 +20,8 @@ export const henseiDataSelector = createSelector(
   state => state.henseiData || {}
 )
 
-export const fleetsByTitleSelector = memoize(title =>
+export const fleetsByTitleSelector = (title) =>
   createSelector(henseiDataSelector, ({ data }) => ({ fleets: (data[title] || { fleets: {} }).fleets }))
-)
 
 export const constShipInfoSelector = memoize(id =>
   createSelector(constSelector, ({ $ships, $shipTypes }) => ({
@@ -36,13 +35,14 @@ export const constEquipInfoSelector = memoize(id =>
     iconId: $equips[id] ? $equips[id].api_type[3] : 0,
   }))
 )
-// { name, lv, type, slots }
-export const getShipInfoByData = memoize((id, { lv, slots }) =>
+// { name, lv, type, saku, slots }
+export const getShipInfoByData = memoize((id, { lv, saku, slots }) =>
   createSelector(
     constShipInfoSelector(id),
     ({ name, type }) => ({
       name,
       type: getI18n(type.api_name),
+      saku,
       lv,
       slots,
     }))
@@ -51,12 +51,23 @@ export const getShipInfoByApi = memoize(id =>
   createSelector([
     shipDataSelectorFactory(id),
     constSelector,
-  ], ([ship, $ship], { $shipTypes }) => ({
-    name: getI18n(($ship || { api_name: '' }).api_name),
-    lv: ship ? ship.api_lv : 0,
-    type: getI18n($shipTypes[$ship ? $ship.api_stype : 0].api_name),
-    slots: ship ? ship.api_slot : [],
-  }))
+  ], ([ship, $ship], { $shipTypes }) => {
+    const slots = []
+    if (ship) {
+      slots.push(...ship.api_slot)
+      if (ship.api_slot_ex) {
+        const ex = slots.pop()
+        slots.ex = ex
+      }
+    }
+    return {
+      name: getI18n(($ship || { api_name: '' }).api_name),
+      lv: ship ? ship.api_lv : 0,
+      saku: ship.api_sakuteki[0],
+      type: getI18n($shipTypes[$ship ? $ship.api_stype : 0].api_name),
+      slots,
+    }
+  }
 )
 export const shipInfoSelector = (id, ship) =>
   ship.lv ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
