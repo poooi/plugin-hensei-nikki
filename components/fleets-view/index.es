@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs } from 'react-bootstrap'
-import { fleetsByTitleSelector } from '../../utils'
 import Details from './details'
 import Ship from './ship'
 
@@ -14,10 +13,7 @@ const Fleet = ({ fleet }) => (
   </div>
 )
 
-export default connect(
-  (state, { title, code }) =>
-    title ? fleetsByTitleSelector(title) : { code }
-)(class FleetsView extends Component {
+export default class FleetsView extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -54,4 +50,3 @@ export default connect(
     }
   }
 }
-)

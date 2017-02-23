@@ -64,7 +64,7 @@ function newSlots(data) {
       return []
     }
   })
-  // if (data.ix) slots.ex = data.ix
+  if (data.ix) slots.ex = data.ix
   return slots
 }
 function newFleet(data) {
@@ -165,8 +165,12 @@ const aircraftLevelBonus = {
   '8': [0, 0, 0, 0, 0, 0, 0, 0, 0],       // 艦上攻撃機
   '11': [0, 1, 1, 1, 1, 3, 3, 6, 6],      // 水上爆撃機
   '45': [0, 0, 2, 5, 9, 14, 14, 22, 22],  // 水上戦闘機
+  '39': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式景雲改
+  '40': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 橘花改
 }
+
 function getShipSaku(id, lv) {
+  return 0
   const sakuArr = $saku[id] // [ lv1, lv99, lv100, lv155 ]
   const baseSaku = lv >= 100 ? sakuArr[2] : sakuArr[0]
   const tempSaku = (lv >= 100 ? sakuArr[3] : sakuArr[1]) - baseSaku
@@ -179,30 +183,42 @@ function getShipSaku(id, lv) {
 function getTyku(data, $equipsData, $shipsData) {
   let minTyku = 0
   let maxTyku = 0
-  for (const shipId in data) {
-    const maxeq = $shipsData[shipId].api_maxeq
-    const { slots } = data[shipId]
+  let basicTyku = 0
+  for (const ship of data) {
+    const { slots, id } = ship
+    const maxeq = $shipsData[id].api_maxeq
     slots.forEach((slot, i) => {
       const { id, lv, alv } = slot
       let tempTyku = 0.0
       const tempAlv = alv || 0
       const $equip = $equipsData[id]
+      const levelFactor = $equip.api_baku > 0 ? 0.25 : 0.2
       if ([6, 7, 8].includes($equip.api_type[3])) {
         // 艦载機
-        tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * 0.2)
+        tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * levelFactor)
         tempTyku += aircraftLevelBonus[$equip.api_type[3]][tempAlv]
+        basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
       } else if ($equip.api_type[3] == 10 && ($equip.api_type[2] == 11 || $equip.api_type[2] == 45)) {
         // 水上機
         tempTyku += Math.sqrt(maxeq[i]) * $equip.api_tyku
         tempTyku += aircraftLevelBonus[$equip.api_type[2]][tempAlv]
+        basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
+        minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+      } else if ([39, 40].includes($equip.api_type[3])) {
+        // 噴式機
+        tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * levelFactor)
+        tempTyku += aircraftLevelBonus[$equip.api_type[3]][tempAlv]
+        basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
         maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
       }
     })
   }
   return {
+    basic: basicTyku,
     min: minTyku,
     max: maxTyku,
   }
@@ -215,9 +231,9 @@ function getSaku25(data, $equipsData) {
   let shipSaku = 0
   let radarSaku = 0
   let totalSaku = 0
-  for (const shipId in data) {
-    const { slots, lv } = data[shipId]
-    shipSaku += getShipSaku(shipId, lv)
+  for (const ship of data) {
+    const { slots, saku, lv } = ship
+    shipSaku += saku || 0
     slots.forEach(slot => {
       const $equip = $equipsData[slot.id]
       switch ($equip.api_type[3]) {
@@ -261,9 +277,9 @@ function getSaku25a(data, $equipsData, teitokuLv) {
   let shipSaku = 0
   let equipSaku = 0
   let teitokuSaku = 0
-  for (const shipId in data) {
-    const { slots, lv } = data[shipId]
-    let shipPureSaku = getShipSaku(shipId, lv)
+  for (const ship of data) {
+    const { slots, lv, saku } = ship
+    let shipPureSaku = saku || 0
     slots.forEach(slot => {
       const $equip = $equipsData[slot.id]
       shipPureSaku -= $equip.api_saku
@@ -338,16 +354,16 @@ function getSaku25a(data, $equipsData, teitokuLv) {
 //     S(各艦毎の素索敵)
 //     H(レベル)
 //     M(空き数)
-function getSaku33(data, $equipsData, teitokuLv) {
+function getSaku33(data, $equipsData, teitokuLv, mapModifier=1.0) {
   let totalSaku = 0
   let shipSaku = 0
   let equipSaku = 0
   let teitokuSaku = 0
   let shipCount = 6
-  for (const shipId in data) {
+  for (const ship of data) {
     shipCount -= 1
-    const { slots, lv } = data[shipId]
-    let shipPureSaku = getShipSaku(shipId, lv)
+    const { slots, saku, lv } = ship
+    let shipPureSaku = saku || 0
     slots.forEach(slot => {
       const { id, lv } = slot
       const $equip = $equipsData[id]
@@ -378,6 +394,7 @@ function getSaku33(data, $equipsData, teitokuLv) {
     })
     shipSaku += Math.sqrt(shipPureSaku)
   }
+  equipSaku *= mapModifier
   teitokuSaku = Math.ceil(teitokuLv * 0.4)
   totalSaku = shipSaku + equipSaku - teitokuSaku + 2 * shipCount
 
@@ -395,6 +412,8 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
     saku25: getSaku25(fleet, $equips),
     saku25a: getSaku25a(fleet, $equips, teitokuLv),
     saku33: getSaku33(fleet, $equips, teitokuLv),
+    saku33x3: getSaku33(fleet, $equips, teitokuLv, 3.0),
+    saku33x4: getSaku33(fleet, $equips, teitokuLv, 4.0),
   }
 }
 export function transSavedData(oldData) {
@@ -405,7 +424,7 @@ export function transSavedData(oldData) {
       let tempData = {}
       if (version !== 'poi-h-v1') {
         tempData.fleets = codeConversion(ships)
-        tempData.notes = tags || []
+        tempData.note = tags.join(' ') || ''
         tempData.version = 'poi-h-v1'
       } else {
         tempData = oldData[title]

@@ -23,9 +23,7 @@ export default connect(
     this.setState({ showData: this.props.data })
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.data != nextProps.data) {
-      this.setState({ showData: nextProps.data })
-    }
+    this.setState({ showData: nextProps.data })
   }
   onKeywordChange = (e) => {
     const { data, $ships, $equips } = this.props
@@ -62,8 +60,8 @@ export default connect(
             Object.keys(showData).map((title, i) => (
               <OverlayTrigger key={i} placement="right" overlay={
                 <Popover id={`note-${title}`} style={{padding: 7}}>
-                    <div>{ title }</div>
-                    <div>{ showData[title].note }</div>
+                    <p>{ title }</p>
+                    <p>{ showData[title].note }</p>
                 </Popover>
               }>
                 <Button style={{ margin: 0 }}

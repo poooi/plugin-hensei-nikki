@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
-import { FormControl, Button, Checkbox } from 'react-bootstrap'
+import { Well, FormControl, Button, Checkbox } from 'react-bootstrap'
 import { fleetsSelector, shipsSelector, equipsSelector } from 'views/utils/selectors'
 import { __, getHenseiDataByApi, getHenseiDataByCode } from '../utils'
 import FleetsView from '../components/fleets-view'
@@ -63,6 +63,7 @@ const SelectInput = connect(
     const { deckChecked } = this.state
     deckChecked[index] = !deckChecked[index]
     const btnDisable = !deckChecked.filter(c => c).length
+    this.props.onShowPreview()
     this.setState({ deckChecked, btnDisable })
   }
   onShowPreview = () => {
@@ -70,9 +71,8 @@ const SelectInput = connect(
   }
   onNext = () => {
     const { onNext, ships, equips } = this.props
-    let data = this.getHenseiData()
-    if (!data[0][0].lv) data = getHenseiDataByApi(data, ships, equips)
-    this.props.onNext(data)
+    const data = this.getHenseiData()
+    onNext(getHenseiDataByApi(data, ships, equips))
   }
   getHenseiData = () => {
     const { fleets } = this.props
@@ -91,12 +91,14 @@ const SelectInput = connect(
     return (
       <div>
         <div className="fleets-checkzone">{ checkbox }</div>
-        <Button bsSize="small" disabled={btnDisable} onClick={this.onShowPreview}>
-          {__('Preview')}
-        </Button>
-        <Button bsSize="small" disabled={btnDisable} onClick={this.onNext}>
-          {__('Next')}
-        </Button>
+        <div className="btn-row">
+          <Button bsSize="small" disabled={btnDisable} onClick={this.onShowPreview}>
+            {__('Preview')}
+          </Button>
+          <Button bsSize="small" disabled={btnDisable} onClick={this.onNext}>
+            {__('Next')}
+          </Button>
+        </div>
       </div>
     )
   }
@@ -114,6 +116,10 @@ export default class DataPreviewModule extends Component {
     this.props.onAddData(data)
   }
   onShowPreview = (data) => {
+    if (!data) {
+      this.setState({ previewShow: false })
+      return
+    }
     let { previewShow, preCode } = this.state
     if (!previewShow) preCode = data
     this.setState({ preCode, previewShow: !previewShow })
@@ -122,7 +128,8 @@ export default class DataPreviewModule extends Component {
     const { preCode, previewShow } = this.state
 
     return(
-      <div className="add-data-preview-module">
+      <Well className="data-preview-module">
+        <Button className="exit-btn" onClick={this.props.onCancel}>X</Button>
         {
           this.props.type === 'add'
           ? <SelectInput onShowPreview={this.onShowPreview}
@@ -131,7 +138,7 @@ export default class DataPreviewModule extends Component {
                        onNext={this.onNext} />
         }
         { previewShow ? <FleetsView code={preCode} /> : ''}
-      </div>
+      </Well>
     )
   }
 }

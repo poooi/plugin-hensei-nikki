@@ -1,19 +1,29 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import DataList from '../components/data-list'
 import DataView from '../components/data-view'
+import { henseiDataSelector } from '../utils'
 
-export default class DataModule extends Component {
+export default connect(
+  henseiDataSelector
+)(class DataModule extends Component {
   constructor(props) {
     super(props)
     this.state = {
       activeTitle: '',
     }
   }
+  componentWillReceiveProps(nextProps) {
+    const { data } = nextProps
+    const { activeTitle } = this.state
+    if (activeTitle && !data[activeTitle]) this.setState({ activeTitle: '' })
+  }
   onShowData = (title) => {
     this.setState({ activeTitle: title })
   }
   render() {
     const { activeTitle } = this.state
+
     return (
       <div className="hensei-list">
         <DataList onShowData={this.onShowData} activeTitle={activeTitle} />
@@ -21,4 +31,4 @@ export default class DataModule extends Component {
       </div>
     )
   }
-}
+})

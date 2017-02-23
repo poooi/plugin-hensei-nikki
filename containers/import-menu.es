@@ -111,7 +111,7 @@ const ImportModule = connect(
       return (
         <div className="import-module">
           <Button bsSize="small" onClick={this.onCancel}>X</Button>
-          <DataPreviewModule type={this.props.type} onAddData={this.onAddData} />
+          <DataPreviewModule type={this.props.type} onAddData={this.onAddData} onCancel={this.onCancel} />
         </div>
       )
     } else {
@@ -119,7 +119,7 @@ const ImportModule = connect(
         <div className="import-module">
           <Button bsSize="small" onClick={this.onGoBack}><FontAwesome name='arrow-left' /></Button>
           <Button bsSize="small" onClick={this.onCancel}>X</Button>
-          <DataEditModule onSaveData={this.onSaveData} />
+          <DataEditModule type={this.props.type} onSaveData={this.onSaveData} onCancel={this.onCancel} />
         </div>
       )
     }

@@ -62,7 +62,7 @@ function initStatusReducer(state = initialState.initStatus, action) {
 }
 
 function dataReducer(state = initialState.henseiData, action) {
-  const { data } = state
+  const data = { ...state.data }
   switch (action.type) {
   case '@@Response/kcsapi/api_get_member/require_info':
   case '@@poi-plugin-hensei-nikki@init':
@@ -114,7 +114,7 @@ function dataReducer(state = initialState.henseiData, action) {
         }
       }
       console.log('exit loop');
-      const sum = Object.keys(data).length - Object.keys(this.state.data).length
+      const sum = Object.keys(data).length - Object.keys(state.data).length
       msg = sum ? `成功导入${sum}条数据` : "无可用数据"
     }
     if (msg) window.toggleModal(msg)

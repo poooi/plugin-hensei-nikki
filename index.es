@@ -27,8 +27,6 @@ let unsubHenseiDataObserve
 
 export function pluginDidLoad() {
 
-  store.dispatch({ type: '@@poi-plugin-hensei-nikki@init' })
-
   unsubHenseiDataObserve = observe(store, [observer(
     henseiDataSelector,
     (dispatch, current, previous) => {
@@ -37,6 +35,7 @@ export function pluginDidLoad() {
     }
   )])
 
+  store.dispatch({ type: '@@poi-plugin-hensei-nikki@init' })
 }
 
 export function pluginWillUnload() {

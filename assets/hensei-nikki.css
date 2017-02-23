@@ -86,16 +86,51 @@
         height: 50%;
         width: 50%;
         margin: 10px; }
-#HenseiNikki .data-export-module {
+#HenseiNikki .data-export-module, #HenseiNikki .data-edit-module, #HenseiNikki .data-preview-module {
   display: block;
   position: absolute;
   z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto; }
+#HenseiNikki .data-export-module {
   padding-top: 50px; }
   #HenseiNikki .data-export-module .exit-btn {
     display: block;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 0;
+    left: 0;
     margin: 0; }
+#HenseiNikki .data-edit-module textarea {
+  height: 300px; }
+#HenseiNikki .data-preview-module textarea {
+  height: 300px; }
+#HenseiNikki .data-preview-module .btn-row {
+  display: flex;
+  justify-content: space-around; }
+  #HenseiNikki .data-preview-module .btn-row button {
+    width: 40%; }
+#HenseiNikki .data-preview-module .fleets-checkzone {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  align-items: center; }
+  #HenseiNikki .data-preview-module .fleets-checkzone .checkbox {
+    display: inline-block;
+    margin: 10px 0; }
+#HenseiNikki #hensei-list-tabs {
+  box-sizing: border-box;
+  padding: 10px; }
+
+#hensei-nikki-details-recon .recon-title {
+  font-weight: bold;
+  text-align: left; }
+#hensei-nikki-details-recon .recon-entry {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  width: 160px; }
 
 /*# sourceMappingURL=hensei-nikki.css.map */
