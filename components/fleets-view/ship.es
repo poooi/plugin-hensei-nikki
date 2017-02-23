@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { join } from 'path-extra'
 import { SlotitemIcon } from 'views/components/etc/icon'
 import { equipInfoSelector, shipInfoSelector } from '../../utils'
 
-const Slot = connect(
-  (state, { slotId, slot }) => equipInfoSelector(slotId, slot)
-)(({ name, iconId, lv, alv }) => {
+const Slot = ({ slotId, slot }) => {
+  const { name, iconId, lv, alv } = equipInfoSelector(slotId, slot)(window.getStore())
   const overlay = <Tooltip id="name">{ name }</Tooltip>
   return (
     <div className="slotitem-container">
@@ -25,21 +24,22 @@ const Slot = connect(
      </span>
     </div>
   )
-})
+}
 
-const Ship = connect(
-  (state, { shipId, ship }) => shipInfoSelector(shipId, ship)
-)(({ name, lv, type, slots }) => (
-  <div className="ship-item">
-    <span className="ship-name">{ name }</span>
-    <div className="ship-detail">
-      <span>Lv.{ lv }</span>
-      <span className="ship-type">{ type }</span>
+const Ship = ({ shipId, ship }) => {
+  const { lv, name, type, slots } = shipInfoSelector(shipId, ship)(window.getStore())
+  return (
+    <div className="ship-item">
+      <span className="ship-name">{ name }</span>
+      <div className="ship-detail">
+        <span>Lv.{ lv }</span>
+        <span className="ship-type">{ type }</span>
+      </div>
+      <div className="slot-detail">
+        { slots.map((s, i) => s === -1 ? undefined : <Slot key={i} slotId={s.id} slot={s} />) }
+      </div>
     </div>
-    <div className="slot-detail">
-      { slots.map((s, i) => s === -1 ? undefined : <Slot key={i} slotId={s.id} slot={s} />) }
-    </div>
-  </div>
-))
+  )
+}
 
 export default Ship

@@ -20,9 +20,11 @@ export default connect(
     this.setState({ active: opt })
   }
   onDeleteClick = () => {
-    window.toggleModal("真的要删除人家吗！？嘤嘤嘤～～/残忍拒绝/好吧不删")
-    // const { onDeleteData, title } = this.props
-    // onDeleteData(title)
+    const { onDeleteData, title } = this.props
+    window.toggleModal(__('Delete'), __('Confirm?'), [{
+      name: __('Delete'),
+      func: () => onDeleteData(title),
+    }])
     this.setState({ active: 'opts' })
   }
   render() {

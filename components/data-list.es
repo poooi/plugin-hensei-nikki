@@ -61,7 +61,7 @@ export default connect(
               <OverlayTrigger key={i} placement="right" overlay={
                 <Popover id={`note-${title}`} style={{padding: 7}}>
                     <p>{ title }</p>
-                    <p>{ showData[title].note }</p>
+                    { showData[title].note ? <p>{ showData[title].note }</p> : undefined }
                 </Popover>
               }>
                 <Button style={{ margin: 0 }}

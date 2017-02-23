@@ -257,7 +257,7 @@ function getSaku25(data, $equipsData) {
     })
   }
   reconSaku = reconSaku * 2.00
-  shipSaku = Math.sqrt(shipSaku)
+  shipSaku = Math.sqrt(shipSaku) || 0
   totalSaku = reconSaku + radarSaku + shipSaku
 
   return {

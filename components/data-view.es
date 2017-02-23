@@ -12,7 +12,7 @@ const DataView = connect(
 )(({ title, fleets }) =>
   <div>
     <DataOpts title={title} />
-    <FleetsView fleets={fleets} />
+    <FleetsView fleets={[...fleets]} />
   </div>
 )
 
