@@ -14,14 +14,18 @@ const Slot = ({ slotId, slot }) => {
       <OverlayTrigger placement="top" overlay={overlay}>
         <span className="slot-name">{ name }</span>
       </OverlayTrigger>
-      <span className="slot-improvment">
-          &nbsp;&nbsp;{ lv ? <strong style={{color: '#45A9A5'}}>★{ lv }</strong> : ''}
+      {
+        (lv || (alv && 1<= alv && alv <= 7))
+        &&
+        <span className="slot-improvment">
           {
             alv && 1<= alv && alv <= 7
             ? <img className="alv-img" src={join(window.ROOT, 'assets', 'img', 'airplane', `alv${alv}.png`)} />
             : ''
           }
-     </span>
+          { lv ? <strong style={{color: '#45A9A5'}}>&nbsp;★{ lv }</strong> : undefined }
+        </span>
+      }
     </div>
   )
 }
