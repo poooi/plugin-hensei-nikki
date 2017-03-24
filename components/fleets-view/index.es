@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Tab, Tabs } from 'react-bootstrap'
+import { Tab, Tabs, Panel } from 'react-bootstrap'
 import Details from './details'
 import Ship from './ship'
 
 const Fleet = ({ fleet }) => (
-  <div>
+  <Panel className="fleets-container">
     <Details fleet={fleet} />
     <div className="ships-container">
       { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
     </div>
-  </div>
+  </Panel>
 )
 
 export default class FleetsView extends Component {
@@ -19,6 +19,11 @@ export default class FleetsView extends Component {
     this.state = {
       selectedKey: 0,
       tabName: [ 'I', 'II', 'III', 'IV' ],
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fleets !== this.props.fleets) {
+      this.setState({ selectedKey: 0 })
     }
   }
   onTabSelected = (selectedKey) => {
@@ -30,7 +35,8 @@ export default class FleetsView extends Component {
     const { fleets, code } = this.props
     const { tabName, selectedKey } = this.state
     const data = fleets || code
-    if (data.length > 1 && data[1] !== undefined) {
+
+    if (data.length > 1 && data[1]) {
       return (
         <Tabs activeKey={selectedKey}
               onSelect={this.onTabSelected}

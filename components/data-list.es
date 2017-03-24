@@ -16,11 +16,8 @@ export default connect(
     super(props)
     this.state = {
       keywords: '',
-      showData: '',
+      showData: props.data,
     }
-  }
-  componentDidMount() {
-    this.setState({ showData: this.props.data })
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ showData: nextProps.data })
@@ -46,7 +43,7 @@ export default connect(
     const { keywords, showData } = this.state
     const { onKeywordChange, onTitleSelected } = this
 
-    if (!data) return <div></div>
+    if (!data || !showData) return <div></div>
 
     return (
       <div className="title-list">

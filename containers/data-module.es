@@ -27,7 +27,7 @@ export default connect(
     return (
       <div className="hensei-list">
         <DataList onShowData={this.onShowData} activeTitle={activeTitle} />
-        { activeTitle ? <DataView title={activeTitle} /> : undefined }
+        { activeTitle && <DataView title={activeTitle} /> }
       </div>
     )
   }

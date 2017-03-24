@@ -43,7 +43,7 @@ export default connect(
   onSave = (e) => {
     const { title, note } = this.state
     const { onSaveTitle, onSaveNote, onCancel, type, onSaveData } = this.props
-    if (type === 'add') {
+    if ([ 'add', 'import' ].includes(type)) {
       onSaveData(title, note)
     } else {
       if (this.props.title !== title) onSaveTitle(this.props.title, title)

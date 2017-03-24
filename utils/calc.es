@@ -14,7 +14,7 @@ const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
   code: [ (fleet)[ shipItem, ... ], ... ]
 */
 function oldSlots(idArr, lvArr, alvArr) {
-  if (!idArr.length) return
+  if (!idArr.length) return []
   return idArr.map((id, i) => {
     const slot = { id }
     if (lvArr[i]) slot.lv = lvArr[i]
@@ -40,7 +40,7 @@ function oldVer(data) {
   } else {
     throw 'TypeError'
   }
-  return fleets
+  return fleets.map(f => f)
 }
 /*
   v3
@@ -153,8 +153,12 @@ function checkData(data) {
 function codeConversion(data) {
   if (data instanceof Array) {
     return oldVer(data) // thirdparty & HenseiNikki old version
-  } else if (data instanceof Object && [ 3, 4 ].indexOf(data.version) > 0) {
-    return newVer(data) // thirdparty new version
+  } else if (data instanceof Object) {
+    if ([ 3, 4 ].indexOf(data.version) > 0) {
+      return newVer(data) // thirdparty new version
+    } else if (data.version === 'poi-h-v1') {
+      return data.fleets
+    }
   }
 }
 
@@ -406,6 +410,17 @@ function getSaku33(data, $equipsData, teitokuLv, mapModifier=1.0) {
   }
 }
 
+const speedInterpretation = {
+  [5]: 'Slow',
+  [10]: 'Fast',
+  [15]: 'Fast+',
+  [20]: 'Fastest',
+}
+
+function getSoku(fleet) {
+  return speedInterpretation[Math.min(...fleet.map(ship => ship.soku).filter(soku => !!soku))]
+}
+
 export function getDetails(fleet, $equips, $ships, teitokuLv) {
   return {
     tyku: getTyku(fleet, $equips, $ships),
@@ -414,17 +429,21 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
     saku33: getSaku33(fleet, $equips, teitokuLv),
     saku33x3: getSaku33(fleet, $equips, teitokuLv, 3.0),
     saku33x4: getSaku33(fleet, $equips, teitokuLv, 4.0),
+    soku: getSoku(fleet),
   }
 }
 export function transSavedData(oldData) {
   const newData = {}
   for (const title in oldData) {
+    console.log(title, oldData[title]);
     try {
       const { version, ships, tags } = oldData[title]
       let tempData = {}
       if (version !== 'poi-h-v1') {
         tempData.fleets = codeConversion(ships)
-        tempData.note = tags.join(' ') || ''
+        tempData.note = typeof tags === 'object' && tags instanceof Array
+                      ? tags.join(' ')
+                      : ''
         tempData.version = 'poi-h-v1'
       } else {
         tempData = oldData[title]
@@ -450,6 +469,7 @@ export function getHenseiDataByApi(fleets, ships, equips) {
       const id = s.api_ship_id
       const lv = s.api_lv
       const saku = s.api_sakuteki[0]
+      const soku = s.api_soku
       const slots = compact(e.map(slotId => {
         if (slotId > 0) {
           const slot = equips[slotId]
@@ -465,6 +485,7 @@ export function getHenseiDataByApi(fleets, ships, equips) {
         lv,
         saku,
         slots,
+        soku,
       }
     })
   )
