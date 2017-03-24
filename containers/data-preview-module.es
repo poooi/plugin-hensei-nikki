@@ -70,14 +70,13 @@ const SelectInput = connect(
     this.props.onShowPreview(this.getHenseiData())
   }
   onNext = () => {
-    const { onNext, ships, equips } = this.props
-    const data = this.getHenseiData()
-    onNext(getHenseiDataByApi(data, ships, equips))
+    this.props.onNext(this.getHenseiData())
   }
   getHenseiData = () => {
-    const { fleets } = this.props
+    const { fleets, ships, equips } = this.props
     const { deckChecked } = this.state
-    return fleets.filter((f, i) => deckChecked[i]).map(f => f.api_ship.map(s => ({ id: s })))
+    const ids = fleets.filter((f, i) => deckChecked[i]).map(f => f.api_ship.map(s => ({ id: s })))
+    return getHenseiDataByApi(ids, ships, equips)
   }
   render() {
     const { fleets } = this.props
@@ -137,10 +136,8 @@ export default class DataPreviewModule extends Component {
           : <CodeInput onShowPreview={this.onShowPreview}
                        onNext={this.onNext} />
         }
-        { previewShow ? <FleetsView code={preCode} /> : ''}
+        { previewShow && <FleetsView code={preCode} /> }
       </Well>
     )
   }
 }
-
-// TODO: data => fleets => view

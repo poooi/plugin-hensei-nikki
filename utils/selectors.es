@@ -23,6 +23,9 @@ export const henseiDataSelector = createSelector(
 export const fleetsByTitleSelector = (title) =>
   createSelector(henseiDataSelector, ({ data }) => ({ fleets: (data[title] || { fleets: {} }).fleets }))
 
+export const dataByTitleSelector = (title) =>
+  createSelector(henseiDataSelector, ({ data }) => ({ data: data[title] || {} }))
+
 export const constShipInfoSelector = memoize(id =>
   createSelector(constSelector, ({ $ships, $shipTypes }) => ({
     name: getI18n(($ships[id] || { api_name: '' }).api_name),
@@ -70,8 +73,8 @@ export const getShipInfoByApi = memoize(id =>
   })
 )
 
-export const shipInfoSelector = (id, ship) =>
-  ship.lv ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
+export const shipInfoSelector = (id, ship) => getShipInfoByData(id, ship)
+  // ship.saku ? getShipInfoByData(id, ship) : getShipInfoByApi(id)
 
 
 export const getEquipInfoByData = memoize((id, { lv, alv }) =>

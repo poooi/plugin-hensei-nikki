@@ -2,27 +2,26 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FormGroup, FormControl, ControlLabel, Button, Well } from 'react-bootstrap'
 import { shell, clipboard } from 'electron'
-import { __, fleetsByTitleSelector, dataToThirdparty } from '../utils'
+import { __, dataByTitleSelector, dataToThirdparty } from '../utils'
 
 export default connect(
-  (state, { title }) => fleetsByTitleSelector(title)
+  (state, { title }) => dataByTitleSelector(title)
 )(class DataExportModule extends Component {
   constructor(props) {
     super(props)
+    const { version, fleets } = props.data
     this.state = {
-      code: '',
+      code: JSON.stringify({ version, fleets }),
       type: 'poi',
     }
   }
-  componentDidMount() {
-    this.setState({ code: JSON.stringify(this.props.fleets) })
-  }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.fleets !== this.props.fleets) {
-      const fleets = nextProps.type === 'poi'
-                   ? nextProps.fleets
-                   : dataToThirdparty(nextProps.fleets)
-      const code = JSON.stringify(fleets)
+    if (nextProps.data !== this.props.data) {
+      const { version, fleets } = nextProps.data
+      const data = nextProps.type === 'poi'
+                 ? { version, fleets }
+                 : dataToThirdparty(nextProps.fleets)
+      const code = JSON.stringify(data)
       this.setState({ code })
     }
   }
@@ -32,10 +31,10 @@ export default connect(
   }
   onTypeSelected = (type) => {
     if (type === this.state.type) return
-    const { fleets } = this.props
+    const { version, fleets } = this.props.data
     const code = type === 'poi'
-               ? JSON.stringify(fleets)
-               : JSON.stringify(dataToThirdparty(fleets))
+               ? JSON.stringify({ version, fleets })
+               : JSON.stringify(dataToThirdparty(data.fleets))
     this.setState({
       code,
       type,
@@ -67,7 +66,7 @@ export default connect(
                        componentClass="textarea"
                        label={__('Code')}
                        placeholder={__('Code')}
-                       value={this.state.code} />
+                       defaultValue={this.state.code} />
         </div>
       </Well>
     )

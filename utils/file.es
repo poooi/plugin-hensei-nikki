@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import { join } from 'path-extra'
-import FileWriter from 'views/utils/fileWriter'
+import FileWriter from 'views/utils/file-writer'
 import { transSavedData } from './calc'
 
 const { APPDATA_PATH, getStore } = window

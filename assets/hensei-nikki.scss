@@ -115,6 +115,12 @@
       }
     }
   }
+  .fleets-container {
+    margin: 10px;
+    .panel-body {
+      padding: 10px 0;
+    }
+  }
   .data-export-module, .data-edit-module, .data-preview-module {
     display: block;
     position: absolute;
@@ -165,6 +171,9 @@
   #hensei-list-tabs {
     box-sizing: border-box;
     padding: 10px;
+    .fleets-container {
+      margin: 0;
+    }
   }
 }
 #hensei-nikki-details-recon {

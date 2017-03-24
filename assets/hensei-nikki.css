@@ -86,6 +86,10 @@
         height: 50%;
         width: 50%;
         margin: 10px; }
+#HenseiNikki .fleets-container {
+  margin: 10px; }
+  #HenseiNikki .fleets-container .panel-body {
+    padding: 10px 0; }
 #HenseiNikki .data-export-module, #HenseiNikki .data-edit-module, #HenseiNikki .data-preview-module {
   display: block;
   position: absolute;
@@ -123,6 +127,8 @@
 #HenseiNikki #hensei-list-tabs {
   box-sizing: border-box;
   padding: 10px; }
+  #HenseiNikki #hensei-list-tabs .fleets-container {
+    margin: 0; }
 
 #hensei-nikki-details-recon .recon-title {
   font-weight: bold;

@@ -32,7 +32,7 @@ const Ship = ({ shipId, ship }) => {
     <div className="ship-item">
       <span className="ship-name">{ name }</span>
       <div className="ship-detail">
-        <span>Lv.{ lv }</span>
+        { lv && <span>Lv.{ lv }</span> }
         <span className="ship-type">{ type }</span>
       </div>
       <div className="slot-detail">
