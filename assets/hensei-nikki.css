@@ -78,12 +78,14 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       display: block;
-      flex-shrink: 1;
       flex-grow: 1; }
     #HenseiNikki .slotitem-container .slot-improvment {
       display: flex;
       flex-flow: row nowrap;
-      flex: none; }
+      flex: none;
+      width: 44px; }
+      #HenseiNikki .slotitem-container .slot-improvment strong {
+        width: 30px; }
   #HenseiNikki .ships-container {
     display: flex;
     flex-flow: row wrap;
