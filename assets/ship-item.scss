@@ -91,17 +91,21 @@
       }
       .slot-name {
         font-size: 90%;
+        //width: calc(100% - 30px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         display: block;
-        flex-shrink: 1;
         flex-grow: 1;
       }
       .slot-improvment {
         display: flex;
         flex-flow: row nowrap;
         flex: none;
+        width: 44px;
+        strong {
+          width: 30px;
+        }
       }
     }
     .ships-container {
