@@ -1,57 +1,41 @@
 module.exports = {
+  'extends': 'airbnb',
+  'plugins': [
+    'react',
+    'jsx-a11y',
+    'import'
+  ],
   'env': {
     'browser': true,
     'es6': true,
     'node': true,
   },
-  'extends': [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-  ],
-  'installedESLint': true,
-  'parserOptions': {
-    'ecmaVersion': 7,
-    'ecmaFeatures': {
-      'experimentalObjectRestSpread': true,
-      'jsx': true,
-    },
-    'sourceType': 'module',
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
-  'plugins': [
-    'import',
-    'react',
-  ],
   'parser': 'babel-eslint',
   'rules': {
-    'comma-dangle': ['error', 'always-multiline'],
-    'indent': ['warn', 2],
-    'linebreak-style': ['error', 'unix'],
-    'no-console': ['warn', {'allow': ['warn', 'error']}],
-    'no-var': 'error',
-    'no-unused-vars': ['warn', {'args': 'none'}],
     'semi': ['error', 'never'],
-    'unicode-bom': 'error',
-    'prefer-const': ['error', {'destructuring': 'all'}],
-    'react/prop-types': [0],
-    'no-irregular-whitespace': [
-      'error',
-      {
-        'skipStrings': true,
-        'skipTemplates': true,
-        'skipComments': true
-      }
-    ],
+    'import/no-unresolved': [2, { 'ignore': ['views/.*'] }],
+    'react/jsx-filename-extension': 'off',
+    'no-underscore-dangle': ['error', { 'allow': ['__'], 'allowAfterThis': true }],
+    'import/extensions': ['error', { 'es': 'never' }],
+    'import/no-extraneous-dependencies': 'off',
+    'comma-dangle': ['error', 'always-multiline'],
+    'camelcase': 'off',
+    'no-confusing-arrow': 'off',
   },
   'settings': {
     'import/resolver': {
       'node': {
-        'extensions': ['', '.js', '.jsx', '.es', '.coffee', '.cjsx'],
-        'paths': [__dirname]
+        'extensions': ['.js', '.jsx', '.es'],
+        'paths': [__dirname],
       },
     },
     'import/core-modules': [
+      'bluebird',
       'electron',
       'react',
       'react-redux',
@@ -63,7 +47,13 @@ module.exports = {
       'fs-extra',
       'lodash',
       'cson',
-      'fast-memoize',
+      'react-dom',
+      'redux',
+      'semver',
+      'prop-types',
     ],
+  },
+  globals: {
+    config: false,
   },
 }
