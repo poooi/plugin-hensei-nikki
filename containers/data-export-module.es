@@ -29,16 +29,14 @@ export default connect(
     clipboard.writeText(this.state.code)
     window.toggleModal(__('Copy'), __('The code has been copied to the clipboard.'))
   }
-  onTypeSelected = (type) => {
+  onTypeSelected = (e) => {
+    const type = e.target.value
     if (type === this.state.type) return
     const { version, fleets } = this.props.data
     const code = type === 'poi'
                ? JSON.stringify({ version, fleets })
-               : JSON.stringify(dataToThirdparty(data.fleets))
-    this.setState({
-      code,
-      type,
-    })
+               : JSON.stringify(dataToThirdparty(fleets))
+    this.setState({ code, type })
   }
   render() {
     return (
@@ -66,7 +64,7 @@ export default connect(
                        componentClass="textarea"
                        label={__('Code')}
                        placeholder={__('Code')}
-                       defaultValue={this.state.code} />
+                       value={this.state.code} />
         </div>
       </Well>
     )
