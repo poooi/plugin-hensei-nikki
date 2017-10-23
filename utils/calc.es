@@ -435,7 +435,6 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
 export function transSavedData(oldData) {
   const newData = {}
   for (const title in oldData) {
-    console.log(title, oldData[title]);
     try {
       const { version, ships, tags } = oldData[title]
       let tempData = {}
@@ -491,7 +490,7 @@ export function getHenseiDataByApi(fleets, ships, equips) {
   )
 }
 export function dataToThirdparty(oldData) {
-  const newData = {}
+  const newData = { version: 4 }
   oldData.forEach((fleet, fi) => {
     const f = {}
     if (fleet) {
@@ -501,12 +500,12 @@ export function dataToThirdparty(oldData) {
         slots.forEach((slot, ei) => {
           const e = { id: slot.id, rf: slot.lv }
           if (slot.alv) e.mas = slot.alv
-          s.items[`i${ei}`] = e
+          s.items[`i${ei + 1}`] = e
         })
-        f[`s${si}`] = s
+        f[`s${si + 1}`] = s
       })
     }
-    newData[`f${fi}`] = f
+    newData[`f${fi + 1}`] = f
   })
   return newData
 }

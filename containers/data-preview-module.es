@@ -115,6 +115,7 @@ export default class DataPreviewModule extends Component {
     this.props.onAddData(data)
   }
   onShowPreview = (data) => {
+    // TODO: login
     if (!data) {
       this.setState({ previewShow: false })
       return
