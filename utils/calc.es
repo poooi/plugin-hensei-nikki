@@ -494,16 +494,18 @@ export function dataToThirdparty(oldData) {
   const newData = {}
   oldData.forEach((fleet, fi) => {
     const f = {}
-    fleet.forEach((ship, si) => {
-      const { id, lv, slots } = ship
-      const s = { id, lv, luck: -1, items: {} }
-      slots.forEach((slot, ei) => {
-        const e = { id: slot.id, rf: slot.lv }
-        if (slot.alv) e.mas = slot.alv
-        s.items[`i${ei}`] = e
+    if (fleet) {
+      fleet.forEach((ship, si) => {
+        const { id, lv, slots } = ship
+        const s = { id, lv, luck: -1, items: {} }
+        slots.forEach((slot, ei) => {
+          const e = { id: slot.id, rf: slot.lv }
+          if (slot.alv) e.mas = slot.alv
+          s.items[`i${ei}`] = e
+        })
+        f[`s${si}`] = s
       })
-      f[`s${si}`] = s
-    })
+    }
     newData[`f${fi}`] = f
   })
   return newData
