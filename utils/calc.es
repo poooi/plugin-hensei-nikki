@@ -60,12 +60,10 @@ function newSlots(data) {
       if (rp) slot.alv = rp
       if (mas) slot.alv = mas
       return slot
-    } else {
-      return []
     }
   })
   if (data.ix) slots.ex = data.ix
-  return slots
+  return slots.filter(s => s)
 }
 function newFleet(data) {
   return range(1, 7).map(i => {

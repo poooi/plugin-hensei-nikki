@@ -132,10 +132,8 @@ export default class DataPreviewModule extends Component {
         <Button className="exit-btn" onClick={this.props.onCancel}>X</Button>
         {
           this.props.type === 'add'
-          ? <SelectInput onShowPreview={this.onShowPreview}
-                         onNext={this.onNext} />
-          : <CodeInput onShowPreview={this.onShowPreview}
-                       onNext={this.onNext} />
+          ? <SelectInput onShowPreview={this.onShowPreview} onNext={this.onNext} />
+          : <CodeInput onShowPreview={this.onShowPreview} onNext={this.onNext} />
         }
         { previewShow && <FleetsView code={preCode} /> }
       </Well>
