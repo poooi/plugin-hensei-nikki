@@ -1,0 +1,180 @@
+@import "ship-item";
+#HenseiNikki {
+  .hidden {
+    display: none;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  #henseinikki-add-dropdown {
+    display: block;
+    position: absolute;
+    margin-top: 7px;
+  }
+  .opts {
+    .back {
+      margin: 10px;
+    }
+    .sub-opts {
+      display: flex;
+      justify-content: space-around;
+      margin: 10px;
+      margin-bottom: 0;
+    }
+  }
+  .data-opts {
+    width: 90%;
+    margin-left: 20px;
+    margin-top: -3px;
+  }
+  .import-module {
+    display: block;
+    padding: 15px;
+  }
+  .container-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .hensei-list {
+    display: flex;
+    flex: none;
+    .ships-container {
+      display: flex;
+      flex-flow: row wrap;
+      padding-top: 10px;
+      .details-container {
+        display: flex;
+        justify-content: center;
+        padding: 0 0 0 25px;
+        > span {
+          margin-right: 15px;
+        }
+      }
+    }
+    .title-list {
+      flex: 0 1;
+      max-width: 80px;
+      min-width: 50px;
+      margin-top: 30px;
+      .title-keywords {
+        flex: 1;
+        padding: 0;
+        input, .form-group {
+          height: 100%;
+          padding: 0;
+        }
+      }
+      .titles-container {
+        display: flex;
+        flex-direction: column;
+        button {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-wrap: break-word;
+          white-space: nowrap;
+          margin: 0;
+        }
+        #titles {
+          padding: 7px;
+          .tag {
+            display: inline-block;
+            margin: 5px;
+            font-size: 14px;
+          }
+        }
+        .details-container{
+          display: flex;
+          justify-content: center;
+          padding: 0 0 0 25px;
+          & > span {
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+    .title-editor {
+      margin-top: 10px;
+      margin-bottom: 0;
+      .form-control {
+        margin: 10px;
+        button {
+          height: 50%;
+          width: 50%;
+          margin: 10px;
+        }
+      }
+    }
+  }
+  .fleets-container {
+    margin: 10px;
+    .panel-body {
+      padding: 10px 0;
+    }
+  }
+  .data-export-module, .data-edit-module, .data-preview-module {
+    display: block;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+  }
+  .data-export-module {
+    padding-top: 50px;
+    .exit-btn {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+    }
+  }
+  .data-edit-module {
+    textarea {
+      height: 300px;
+    }
+  }
+  .data-preview-module {
+    textarea {
+      height: 300px;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-around;
+      button {
+        width: 40%;
+      }
+    }
+    .fleets-checkzone {
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      align-items: center;
+      .checkbox {
+        display: inline-block;
+        margin: 10px 0;
+      }
+    }
+  }
+  #hensei-list-tabs {
+    box-sizing: border-box;
+    padding: 10px;
+    .fleets-container {
+      margin: 0;
+    }
+  }
+}
+#hensei-nikki-details-recon {
+  .recon-title {
+    font-weight: bold;
+    text-align: left;
+  }
+  .recon-entry {
+    display:flex;
+    justify-content: space-between;
+    text-align: left;
+    width: 160px;
+  }
+}
