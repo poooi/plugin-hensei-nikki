@@ -29,7 +29,7 @@ export const dataByTitleSelector = (title) =>
 export const constShipInfoSelector = memoize(id =>
   createSelector(constSelector, ({ $ships, $shipTypes }) => ({
     name: getI18n(($ships[id] || { api_name: '' }).api_name),
-    type: getI18n($shipTypes[$ships[id].api_stype]),
+    type: getI18n($shipTypes[$ships[id].api_stype].api_name),
   }))
 )
 export const constEquipInfoSelector = memoize(id =>
@@ -44,7 +44,7 @@ export const getShipInfoByData = memoize((id, { lv, saku, slots }) => {
     constShipInfoSelector(id),
     ({ name, type }) => ({
       name,
-      type: getI18n(type.api_name),
+      type,
       saku,
       lv,
       slots,
