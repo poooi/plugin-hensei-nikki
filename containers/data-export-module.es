@@ -61,6 +61,7 @@ export default connect(
         <div className="container-col">
           <Button bsSize="small" onClick={this.onCopy}>{__('Copy')}</Button>
           <FormControl style={{height: 250}}
+                       readOnly
                        componentClass="textarea"
                        label={__('Code')}
                        placeholder={__('Code')}
