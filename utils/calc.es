@@ -167,8 +167,11 @@ const aircraftLevelBonus = {
   '8': [0, 0, 0, 0, 0, 0, 0, 0, 0],       // 艦上攻撃機
   '11': [0, 1, 1, 1, 1, 3, 3, 6, 6],      // 水上爆撃機
   '45': [0, 0, 2, 5, 9, 14, 14, 22, 22],  // 水上戦闘機
-  '39': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式景雲改
-  '40': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 橘花改
+  '47': [0, 0, 0, 0, 0, 0, 0, 0, 0],       // 陸上攻撃機
+  '48': [0, 0, 2, 5, 9, 14, 14, 22, 22],   // 局地戦闘機 陸軍戦闘機
+  '56': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式戦闘機
+  '57': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式戦闘爆撃機
+  '58': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式攻撃機
 }
 
 function getShipSaku(id, lv) {
@@ -182,11 +185,13 @@ function getShipSaku(id, lv) {
 }
 
 //  data = { shipId: { slots: [ { id, lv, alv }, ... , ex: { id } ], lv }, ... }
-function getTyku(data, $equipsData, $shipsData) {
+function getTyku(data, $equipsData, $shipsData, landbaseStatus=0) {
   let minTyku = 0
   let maxTyku = 0
   let basicTyku = 0
+  let reconBonus = 1
   for (const ship of data) {
+    if (!ship.id) continue
     const { slots, id } = ship
     const maxeq = $shipsData[id].api_maxeq
     slots.forEach((slot, i) => {
@@ -195,27 +200,59 @@ function getTyku(data, $equipsData, $shipsData) {
       const tempAlv = alv || 0
       const $equip = $equipsData[id]
       const levelFactor = $equip.api_baku > 0 ? 0.25 : 0.2
-      if ([6, 7, 8].includes($equip.api_type[3])) {
-        // 艦载機
+
+      if ([6, 7, 8, 45, 47, 56, 57, 58].includes($equip.api_type[2])) {
+        // 艦载機 · 水上戦闘機 · 陸上攻撃機 · 噴式機
         tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * levelFactor)
-        tempTyku += aircraftLevelBonus[$equip.api_type[3]][tempAlv]
+        tempTyku += aircraftLevelBonus[$equip.api_type[2]][tempAlv]
         basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
-        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
-      } else if ($equip.api_type[3] == 10 && ($equip.api_type[2] == 11 || $equip.api_type[2] == 45)) {
-        // 水上機
+        maxTyku += Math.floor(tempTyku + Math.sqrt((aircraftExpTable[tempAlv + 1] - 1) / 10))
+      } else if ([11].includes($equip.api_type[2])) {
+        // 水上爆撃機
         tempTyku += Math.sqrt(maxeq[i]) * $equip.api_tyku
         tempTyku += aircraftLevelBonus[$equip.api_type[2]][tempAlv]
         basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
-        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
-      } else if ([39, 40].includes($equip.api_type[3])) {
-        // 噴式機
-        tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + (lv || 0) * levelFactor)
-        tempTyku += aircraftLevelBonus[$equip.api_type[3]][tempAlv]
+        maxTyku += Math.floor(tempTyku + Math.sqrt((aircraftExpTable[tempAlv + 1] - 1) / 10))
+      } else if ([48].includes($equip.api_type[2])) {
+        // 局戦 · 陸戦
+        let landbaseBonus = 0
+        if (landbaseStatus === 1) landbaseBonus = 1.5 * $equip.api_houk // (対空 ＋ 迎撃 × 1.5)
+        if (landbaseStatus === 2) landbaseBonus = $equip.api_houk + 2 * $equip.api_houm // (対空 ＋ 迎撃 ＋ 対爆 × 2)
+        tempTyku += Math.sqrt(maxeq[i]) * ($equip.api_tyku + landbaseBonus + (lv || 0) * levelFactor)
+        tempTyku += aircraftLevelBonus[$equip.api_type[2]][tempAlv]
         basicTyku += Math.floor(Math.sqrt(maxeq[i]) * $equip.api_tyku)
         minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
-        maxTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv + 1] / 10))
+        maxTyku += Math.floor(tempTyku + Math.sqrt((aircraftExpTable[tempAlv + 1] - 1) / 10))
+      } else if ([10, 41].includes($equip.api_type[2])) {
+        // 水偵・飛行艇
+        if (landbaseStatus == 2) {
+          if ($equip.api_saku >= 9) {
+            reconBonus = Math.max(reconBonus, 1.16)
+          } else if ($equip.api_saku == 8) {
+            reconBonus = Math.max(reconBonus, 1.13)
+          } else {
+            reconBonus = Math.max(reconBonus, 1.1)
+          }
+        } else if (landbaseStatus == 1) {
+          tempTyku += Math.sqrt(maxeq[i]) * $equip.api_tyku
+          minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+          maxTyku += Math.floor(tempTyku + Math.sqrt((aircraftExpTable[tempAlv + 1] - 1) / 10))
+        }
+      } else if ([9].includes($equip.api_type[2]) && landbaseStatus == 2) {
+        // 艦偵
+        if (landbaseStatus == 2) {
+          if ($equip.api_saku >= 9) {
+            reconBonus = Math.max(reconBonus, 1.3)
+          } else {
+            reconBonus = Math.max(reconBonus, 1.2)
+          }
+        } else if (landbaseStatus == 1) {
+          tempTyku += Math.sqrt(maxeq[i]) * $equip.api_tyku
+          minTyku += Math.floor(tempTyku + Math.sqrt(aircraftExpTable[tempAlv] / 10))
+          maxTyku += Math.floor(tempTyku + Math.sqrt((aircraftExpTable[tempAlv + 1] - 1) / 10))
+        }
       }
     })
   }
@@ -234,6 +271,7 @@ function getSaku25(data, $equipsData) {
   let radarSaku = 0
   let totalSaku = 0
   for (const ship of data) {
+    if (!ship.id) continue
     const { slots, saku, lv } = ship
     shipSaku += saku || 0
     slots.forEach(slot => {
@@ -280,6 +318,7 @@ function getSaku25a(data, $equipsData, teitokuLv) {
   let equipSaku = 0
   let teitokuSaku = 0
   for (const ship of data) {
+    if (!ship.id) continue
     const { slots, lv, saku } = ship
     let shipPureSaku = saku || 0
     slots.forEach(slot => {
@@ -443,6 +482,7 @@ export function transSavedData(oldData) {
                       : ''
         tempData.version = 'poi-h-v1'
       } else {
+        const fleet = []
         tempData = oldData[title]
       }
       if (!tempData.fleets) continue
@@ -454,38 +494,40 @@ export function transSavedData(oldData) {
   return newData
 }
 export function getHenseiDataByCode(code) {
-  return codeConversion(code)
+  return compact(codeConversion(code))
 }
 export function getHenseiDataByApi(fleets, ships, equips) {
-  return fleets.map(fleet =>
-    fleet.map(ship => {
-      const s = ships[ship.id]
-      const e = s.api_slot                // arr
-      const ex = s.api_slot_ex            // int
+  return compact(fleets.map(fleet =>
+    compact(fleet.map(ship => {
+      if (ship.id !== -1) {
+        const s = ships[ship.id]
+        const e = s.api_slot                // arr
+        const ex = s.api_slot_ex            // int
 
-      const id = s.api_ship_id
-      const lv = s.api_lv
-      const saku = s.api_sakuteki[0]
-      const soku = s.api_soku
-      const slots = compact(e.map(slotId => {
-        if (slotId > 0) {
-          const slot = equips[slotId]
-          const sData = { id: slot.api_slotitem_id, lv: slot.api_level }
-          if (slot.api_alv) sData.alv = slot.api_alv
-          return sData
+        const id = s.api_ship_id
+        const lv = s.api_lv
+        const saku = s.api_sakuteki[0]
+        const soku = s.api_soku
+        const slots = compact(e.map(slotId => {
+          if (slotId > 0) {
+            const slot = equips[slotId]
+            const sData = { id: slot.api_slotitem_id, lv: slot.api_level }
+            if (slot.api_alv) sData.alv = slot.api_alv
+            return sData
+          }
+        }))
+        if (ex > 0) slots.ex = { id: ex }
+
+        return {
+          id,
+          lv,
+          saku,
+          slots,
+          soku,
         }
-      }))
-      if (ex > 0) slots.ex = { id: ex }
-
-      return {
-        id,
-        lv,
-        saku,
-        slots,
-        soku,
       }
-    })
-  )
+    }))
+  ))
 }
 export function dataToThirdparty(oldData) {
   const newData = { version: 4 }
