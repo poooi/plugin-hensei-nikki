@@ -8,7 +8,7 @@ const Fleet = ({ fleet }) => (
   <Panel className="fleets-container">
     <Details fleet={fleet} />
     <div className="ships-container">
-      { fleet.map((ship, i) => <Ship key={i} shipId={ship.id} ship={ship} />) }
+      { fleet.map((ship, i) => ship.id ? <Ship key={i} shipId={ship.id} ship={ship} /> : '') }
     </div>
   </Panel>
 )
@@ -44,6 +44,7 @@ export default class FleetsView extends Component {
               id="hensei-list-tabs">
           {
             data.map((fleet, i) =>
+              !fleet ? '' :
               <Tab eventKey={i} title={tabName[i]} key={i}>
                 <Fleet fleet={fleet} />
               </Tab>
