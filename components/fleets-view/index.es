@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Tab, Tabs, Panel } from 'react-bootstrap'
+import { Tab, Tabs } from 'react-bootstrap'
 import Details from './details'
 import Ship from './ship'
+import Panel from './compat-panel'
 
 const Fleet = ({ fleet }) => (
   <Panel className="fleets-container">
