@@ -4,7 +4,10 @@
   "description": "a plugin which can save your fleet organize for poi",
   "main": "index.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "node-sass-chokidar": "0.0.3",
+    "poi-util-transpile": "^8.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
