@@ -9,6 +9,8 @@
     "poi-util-transpile": "^8.0.0"
   },
   "scripts": {
+    "prepack": "poi-util-transpile --sm --replace",
+    "postpublish": "npm run reset",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
