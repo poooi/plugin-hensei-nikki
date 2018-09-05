@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer, observe } from 'redux-observers'
 import { join } from 'path-extra'
-import { store } from 'views/createStore'
+import { store } from 'views/create-store'
 
 import { reducer } from './redux'
 import { henseiDataSelector, saveData } from './utils'
