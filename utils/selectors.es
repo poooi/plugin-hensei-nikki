@@ -8,7 +8,10 @@ import {
 } from 'views/utils/selectors'
 
 const REDUCER_EXTENSION_KEY = 'poi-plugin-hensei-nikki'
-const getI18n = window.i18n.resources.__
+
+const { resources } = window.i18n
+
+const getI18n = s => resources.fixedT ? resources.fixedT(s, { keySeparator: false }) : resources.__(s)
 
 export const initStatusSelector = createSelector(
   extensionSelectorFactory(REDUCER_EXTENSION_KEY),
