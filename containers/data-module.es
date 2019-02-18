@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { first } from 'lodash'
 import DataList from '../components/data-list'
 import DataView from '../components/data-view'
 import { henseiDataSelector } from '../utils'
@@ -16,7 +17,12 @@ export default connect(
   componentWillReceiveProps(nextProps) {
     const { data } = nextProps
     const { activeTitle } = this.state
-    if (activeTitle && !data[activeTitle]) this.setState({ activeTitle: '' })
+    if (activeTitle && !data[activeTitle]) {
+      this.setState({ activeTitle: '' })
+    }
+    if (!activeTitle && Object.keys(data).length > 0) {
+      this.setState({ activeTitle: first(data).title })
+    }
   }
   onShowData = (title) => {
     this.setState({ activeTitle: title })

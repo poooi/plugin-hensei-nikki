@@ -2,7 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { constSelector } from 'views/utils/selectors'
-import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import {
+  Button,
+  Popover,
+  Position,
+  InputGroup,
+  PopoverInteractionKind,
+} from '@blueprintjs/core'
+// import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import { __, henseiDataSelector, dataFilter } from '../utils'
 
 export default connect(
@@ -41,36 +48,69 @@ export default connect(
   render() {
     const { activeTitle, data } = this.props
     const { keywords, showData } = this.state
-    const { onKeywordChange, onTitleSelected } = this
+    const { onTitleSelected } = this
 
-    if (!data || !showData) return <div></div>
+    if (!Object.keys(data).length || !Object.keys(showData).length) return <></>
 
     return (
-      <div className="title-list">
-        <FormControl type="text"
-                     className="title-keywords"
-                     value={keywords}
-                     placeholder={__("Keywords")}
-                     onChange={onKeywordChange} />
-        <ButtonGroup vertical bsSize="xsmall" className="titles-container">
-          {
-            Object.keys(showData).map((title, i) => (
-              <OverlayTrigger key={i} placement="right" overlay={
-                <Popover id={`note-${title}`} style={{padding: 7}}>
-                    <p>{ title }</p>
-                    { showData[title].note ? <p>{ showData[title].note }</p> : undefined }
-                </Popover>
-              }>
-                <Button style={{ margin: 0 }}
-                        onClick={onTitleSelected.bind(this, title)}
-                        className={activeTitle === title ? 'active' : ''}>
-                  {title}
-                </Button>
-              </OverlayTrigger>
-            ))
-          }
-        </ButtonGroup>
-      </div>
+      <Popover
+        className="title-selector"
+        position={Position.BOTTOM}
+        content={
+          <div className="title-container">
+            {
+              Object.keys(showData).length > 10 && (
+                <InputGroup
+                  leftIcon="filter"
+                  onChange={this.onKeywordChange}
+                  placeholder={__('Keywords')}
+                  value={keywords}
+                />
+              )
+            }
+            <div>
+              {
+                Object.keys(showData).map((title, i) => (
+                  showData[title].note
+                    ? (
+                      <Popover
+                        key={i}
+                        position={Position.BOTTOM}
+                        interactionKind={PopoverInteractionKind}
+                        content={
+                          <div>{showData[title].note}</div>
+                        }
+                      >
+                        <Button
+                          onClick={onTitleSelected.bind(this, title)}
+                          disabled={activeTitle === title}
+                        >
+                          {title}
+                        </Button>
+                      </Popover>
+                    )
+                  : (
+                    <Button
+                      key={i}
+                      onClick={onTitleSelected.bind(this, title)}
+                      disabled={activeTitle === title}
+                    >
+                      {title}
+                    </Button>
+                  )
+                ))
+              }
+            </div>
+          </div>
+        }
+      >
+        <Button
+          className="selected-title"
+          rightIcon="caret-down"
+        >
+          { activeTitle }
+        </Button>
+      </Popover>
     )
   }
 })

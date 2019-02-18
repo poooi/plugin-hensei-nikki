@@ -122,34 +122,37 @@
       overflow: hidden;
       flex-direction: column;
       align-content: center; } }
-#HenseiNikki .hidden {
-  display: none; }
-#HenseiNikki ::-webkit-scrollbar {
-  width: 10px; }
-#HenseiNikki #henseinikki-add-dropdown {
-  display: block;
-  position: absolute;
-  margin-top: 7px; }
-#HenseiNikki .opts .back {
-  margin: 10px; }
-#HenseiNikki .opts .sub-opts {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px;
-  margin-bottom: 0; }
-#HenseiNikki .data-opts {
-  width: 90%;
-  margin-left: 20px;
-  margin-top: -3px; }
-#HenseiNikki .import-module {
-  display: block;
-  padding: 15px; }
-#HenseiNikki .container-col {
-  display: flex;
-  flex-direction: column; }
-#HenseiNikki .hensei-list {
-  display: flex;
-  flex: none; }
+#HenseiNikki {
+  position: relative;
+  padding: 1em; }
+  #HenseiNikki .options {
+    position: absolute;
+    top: 1em;
+    left: 1em; }
+  #HenseiNikki .bp3-control-group {
+    margin-bottom: 2em; }
+  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab,
+  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab-indicator-wrapper {
+    width: 25%;
+    margin: 0;
+    text-align: center; }
+  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab-indicator {
+    width: 100%; }
+  #HenseiNikki .container-col {
+    display: flex;
+    flex-direction: column; }
+  #HenseiNikki .hensei-list .title-selector {
+    display: block;
+    width: calc(100% - 3em);
+    margin-left: 3em; }
+    #HenseiNikki .hensei-list .title-selector .bp3-popover-target {
+      position: relative;
+      width: 100%; }
+      #HenseiNikki .hensei-list .title-selector .bp3-popover-target .bp3-traget {
+        position: absolute;
+        right: 1em; }
+  #HenseiNikki .hensei-list .bp3-button-group {
+    margin: 1em 0; }
   #HenseiNikki .hensei-list .ships-container {
     display: flex;
     flex-flow: row wrap;
@@ -201,49 +204,24 @@
         height: 50%;
         width: 50%;
         margin: 10px; }
-#HenseiNikki .fleets-container {
-  margin: 10px; }
-  #HenseiNikki .fleets-container .panel-body {
-    padding: 10px 0; }
-#HenseiNikki .data-export-module, #HenseiNikki .data-edit-module, #HenseiNikki .data-preview-module {
-  display: block;
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: auto; }
-#HenseiNikki .data-export-module {
-  padding-top: 50px; }
-  #HenseiNikki .data-export-module .exit-btn {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0; }
-#HenseiNikki .data-edit-module textarea {
-  height: 300px; }
-#HenseiNikki .data-preview-module textarea {
-  height: 300px; }
-#HenseiNikki .data-preview-module .btn-row {
-  display: flex;
-  justify-content: space-around; }
-  #HenseiNikki .data-preview-module .btn-row button {
-    width: 40%; }
-#HenseiNikki .data-preview-module .fleets-checkzone {
-  display: flex;
-  justify-content: space-around;
-  position: relative;
-  align-items: center; }
-  #HenseiNikki .data-preview-module .fleets-checkzone .checkbox {
-    display: inline-block;
-    margin: 10px 0; }
-#HenseiNikki #hensei-list-tabs {
-  box-sizing: border-box;
-  padding: 10px; }
-  #HenseiNikki #hensei-list-tabs .fleets-container {
-    margin: 0; }
+  #HenseiNikki .fleets-container {
+    margin: 10px; }
+    #HenseiNikki .fleets-container .panel-body {
+      padding: 10px 0; }
+  #HenseiNikki .data-export-module {
+    padding-top: 50px; }
+    #HenseiNikki .data-export-module .exit-btn {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0; }
+  #HenseiNikki .data-preview-module .fleets-checkzone {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    margin: 2em 0 1em; }
 
 #hensei-nikki-details-recon .recon-title {
   font-weight: bold;

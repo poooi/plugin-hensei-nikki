@@ -11,10 +11,10 @@ const DataView = connect(
     return { fleets }
   }
 )(({ title, fleets }) =>
-  <div>
+  <>
     <DataOpts title={title} />
     <FleetsView fleets={[...fleets]} />
-  </div>
+  </>
 )
 
 export default DataView

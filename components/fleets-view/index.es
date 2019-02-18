@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Tab, Tabs } from 'react-bootstrap'
+import { Tab, Tabs } from '@blueprintjs/core'
+import { isEqual } from 'lodash'
 import Details from './details'
 import Ship from './ship'
-import Panel from './compat-panel'
 
 const Fleet = ({ fleet }) => (
-  <Panel className="fleets-container">
+  <div className="fleets-container">
     <Details fleet={fleet} />
     <div className="ships-container">
       { fleet.map((ship, i) => ship.id ? <Ship key={i} shipId={ship.id} ship={ship} /> : '') }
     </div>
-  </Panel>
+  </div>
 )
 
 export default class FleetsView extends Component {
@@ -23,7 +23,9 @@ export default class FleetsView extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.fleets !== this.props.fleets) {
+    const data = this.props.fleets || this.props.code
+    const nextData = nextProps.fleets || nextProps.code
+    if (!isEqual(data, nextData)) {
       this.setState({ selectedKey: 0 })
     }
   }
@@ -39,16 +41,20 @@ export default class FleetsView extends Component {
 
     if (data.length > 1 && data[1]) {
       return (
-        <Tabs activeKey={selectedKey}
-              onSelect={this.onTabSelected}
-              animation={false}
-              id="hensei-list-tabs">
+        <Tabs
+          animate={false}
+          selectedTabId={selectedKey}
+          onChange={this.onTabSelected}
+        >
           {
             data.map((fleet, i) =>
               !fleet ? '' :
-              <Tab eventKey={i} title={tabName[i]} key={i}>
-                <Fleet fleet={fleet} />
-              </Tab>
+              <Tab
+                id={i}
+                key={i}
+                title={tabName[i]}
+                panel={<Fleet fleet={fleet} />}
+              />
             )
           }
         </Tabs>

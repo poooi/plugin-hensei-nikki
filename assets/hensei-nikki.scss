@@ -1,43 +1,49 @@
 @import "ship-item";
 #HenseiNikki {
-  .hidden {
-    display: none;
-  }
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  #henseinikki-add-dropdown {
-    display: block;
+  position: relative;
+  padding: 1em;
+  .options {
     position: absolute;
-    margin-top: 7px;
+    top: 1em;
+    left: 1em;
   }
-  .opts {
-    .back {
-      margin: 10px;
+  .bp3-control-group {
+    margin-bottom: 2em;
+  }
+  .bp3-tabs {
+    .bp3-tab-list {
+      .bp3-tab,
+      .bp3-tab-indicator-wrapper {
+        width: 25%;
+        margin: 0;
+        text-align: center;
+      }
+      .bp3-tab-indicator {
+        width: 100%;
+      }
     }
-    .sub-opts {
-      display: flex;
-      justify-content: space-around;
-      margin: 10px;
-      margin-bottom: 0;
-    }
-  }
-  .data-opts {
-    width: 90%;
-    margin-left: 20px;
-    margin-top: -3px;
-  }
-  .import-module {
-    display: block;
-    padding: 15px;
   }
   .container-col {
     display: flex;
     flex-direction: column;
   }
   .hensei-list {
-    display: flex;
-    flex: none;
+    .title-selector {
+      display: block;
+      width: calc(100% - 3em);
+      margin-left: 3em;
+      .bp3-popover-target {
+        position: relative;
+        width: 100%;
+        .bp3-traget {
+          position: absolute;
+          right: 1em;
+        }
+      }
+    }
+    .bp3-button-group {
+      margin: 1em 0;
+    }
     .ships-container {
       display: flex;
       flex-flow: row wrap;
@@ -111,16 +117,6 @@
       padding: 10px 0;
     }
   }
-  .data-export-module, .data-edit-module, .data-preview-module {
-    display: block;
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: auto;
-  }
   .data-export-module {
     padding-top: 50px;
     .exit-btn {
@@ -131,38 +127,13 @@
       margin: 0;
     }
   }
-  .data-edit-module {
-    textarea {
-      height: 300px;
-    }
-  }
   .data-preview-module {
-    textarea {
-      height: 300px;
-    }
-    .btn-row {
-      display: flex;
-      justify-content: space-around;
-      button {
-        width: 40%;
-      }
-    }
     .fleets-checkzone {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       position: relative;
       align-items: center;
-      .checkbox {
-        display: inline-block;
-        margin: 10px 0;
-      }
-    }
-  }
-  #hensei-list-tabs {
-    box-sizing: border-box;
-    padding: 10px;
-    .fleets-container {
-      margin: 0;
+      margin: 2em 0 1em;
     }
   }
 }

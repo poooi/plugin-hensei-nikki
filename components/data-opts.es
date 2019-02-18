@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, ButtonGroup } from 'react-bootstrap'
+import { Button, ButtonGroup } from '@blueprintjs/core'
 import FontAwesome from 'react-fontawesome'
 import { onDeleteData } from '../redux'
 import { __ } from '../utils'
-import DataEditModule from '../containers/data-edit-module'
+// import DataEditModule from '../containers/data-edit-module'
 import DataExportModule from '../containers/data-export-module'
 
 export default connect(
@@ -34,20 +34,36 @@ export default connect(
     case 'export':
       return <DataExportModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
     case 'edit':
-      return <DataEditModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
+      // return <DataEditModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
     }
     return (
-      <ButtonGroup className="data-opts">
-        <Button style={{ width: '33%' }} onClick={this.onOptsClick.bind(this, 'export')}>
-          <FontAwesome name="share-square-o" /> {__('Export')}
-        </Button>
-        <Button style={{ width: '33%' }} onClick={this.onOptsClick.bind(this, 'edit')}>
-          <FontAwesome name="plus-square-o" /> {__('Edit')}
-        </Button>
-        <Button style={{ width: '33%' }} onClick={this.onDeleteClick}>
-          <FontAwesome name="trash"  /> {__('Delete Records')}
-        </Button>
-      </ButtonGroup>
+      <>
+        <ButtonGroup className="data-opts" fill>
+          <Button
+            icon="export"
+            onClick={this.onOptsClick.bind(this, 'export')}
+          >
+            {__('Export')}
+          </Button>
+          <Button
+            icon="edit"
+            onClick={this.onOptsClick.bind(this, 'edit')}
+          >
+            {__('Edit')}
+          </Button>
+          <Button
+            icon="delete"
+            onClick={this.onDeleteClick}
+          >
+            {__('Delete Records')}
+          </Button>
+        </ButtonGroup>
+        {
+          active === 'edit' && (
+            <></>
+          )
+        }
+      </>
     )
   }
 }
