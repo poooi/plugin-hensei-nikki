@@ -1,9 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
+import {
+  Card,
+  Icon,
+  Button,
+  FormGroup,
+  TextArea,
+} from '@blueprintjs/core'
 import { FormControl, Button, Well } from 'react-bootstrap'
 import { __, fleetsByTitleSelector } from '../utils'
 import { onSaveTitle, onSaveNote } from '../redux'
+
+const CardM = styled(Card)`
+  margin: 1em 0;
+`
 
 export default connect(
   (state, { title }) =>
@@ -65,22 +76,25 @@ export default connect(
     const { saveDisable, title, note } = this.state
 
     return(
-      <Well className="data-edit-module">
-        <Button className="exit-btn" onClick={this.props.onCancel}>X</Button>
-        <FormControl type="text"
-                     label={__('Title')}
-                     placeholder={__('Title')}
-                     value={title}
-                     onChange={this.onTitileChange} />
-        <FormControl componentClass='textarea'
-                     label={__('Note')}
-                     placeholder={__('Note')}
-                     value={note}
-                     onChange={this.onNoteChange} />
-        <Button bsSize="small" disabled={saveDisable} onClick={this.onSave}>
+      <CardM>
+        <Button onClick={this.props.onCancel}>
+          <Icon icon="cross" />
+        </Button>
+        <label>{__('Title')}</label>
+        <InputGroup
+          value={title}
+          onChange={this.onTitileChange}
+          placeholder={__('Title')}
+        />
+        <label>{__('Note')}</label>
+        <TextArea
+          onChange={this.onNoteChange}
+          value={note}
+        />
+        <Button disabled={saveDisable} onClick={this.onSave}>
           {__('Save')}
         </Button>
-      </Well>
+      </CardM>
     )
   }
 })

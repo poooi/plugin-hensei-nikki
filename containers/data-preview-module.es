@@ -3,9 +3,20 @@ import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { trim } from 'lodash'
 import { Button, Checkbox, InputGroup, ControlGroup } from '@blueprintjs/core'
+import styled from 'styled-components'
 import { fleetsSelector, shipsSelector, equipsSelector } from 'views/utils/selectors'
 import { __, getHenseiDataByApi } from '../utils'
 import FleetsView from '../components/fleets-view'
+
+const CheckZone = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2em 0 1em;
+`
+const ControlGroupM = styled(ControlGroup)`
+  margin-bottom: 2em;
+`
 
 const SelectInput = connect(
   createSelector([
@@ -51,7 +62,7 @@ const SelectInput = connect(
     const { onCheck } = this
     return (
       <>
-        <div className="fleets-checkzone">
+        <CheckZone>
           {
             fleets.map((fleet, i) =>
               <Checkbox
@@ -63,8 +74,8 @@ const SelectInput = connect(
               </Checkbox>
             )
           }
-        </div>
-        <ControlGroup fill>
+        </CheckZone>
+        <ControlGroupM fill>
           <InputGroup
             type="text"
             placeholder={__('Title')}
@@ -77,7 +88,7 @@ const SelectInput = connect(
           >
             {__('Next')}
           </Button>
-        </ControlGroup>
+        </ControlGroupM>
       </>
     )
   }

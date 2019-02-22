@@ -4,7 +4,7 @@ import { Button, ButtonGroup } from '@blueprintjs/core'
 import FontAwesome from 'react-fontawesome'
 import { onDeleteData } from '../redux'
 import { __ } from '../utils'
-// import DataEditModule from '../containers/data-edit-module'
+import DataEditModule from '../containers/data-edit-module'
 import DataExportModule from '../containers/data-export-module'
 
 export default connect(
@@ -30,12 +30,7 @@ export default connect(
   render() {
     const { active } = this.state
     const { title } = this.props
-    switch (active) {
-    case 'export':
-      return <DataExportModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
-    case 'edit':
-      // return <DataEditModule title={title} onCancel={this.onOptsClick.bind(this, 'opts')} />
-    }
+
     return (
       <>
         <ButtonGroup className="data-opts" fill>
@@ -59,8 +54,19 @@ export default connect(
           </Button>
         </ButtonGroup>
         {
+          active === 'export' && (
+            <DataExportModule
+              title={title}
+              onCancel={this.onOptsClick.bind(this, 'opts')}
+            />
+          )
+        }
+        {
           active === 'edit' && (
-            <></>
+            <DataEditModule
+              title={title}
+              onCancel={this.onOptsClick.bind(this, 'opts')}
+            />
           )
         }
       </>

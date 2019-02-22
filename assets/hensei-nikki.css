@@ -125,32 +125,9 @@
 #HenseiNikki {
   position: relative;
   padding: 1em; }
-  #HenseiNikki .options {
-    position: absolute;
-    top: 1em;
-    left: 1em; }
-  #HenseiNikki .bp3-control-group {
-    margin-bottom: 2em; }
-  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab,
-  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab-indicator-wrapper {
-    width: 25%;
-    margin: 0;
-    text-align: center; }
-  #HenseiNikki .bp3-tabs .bp3-tab-list .bp3-tab-indicator {
-    width: 100%; }
   #HenseiNikki .container-col {
     display: flex;
     flex-direction: column; }
-  #HenseiNikki .hensei-list .title-selector {
-    display: block;
-    width: calc(100% - 3em);
-    margin-left: 3em; }
-    #HenseiNikki .hensei-list .title-selector .bp3-popover-target {
-      position: relative;
-      width: 100%; }
-      #HenseiNikki .hensei-list .title-selector .bp3-popover-target .bp3-traget {
-        position: absolute;
-        right: 1em; }
   #HenseiNikki .hensei-list .bp3-button-group {
     margin: 1em 0; }
   #HenseiNikki .hensei-list .ships-container {
@@ -204,24 +181,6 @@
         height: 50%;
         width: 50%;
         margin: 10px; }
-  #HenseiNikki .fleets-container {
-    margin: 10px; }
-    #HenseiNikki .fleets-container .panel-body {
-      padding: 10px 0; }
-  #HenseiNikki .data-export-module {
-    padding-top: 50px; }
-    #HenseiNikki .data-export-module .exit-btn {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      margin: 0; }
-  #HenseiNikki .data-preview-module .fleets-checkzone {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    align-items: center;
-    margin: 2em 0 1em; }
 
 #hensei-nikki-details-recon .recon-title {
   font-weight: bold;

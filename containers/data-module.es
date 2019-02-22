@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { first } from 'lodash'
+import { first, isEmpty } from 'lodash'
 import DataList from '../components/data-list'
 import DataView from '../components/data-view'
 import { henseiDataSelector } from '../utils'
@@ -20,7 +20,7 @@ export default connect(
     if (activeTitle && !data[activeTitle]) {
       this.setState({ activeTitle: '' })
     }
-    if (!activeTitle && Object.keys(data).length > 0) {
+    if (!activeTitle && !isEmpty(data)) {
       this.setState({ activeTitle: first(data).title })
     }
   }

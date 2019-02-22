@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core'
+import styled from 'styled-components'
 
 import { reducer, onImportFile } from './redux'
 import { __,henseiDataSelector, saveData } from './utils'
@@ -18,6 +19,12 @@ import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
 
 const { dialog } = remote.require('electron')
+
+const OptionsPop = styled(Popover)`
+  position: absolute;
+  top: 1em;
+  left: 1em;
+`
 
 const Options = connect(
   henseiDataSelector,
@@ -71,8 +78,7 @@ const Options = connect(
   }
   render() {
     return (
-      <Popover
-        className="options"
+      <OptionsPop
         position={Position.BOTTOM}
         content={
           <Menu>
@@ -95,9 +101,9 @@ const Options = connect(
         }
       >
         <Button>
-          <Icon icon="annotation" />
+          <Icon icon="add" />
         </Button>
-      </Popover>
+      </OptionsPop>
     )
   }
 })

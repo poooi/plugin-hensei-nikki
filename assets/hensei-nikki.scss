@@ -2,45 +2,11 @@
 #HenseiNikki {
   position: relative;
   padding: 1em;
-  .options {
-    position: absolute;
-    top: 1em;
-    left: 1em;
-  }
-  .bp3-control-group {
-    margin-bottom: 2em;
-  }
-  .bp3-tabs {
-    .bp3-tab-list {
-      .bp3-tab,
-      .bp3-tab-indicator-wrapper {
-        width: 25%;
-        margin: 0;
-        text-align: center;
-      }
-      .bp3-tab-indicator {
-        width: 100%;
-      }
-    }
-  }
   .container-col {
     display: flex;
     flex-direction: column;
   }
   .hensei-list {
-    .title-selector {
-      display: block;
-      width: calc(100% - 3em);
-      margin-left: 3em;
-      .bp3-popover-target {
-        position: relative;
-        width: 100%;
-        .bp3-traget {
-          position: absolute;
-          right: 1em;
-        }
-      }
-    }
     .bp3-button-group {
       margin: 1em 0;
     }
@@ -109,31 +75,6 @@
           margin: 10px;
         }
       }
-    }
-  }
-  .fleets-container {
-    margin: 10px;
-    .panel-body {
-      padding: 10px 0;
-    }
-  }
-  .data-export-module {
-    padding-top: 50px;
-    .exit-btn {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      margin: 0;
-    }
-  }
-  .data-preview-module {
-    .fleets-checkzone {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      align-items: center;
-      margin: 2em 0 1em;
     }
   }
 }

@@ -1,16 +1,39 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
+import { isEmpty, map } from 'lodash'
 import { constSelector } from 'views/utils/selectors'
 import {
+  Card,
   Button,
   Popover,
   Position,
   InputGroup,
   PopoverInteractionKind,
 } from '@blueprintjs/core'
-// import { FormControl, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import styled from 'styled-components'
 import { __, henseiDataSelector, dataFilter } from '../utils'
+
+const BlockButton = styled(Button)`
+  display: block;
+  position: relative;
+  width: calc(100% - 3em);
+  margin-left: 3em;
+  text-align: center;
+  .bp3-icon {
+    position: absolute;
+    top: .5em;
+    right: 1em;
+  }
+`
+
+const FleetTitle = styled(Button)`
+  margin-right: 1em;
+`
+
+const CardM = styled(Card)`
+  margin-top: 1em;
+`
 
 export default connect(
   createSelector([
@@ -24,6 +47,7 @@ export default connect(
     this.state = {
       keywords: '',
       showData: props.data,
+      showList: false,
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -43,74 +67,77 @@ export default connect(
   onTitleSelected = (title) => {
     if (title !== this.props.activeTitle) {
       this.props.onShowData(title)
+      this.setState({ showList: false })
     }
+  }
+  onShowList = () => {
+    this.setState({ showList: !this.state.showList })
   }
   render() {
     const { activeTitle, data } = this.props
-    const { keywords, showData } = this.state
+    const { keywords, showData, showList } = this.state
     const { onTitleSelected } = this
 
-    if (!Object.keys(data).length || !Object.keys(showData).length) return <></>
+    if (isEmpty(data) || isEmpty(showData)) return <></>
 
     return (
-      <Popover
-        className="title-selector"
-        position={Position.BOTTOM}
-        content={
-          <div className="title-container">
-            {
-              Object.keys(showData).length > 10 && (
-                <InputGroup
-                  leftIcon="filter"
-                  onChange={this.onKeywordChange}
-                  placeholder={__('Keywords')}
-                  value={keywords}
-                />
-              )
-            }
-            <div>
-              {
-                Object.keys(showData).map((title, i) => (
-                  showData[title].note
-                    ? (
-                      <Popover
-                        key={i}
-                        position={Position.BOTTOM}
-                        interactionKind={PopoverInteractionKind}
-                        content={
-                          <div>{showData[title].note}</div>
-                        }
-                      >
-                        <Button
-                          onClick={onTitleSelected.bind(this, title)}
-                          disabled={activeTitle === title}
-                        >
-                          {title}
-                        </Button>
-                      </Popover>
-                    )
-                  : (
-                    <Button
-                      key={i}
-                      onClick={onTitleSelected.bind(this, title)}
-                      disabled={activeTitle === title}
-                    >
-                      {title}
-                    </Button>
-                  )
-                ))
-              }
-            </div>
-          </div>
-        }
-      >
-        <Button
-          className="selected-title"
+      <>
+        <BlockButton
           rightIcon="caret-down"
+          onClick={this.onShowList}
         >
-          { activeTitle }
-        </Button>
-      </Popover>
+          {activeTitle}
+        </BlockButton>
+        {
+          showList && (
+            <CardM>
+              {
+                Object.keys(showData).length > 10 && (
+                  <InputGroup
+                    leftIcon="filter"
+                    onChange={this.onKeywordChange}
+                    placeholder={__('Keywords')}
+                    value={keywords}
+                  />
+                )
+              }
+              <div>
+                {
+                  map(showData, ({ note }, title) => (
+                    note
+                      ? (
+                        <Popover
+                          key={title}
+                          position={Position.BOTTOM}
+                          interactionKind={PopoverInteractionKind}
+                          content={
+                            <div>{note}</div>
+                          }
+                        >
+                          <FleetTitle
+                            onClick={onTitleSelected.bind(this, title)}
+                            disabled={activeTitle === title}
+                          >
+                            {title}
+                          </FleetTitle>
+                        </Popover>
+                      )
+                    : (
+                      <FleetTitle
+                        key={title}
+                        onClick={onTitleSelected.bind(this, title)}
+                        disabled={activeTitle === title}
+                      >
+                        {title}
+                      </FleetTitle>
+                    )
+                  ))
+                }
+              </div>
+            </CardM>
+          )
+        }
+      </>
     )
   }
 })

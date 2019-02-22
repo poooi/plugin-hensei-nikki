@@ -1,9 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs } from '@blueprintjs/core'
+import styled from 'styled-components'
 import { isEqual } from 'lodash'
 import Details from './details'
 import Ship from './ship'
+
+const NavTabs = styled(Tabs)`
+  .bp3-tab {
+    margin: 0;
+    text-align: center;
+    &.nav-tab-1 {
+      width: 100%;
+    }
+    &.nav-tab-2 {
+      width: 50%;
+    }
+    &.nav-tab-3 {
+      width: 33.3%;
+    }
+    &.nav-tab-4 {
+      width: 25%;
+    }
+  }
+`
 
 const Fleet = ({ fleet }) => (
   <div className="fleets-container">
@@ -41,7 +61,7 @@ export default class FleetsView extends Component {
 
     if (data.length > 1 && data[1]) {
       return (
-        <Tabs
+        <NavTabs
           animate={false}
           selectedTabId={selectedKey}
           onChange={this.onTabSelected}
@@ -54,10 +74,11 @@ export default class FleetsView extends Component {
                 key={i}
                 title={tabName[i]}
                 panel={<Fleet fleet={fleet} />}
+                className={`nav-tab-${data.length}`}
               />
             )
           }
-        </Tabs>
+        </NavTabs>
       )
     } else {
       return <Fleet fleet={data[0]} />
