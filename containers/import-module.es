@@ -11,10 +11,11 @@ import DataPreviewModule from './data-preview-module'
 const ImportModule = connect(
   '', { onSaveData }
 )(class ImportModule extends Component {
-  onSaveData = (title, data) => {
+  onSaveData = (title, note, data) => {
     this.props.onSaveData(
       title,
       {
+        note,
         fleets: data,
         version: 'poi-h-v2',
       },

@@ -27,8 +27,16 @@ const BlockButton = styled(Button)`
   }
 `
 
+const Overlay = styled.div`
+  padding: 1em;
+`
+
+const FilterInput = styled(InputGroup)`
+  margin-bottom: 1em;
+`
+
 const FleetTitle = styled(Button)`
-  margin-right: 1em;
+  margin: .5em 1em .5em 0;
 `
 
 const CardM = styled(Card)`
@@ -92,8 +100,8 @@ export default connect(
           showList && (
             <CardM>
               {
-                Object.keys(showData).length > 10 && (
-                  <InputGroup
+                Object.keys(data).length > 10 && (
+                  <FilterInput
                     leftIcon="filter"
                     onChange={this.onKeywordChange}
                     placeholder={__('Keywords')}
@@ -109,9 +117,9 @@ export default connect(
                         <Popover
                           key={title}
                           position={Position.BOTTOM}
-                          interactionKind={PopoverInteractionKind}
+                          interactionKind={PopoverInteractionKind.HOVER_TARGET_ONLY}
                           content={
-                            <div>{note}</div>
+                            <Overlay>{note}</Overlay>
                           }
                         >
                           <FleetTitle

@@ -2,7 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { trim } from 'lodash'
-import { Button, Checkbox, InputGroup, ControlGroup } from '@blueprintjs/core'
+import {
+  Button,
+  Checkbox,
+  InputGroup,
+  ControlGroup,
+  FormGroup,
+  TextArea,
+} from '@blueprintjs/core'
 import styled from 'styled-components'
 import { fleetsSelector, shipsSelector, equipsSelector } from 'views/utils/selectors'
 import { __, getHenseiDataByApi } from '../utils'
@@ -15,7 +22,10 @@ const CheckZone = styled.div`
   margin: 2em 0 1em;
 `
 const ControlGroupM = styled(ControlGroup)`
-  margin-bottom: 2em;
+  margin-bottom: 1em;
+`
+const FormGroupM = styled(FormGroup)`
+  margin-bottom: 1em;
 `
 
 const SelectInput = connect(
@@ -31,6 +41,7 @@ const SelectInput = connect(
       deckChecked: [false, false, false, false],
       btnDisable: true,
       title: '',
+      note: '',
     }
   }
   onCheck = (index) => {
@@ -42,10 +53,14 @@ const SelectInput = connect(
     })
   }
   onNext = () => {
-    this.props.onNext(this.state.title, this.getHenseiData())
+    const { title, note } = this.state
+    this.props.onNext(title, note, this.getHenseiData())
   }
   onTitileChange = (e) => {
     this.setState({ title: trim(e.target.value) })
+  }
+  onNoteChange = (e) => {
+    this.setState({ note: trim(e.target.value) })
   }
   getHenseiData = () => {
     const { fleets, ships, equips } = this.props
@@ -58,7 +73,7 @@ const SelectInput = connect(
   }
   render() {
     const { fleets } = this.props
-    const { deckChecked, btnDisable, title } = this.state
+    const { deckChecked, btnDisable, title, note } = this.state
     const { onCheck } = this
     return (
       <>
@@ -89,6 +104,14 @@ const SelectInput = connect(
             {__('Next')}
           </Button>
         </ControlGroupM>
+        <FormGroupM label={__('Note')} labelFor="note-input">
+          <TextArea
+            fill
+            id="note-input"
+            onChange={this.onNoteChange}
+            value={note}
+          />
+        </FormGroupM>
       </>
     )
   }
@@ -101,8 +124,8 @@ export default class DataPreviewModule extends Component {
       preCode: '',
     }
   }
-  onNext = (title, data) => {
-    this.props.onAddData(title, data)
+  onNext = (title, note, data) => {
+    this.props.onAddData(title, note, data)
   }
   onShowPreview = (data) => {
     this.setState({ preCode: data })

@@ -6,23 +6,28 @@ import {
   Icon,
   Button,
   FormGroup,
+  InputGroup,
   TextArea,
 } from '@blueprintjs/core'
-import { FormControl, Button, Well } from 'react-bootstrap'
-import { __, fleetsByTitleSelector } from '../utils'
+import styled from 'styled-components'
+import { __, dataByTitleSelector } from '../utils'
 import { onSaveTitle, onSaveNote } from '../redux'
 
 const CardM = styled(Card)`
   margin: 1em 0;
 `
 
+const ButtonM = styled(Button)`
+  margin-bottom: 1em;
+`
+
 export default connect(
   (state, { title }) =>
     !title
-    ? { note: "" }
+    ? { note: '' }
     : createSelector([
-        fleetsByTitleSelector(title),
-      ], fleets => ({ note: fleets.note })),
+        dataByTitleSelector(title),
+      ], ({ data }) => ({ note: data.note })),
   { onSaveTitle, onSaveNote }
 )(class DataEditModule extends Component {
   constructor(props) {
@@ -77,20 +82,25 @@ export default connect(
 
     return(
       <CardM>
-        <Button onClick={this.props.onCancel}>
+        <ButtonM onClick={this.props.onCancel}>
           <Icon icon="cross" />
-        </Button>
-        <label>{__('Title')}</label>
-        <InputGroup
-          value={title}
-          onChange={this.onTitileChange}
-          placeholder={__('Title')}
-        />
-        <label>{__('Note')}</label>
-        <TextArea
-          onChange={this.onNoteChange}
-          value={note}
-        />
+        </ButtonM>
+        <FormGroup label={__('Title')} labelFor="title-input">
+          <InputGroup
+            id="title-input"
+            value={title}
+            onChange={this.onTitileChange}
+            placeholder={__('Title')}
+          />
+        </FormGroup>
+        <FormGroup label={__('Note')} labelFor="note-input">
+          <TextArea
+            fill
+            id="note-input"
+            onChange={this.onNoteChange}
+            value={note}
+          />
+        </FormGroup>
         <Button disabled={saveDisable} onClick={this.onSave}>
           {__('Save')}
         </Button>

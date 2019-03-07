@@ -1,19 +1,33 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
+import {
+  Popover,
+  Position,
+  PopoverInteractionKind,
+} from '@blueprintjs/core'
+import styled from 'styled-components'
 import { join } from 'path-extra'
 import { SlotitemIcon } from 'views/components/etc/icon'
 import { equipInfoSelector, shipInfoSelector } from '../../utils'
 
+const Overlay = styled.div`
+  padding: 1em;
+`
+
 const Slot = ({ slotId, slot }) => {
   const { name, iconId, lv, alv } = equipInfoSelector(slotId, slot)(window.getStore())
-  const overlay = <Tooltip id="name">{ name }</Tooltip>
   return (
     <div className="slotitem-container">
       <SlotitemIcon className="slotitem-img" slotitemId={iconId} />
-      <OverlayTrigger placement="top" overlay={overlay}>
+      <Popover
+        position={Position.BOTTOM}
+        interactionKind={PopoverInteractionKind.HOVER_TARGET_ONLY}
+        content={
+          <Overlay id="name">{ name }</Overlay>
+        }
+      >
         <span className="slot-name">{ name }</span>
-      </OverlayTrigger>
+      </Popover>
       {
         Boolean(lv || (alv && 1<= alv && alv <= 7))
         &&

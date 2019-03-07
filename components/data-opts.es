@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, ButtonGroup } from '@blueprintjs/core'
-import FontAwesome from 'react-fontawesome'
+import styled from 'styled-components'
 import { onDeleteData } from '../redux'
 import { __ } from '../utils'
 import DataEditModule from '../containers/data-edit-module'
 import DataExportModule from '../containers/data-export-module'
+
+const ButtonGroupM = styled(ButtonGroup)`
+  margin: 1em 0;
+`
 
 export default connect(
   '', { onDeleteData }
@@ -33,7 +37,7 @@ export default connect(
 
     return (
       <>
-        <ButtonGroup className="data-opts" fill>
+        <ButtonGroupM className="data-opts" fill>
           <Button
             icon="export"
             onClick={this.onOptsClick.bind(this, 'export')}
@@ -52,7 +56,7 @@ export default connect(
           >
             {__('Delete Records')}
           </Button>
-        </ButtonGroup>
+        </ButtonGroupM>
         {
           active === 'export' && (
             <DataExportModule
@@ -72,5 +76,4 @@ export default connect(
       </>
     )
   }
-}
-)
+})
