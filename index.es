@@ -121,7 +121,6 @@ export const reactClass = class HenseiNikki extends Component {
     return (
       <div id="HenseiNikki">
         <link rel="stylesheet" href={join(__dirname , 'assets', 'hensei-nikki.css')} />
-        {/* <link rel="stylesheet" href={join(__dirname, 'assets', 'ship-item.css')} /> */}
         { activeState !== 'add' && <Options switchState={this.switchState} /> }
         { activeState === 'add' && <ImportModule switchState={this.switchState} /> }
         { activeState !== 'add' && <DataModule /> }

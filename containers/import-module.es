@@ -17,7 +17,7 @@ const ImportModule = connect(
       {
         note,
         fleets: data,
-        version: 'poi-h-v2',
+        version: 'poi-h-v1',
       },
     )
     this.onCancel()

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Card } from '@blueprintjs/core'
 import DataOpts from './data-opts'
 import FleetsView from './fleets-view'
-import { fleetsByTitleSelector, henseiDataSelector } from '../utils'
+import { henseiDataSelector } from '../utils'
 
 const DataView = connect(
   (state, { title }) => {

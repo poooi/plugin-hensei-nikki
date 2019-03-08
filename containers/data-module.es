@@ -16,6 +16,7 @@ export default connect(
   }
   componentWillReceiveProps(nextProps) {
     const { data } = nextProps
+    if (!data) return
     const { activeTitle } = this.state
     if (activeTitle && !data[activeTitle]) {
       this.setState({ activeTitle: '' })
