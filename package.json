@@ -1,12 +1,12 @@
 {
   "name": "poi-plugin-hensei-nikki",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "a plugin which can save your fleet organize for poi",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
     "node-sass-chokidar": "0.0.3",
-    "poi-util-transpile": "^8.0.0"
+    "poi-util-transpile": "^8.2.2"
   },
   "scripts": {
     "prepack": "poi-util-transpile --sm --replace",

@@ -22,7 +22,7 @@ export default connect(
       this.setState({ activeTitle: '' })
     }
     if (!activeTitle && !isEmpty(data)) {
-      this.setState({ activeTitle: first(data).title })
+      this.setState({ activeTitle: first(Object.keys(data)) })
     }
   }
   onShowData = (title) => {
