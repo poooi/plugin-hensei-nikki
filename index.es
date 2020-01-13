@@ -14,9 +14,10 @@ import {
 import styled from 'styled-components'
 
 import { reducer, onImportFile } from './redux'
-import { __,henseiDataSelector, saveData } from './utils'
+import { __, henseiDataSelector, saveData } from './utils'
 import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
+import fs from 'fs'
 
 const { dialog } = remote.require('electron')
 
@@ -35,14 +36,14 @@ const Options = connect(
   }
   onMenuSelected = (eventKey) => {
     switch (eventKey) {
-    case 'importFile':
-      this.onFileImportSelected()
-      break
-    case 'exportFile':
-      this.onFileExportSelected()
-      break
-    default:
-      this.props.switchState(eventKey)
+      case 'importFile':
+        this.onFileImportSelected()
+        break
+      case 'exportFile':
+        this.onFileExportSelected()
+        break
+      default:
+        this.props.switchState(eventKey)
     }
 
   }
@@ -54,12 +55,12 @@ const Options = connect(
     })
     if (filename && filename[0]) {
       this.props.onImportFile(loadImportFile(filename[0]))
-    } else if(filename && !filename[0]) {
+    } else if (filename && !filename[0]) {
       window.toggleModal('找不到该文件')
     }
   }
   onFileExportSelected = (e) => {
-    const filename = dialog.showSaveDialog({
+    const filename = (dialog.showSaveDialogSync ? dialog.showSaveDialogSync : dialog.showSaveDialog)({
       title: __('Export records file'),
       defaultPath: 'HenseiNikki.json',
     })
@@ -120,10 +121,10 @@ export const reactClass = class HenseiNikki extends Component {
     const { activeState } = this.state
     return (
       <div id="HenseiNikki">
-        <link rel="stylesheet" href={join(__dirname , 'assets', 'hensei-nikki.css')} />
-        { activeState !== 'add' && <Options switchState={this.switchState} /> }
-        { activeState === 'add' && <ImportModule switchState={this.switchState} /> }
-        { activeState !== 'add' && <DataModule /> }
+        <link rel="stylesheet" href={join(__dirname, 'assets', 'hensei-nikki.css')} />
+        {activeState !== 'add' && <Options switchState={this.switchState} />}
+        {activeState === 'add' && <ImportModule switchState={this.switchState} />}
+        {activeState !== 'add' && <DataModule />}
       </div>
     )
   }
