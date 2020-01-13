@@ -14,7 +14,7 @@ import {
 import styled from 'styled-components'
 
 import { reducer, onImportFile } from './redux'
-import { __, henseiDataSelector, saveData } from './utils'
+import { __, henseiDataSelector, saveData, loadImportFile } from './utils'
 import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
 import fs from 'fs'

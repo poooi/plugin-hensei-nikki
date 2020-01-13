@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Icon } from '@blueprintjs/core'
-import FontAwesome from 'react-fontawesome'
-import { remote } from 'electron'
-import fs from 'fs-extra'
-import { __, loadImportFile } from '../utils'
+import { __ } from '../utils'
 import { onSaveData } from '../redux'
 import DataPreviewModule from './data-preview-module'
 
