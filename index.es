@@ -48,7 +48,7 @@ const Options = connect(
 
   }
   onFileImportSelected = (e) => {
-    const filename = dialog.showOpenDialog({
+    const filename = (dialog.showOpenDialogSync ? dialog.showOpenDialogSync : dialog.showOpenDialog)({
       title: __('Import records file'),
       filters: [{ name: 'json file', extensions: ['json'] }],
       properties: ['openFile'],
