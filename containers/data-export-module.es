@@ -8,7 +8,7 @@ import {
   HTMLSelect,
 } from '@blueprintjs/core'
 import styled from 'styled-components'
-import { shell, clipboard } from 'electron'
+import { shell } from 'electron'
 import { __, dataByTitleSelector, dataToThirdparty } from '../utils'
 
 const CardM = styled(Card)`
@@ -50,7 +50,13 @@ export default connect(
     }
   }
   onCopy = (e) => {
-    clipboard.writeText(this.state.code)
+    try {
+      const clipboardService = require('views/services/clipboard')
+      clipboardService.copyText(this.state.code)
+    } catch (err) {
+      const { clipboard } = require('electron')
+      clipboard.writeText(this.state.code)
+    }
     window.toggleModal(__('Copy'), __('The code has been copied to the clipboard.'))
   }
   onTypeSelected = (e) => {
