@@ -5,11 +5,15 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "node-sass-chokidar": "0.0.3",
-    "poi-util-transpile": "^8.2.2"
+    "poi-util-transpile": "^8.2.2",
+    "sass": "^1.92.1"
   },
   "scripts": {
-    "prepack": "poi-util-transpile --sm --replace",
+    "build:css": "sass --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
+    "watch:css": "sass --watch --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
+    "build:js": "poi-util-transpile --sm",
+    "build": "npm run build:css && npm run build:js",
+    "prepack": "npm run build",
     "postpublish": "npm run reset",
     "reset": "git checkout . && git clean -f",
     "test": "echo \"Error: no test specified\" && exit 1"
