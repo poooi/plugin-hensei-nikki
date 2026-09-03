@@ -18,13 +18,13 @@
   "scripts": {
     "build:css": "sass --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
     "watch:css": "sass --watch --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
-    "build:js": "tsc --project tsconfig.build.json",
+    "build:js": "node ./node_modules/typescript/bin/tsc --project tsconfig.build.json",
     "build": "npm run build:css && npm run build:js",
     "prepack": "npm run build",
     "postpublish": "npm run reset",
     "reset": "git checkout . && git clean -f",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
-    "build:test": "tsc --project tsconfig.test.json",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --project tsconfig.json --noEmit",
+    "build:test": "node ./node_modules/typescript/bin/tsc --project tsconfig.test.json",
     "test": "npm run build:test && node --test build/test/*.test.js",
     "package:check": "npm pack --dry-run --json --cache \"${TMPDIR:-/tmp}/poi-plugin-hensei-nikki-npm-cache\" > /dev/null",
     "check": "npm run typecheck && npm test && npm run build && npm run package:check"
