@@ -2,6 +2,20 @@ import fs from 'fs'
 import { join } from 'path'
 import { transSavedData } from './calc'
 
+interface FileWriter {
+  write: (filename: string, data: string) => void
+}
+
+let fileWriter: FileWriter | undefined
+
+function getFileWriter(): FileWriter {
+  if (!fileWriter) {
+    const FileWriter = require('views/utils/file-writer').default
+    fileWriter = new FileWriter()
+  }
+  return fileWriter!
+}
+
 function getDataPaths() {
   const { APPDATA_PATH, getStore } = window
   const pluginPath = join(APPDATA_PATH, 'hensei-nikki')
@@ -14,8 +28,7 @@ function getDataPaths() {
 export function saveData(data: Record<string, unknown>): void {
   if (!data || !Object.keys(data).length) return
   const { dataPath } = getDataPaths()
-  const FileWriter = require('views/utils/file-writer').default
-  new FileWriter().write(dataPath, JSON.stringify(data))
+  getFileWriter().write(dataPath, JSON.stringify(data))
 }
 
 export function loadData(): Record<string, any> {
