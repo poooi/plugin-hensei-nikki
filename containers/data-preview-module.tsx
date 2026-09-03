@@ -28,14 +28,16 @@ const FormGroupM = styled(FormGroup)`
   margin-bottom: 1em;
 `
 
+type DataPreviewProps = any
+
 const SelectInput = connect(
   createSelector([
     fleetsSelector,
     shipsSelector,
     equipsSelector,
-  ], (fleets, ships, equips) => ({ fleets, ships, equips }))
+  ], (fleets: any[], ships: any, equips: any) => ({ fleets, ships, equips }))
 )(class SelectInput extends Component {
-  constructor(props) {
+  constructor(props: DataPreviewProps) {
     super(props)
     this.state = {
       deckChecked: [false, false, false, false],
@@ -44,10 +46,10 @@ const SelectInput = connect(
       note: '',
     }
   }
-  onCheck = (index) => {
+  onCheck = (index: number) => {
     const { deckChecked } = this.state
     deckChecked[index] = !deckChecked[index]
-    const btnDisable = !deckChecked.filter(c => c).length
+    const btnDisable = !deckChecked.filter((c: boolean) => c).length
     this.setState({ deckChecked, btnDisable }, () => {
       this.props.onShowPreview(btnDisable ? '' : this.getHenseiData())
     })
@@ -56,10 +58,10 @@ const SelectInput = connect(
     const { title, note } = this.state
     this.props.onNext(title, note, this.getHenseiData())
   }
-  onTitileChange = (e) => {
+  onTitileChange = (e: any) => {
     this.setState({ title: trim(e.target.value) })
   }
-  onNoteChange = (e) => {
+  onNoteChange = (e: any) => {
     this.setState({ note: trim(e.target.value) })
   }
   getHenseiData = () => {
@@ -67,8 +69,8 @@ const SelectInput = connect(
     const { deckChecked } = this.state
     const ids =
       fleets
-        .filter((f, i) => deckChecked[i])
-        .map(f => f.api_ship.map(s => ({ id: s })))
+        .filter((f: any, i: number) => deckChecked[i])
+        .map((f: any) => f.api_ship.map((s: number) => ({ id: s })))
     return getHenseiDataByApi(ids, ships, equips)
   }
   render() {
@@ -79,7 +81,7 @@ const SelectInput = connect(
       <>
         <CheckZone>
           {
-            fleets.map((fleet, i) =>
+            fleets.map((fleet: any, i: number) =>
               <Checkbox
                 key={i}
                 onChange={onCheck.bind(this, i)}
@@ -118,16 +120,16 @@ const SelectInput = connect(
 })
 
 export default class DataPreviewModule extends Component {
-  constructor(props) {
+  constructor(props: DataPreviewProps) {
     super(props)
     this.state = {
       preCode: '',
     }
   }
-  onNext = (title, note, data) => {
+  onNext = (title: string, note: string, data: any) => {
     this.props.onAddData(title, note, data)
   }
-  onShowPreview = (data) => {
+  onShowPreview = (data: any) => {
     this.setState({ preCode: data })
   }
   render() {

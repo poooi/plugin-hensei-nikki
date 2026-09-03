@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "outDir": "build",
+    "rootDir": "."
+  },
+  "exclude": ["build", "node_modules", "test"]
+}

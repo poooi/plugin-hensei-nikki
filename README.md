@@ -6,8 +6,21 @@ save your Organize
 Install dependencies and build the plugin with:
 
 ```sh
-npm install
+npm ci
 npm run build
+```
+
+Run the strict type-check and focused executable tests with:
+
+```sh
+npm run typecheck
+npm test
+```
+
+Verify the packed plugin contains the generated entry, styles, and locales with:
+
+```sh
+npm run package:check
 ```
 
 Use `npm run watch:css` while editing the Sass files.

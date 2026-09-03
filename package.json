@@ -2,21 +2,32 @@
   "name": "poi-plugin-hensei-nikki",
   "version": "5.0.5",
   "description": "a plugin which can save your fleet organize for poi",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build",
+    "assets",
+    "README.md",
+    "package.json"
+  ],
   "dependencies": {},
   "devDependencies": {
-    "poi-util-transpile": "^8.2.2",
-    "sass": "^1.92.1"
+    "sass": "^1.92.1",
+    "typescript": "6.0.3"
   },
   "scripts": {
     "build:css": "sass --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
     "watch:css": "sass --watch --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
-    "build:js": "poi-util-transpile --sm",
+    "build:js": "tsc --project tsconfig.build.json",
     "build": "npm run build:css && npm run build:js",
     "prepack": "npm run build",
     "postpublish": "npm run reset",
     "reset": "git checkout . && git clean -f",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "build:test": "tsc --project tsconfig.test.json",
+    "test": "npm run build:test && node --test build/test/*.test.js",
+    "package:check": "npm pack --dry-run --json --cache \"${TMPDIR:-/tmp}/poi-plugin-hensei-nikki-npm-cache\" > /dev/null",
+    "check": "npm run typecheck && npm test && npm run build && npm run package:check"
   },
   "repository": {
     "type": "git",

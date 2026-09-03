@@ -16,15 +16,17 @@ const Overlay = styled.div`
 
 const __ = i18n.main.__.bind(i18n.main)
 
+type DetailsProps = any
+
 export default connect(
   createSelector([
     constSelector,
     basicSelector,
-  ], ({ $ships, $equips }, basic) => (
+  ], ({ $ships, $equips }: any, basic: any) => (
     { $ships, $equips, lv: basic.api_level }
   ))
 )(class Details extends Component {
-  constructor(props) {
+  constructor(props: DetailsProps) {
     super(props)
     this.state = {
       details: {},
@@ -34,13 +36,13 @@ export default connect(
     const { fleet, $equips, $ships, lv } = this.props
     this.getDetails(fleet, $equips, $ships, lv)
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DetailsProps) {
     if (nextProps.fleet !== this.props.fleet) {
       const { fleet, $equips, $ships, lv } = nextProps
       this.getDetails(fleet, $equips, $ships, lv)
     }
   }
-  getDetails = (fleet, $equips, $ships, lv) => {
+  getDetails = (fleet: any, $equips: any, $ships: any, lv: number) => {
     const details = getDetails(fleet, $equips, $ships, lv)
     this.setState({ details })
   }

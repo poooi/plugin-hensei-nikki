@@ -9,12 +9,13 @@ import styled from 'styled-components'
 import { join } from 'path-extra'
 import { SlotitemIcon } from 'views/components/etc/icon'
 import { equipInfoSelector, shipInfoSelector } from '../../utils'
+import { ShipData, SlotData } from '../../utils/calc'
 
 const Overlay = styled.div`
   padding: 1em;
 `
 
-const Slot = ({ slotId, slot }) => {
+const Slot = ({ slotId, slot }: { slotId: number, slot: SlotData, key?: any }) => {
   const { name, iconId, lv, alv } = equipInfoSelector(slotId, slot)(window.getStore())
   return (
     <div className="slotitem-container">
@@ -48,7 +49,7 @@ const Slot = ({ slotId, slot }) => {
   )
 }
 
-const Ship = ({ shipId, ship }) => {
+const Ship = ({ shipId, ship }: { shipId: number, ship: ShipData, key?: any }) => {
   const { lv, name, type, slots } = shipInfoSelector(shipId, ship)(window.getStore())
   return (
     <div className="ship-item">
@@ -58,7 +59,7 @@ const Ship = ({ shipId, ship }) => {
         <span className="ship-type">{ type }</span>
       </div>
       <div className="slot-detail">
-        { slots.map((s, i) => s === -1 ? undefined : <Slot key={i} slotId={s.id} slot={s} />) }
+        { slots.map((s: SlotData | -1, i: number) => s === -1 ? undefined : <Slot key={i} slotId={s.id} slot={s} />) }
       </div>
     </div>
   )

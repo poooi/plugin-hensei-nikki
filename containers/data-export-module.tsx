@@ -28,10 +28,12 @@ const Tips = styled.div`
   margin: .5em 0;
 `
 
+type DataExportProps = any
+
 export default connect(
-  (state, { title }) => dataByTitleSelector(title)
+  (state: any, { title }: any) => dataByTitleSelector(title)
 )(class DataExportModule extends Component {
-  constructor(props) {
+  constructor(props: DataExportProps) {
     super(props)
     const { version, fleets } = props.data
     this.state = {
@@ -39,7 +41,7 @@ export default connect(
       type: 'poi',
     }
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DataExportProps) {
     if (nextProps.data !== this.props.data) {
       const { version, fleets } = nextProps.data
       const data = nextProps.type === 'poi'
@@ -49,7 +51,7 @@ export default connect(
       this.setState({ code })
     }
   }
-  onCopy = (e) => {
+  onCopy = (_e: any) => {
     try {
       const clipboardService = require('views/services/clipboard')
       clipboardService.copyText(this.state.code)
@@ -59,7 +61,7 @@ export default connect(
     }
     window.toggleModal(__('Copy'), __('The code has been copied to the clipboard.'))
   }
-  onTypeSelected = (e) => {
+  onTypeSelected = (e: any) => {
     const type = e.target.value
     if (type === this.state.type) return
     const { version, fleets } = this.props.data

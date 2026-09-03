@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { isEqual } from 'lodash'
 import Details from './details'
 import Ship from './ship'
+import { FleetData } from '../../utils/calc'
 
 const NavTabs = styled(Tabs)`
   .bp3-tab {
@@ -25,31 +26,31 @@ const NavTabs = styled(Tabs)`
   }
 `
 
-const Fleet = ({ fleet }) => (
+const Fleet = ({ fleet }: { fleet: FleetData, key?: any }) => (
   <div className="fleets-container">
     <Details fleet={fleet} />
     <div className="ships-container">
-      { fleet.map((ship, i) => ship.id ? <Ship key={i} shipId={ship.id} ship={ship} /> : '') }
+      { fleet.map((ship, i) => ship && ship.id ? <Ship key={i} shipId={ship.id} ship={ship} /> : '') }
     </div>
   </div>
 )
 
 export default class FleetsView extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
     this.state = {
       selectedKey: 0,
       tabName: [ 'I', 'II', 'III', 'IV' ],
     }
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     const data = this.props.fleets || this.props.code
     const nextData = nextProps.fleets || nextProps.code
     if (!isEqual(data, nextData)) {
       this.setState({ selectedKey: 0 })
     }
   }
-  onTabSelected = (selectedKey) => {
+  onTabSelected = (selectedKey: number) => {
     if (selectedKey !== this.state.selectedKey) {
       this.setState({ selectedKey })
     }
@@ -67,7 +68,7 @@ export default class FleetsView extends Component {
           onChange={this.onTabSelected}
         >
           {
-            data.map((fleet, i) =>
+            data.map((fleet: FleetData | undefined, i: number) =>
               !fleet ? '' :
               <Tab
                 id={i}

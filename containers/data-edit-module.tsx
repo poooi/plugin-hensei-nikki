@@ -21,16 +21,18 @@ const ButtonM = styled(Button)`
   margin-bottom: 1em;
 `
 
+type DataEditProps = any
+
 export default connect(
-  (state, { title }) =>
+  (state: any, { title }: any) =>
     !title
     ? { note: '' }
     : createSelector([
         dataByTitleSelector(title),
-      ], ({ data }) => ({ note: data.note })),
+      ], ({ data }: any) => ({ note: data.note })),
   { onSaveTitle, onSaveNote }
 )(class DataEditModule extends Component {
-  constructor(props) {
+  constructor(props: DataEditProps) {
     super(props)
     this.state = {
       title: '',
@@ -42,7 +44,7 @@ export default connect(
     const { title, note } = this.props
     this.setState({ title, note })
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DataEditProps) {
     if (nextProps.title !== this.props.title) {
       this.setState({
         title: nextProps.title,
@@ -50,13 +52,13 @@ export default connect(
       })
     }
   }
-  onTitileChange = (e) => {
+  onTitileChange = (e: any) => {
     this.checkChanges(e.target.value, this.state.note)
   }
-  onNoteChange = (e) => {
+  onNoteChange = (e: any) => {
     this.checkChanges(this.state.title, e.target.value)
   }
-  onSave = (e) => {
+  onSave = (_e: any) => {
     const { title, note } = this.state
     const { onSaveTitle, onSaveNote, onCancel, type, onSaveData } = this.props
     if ([ 'add', 'import' ].includes(type)) {
@@ -67,7 +69,7 @@ export default connect(
     }
     onCancel()
   }
-  checkChanges(newTitle, newNote) {
+  checkChanges(newTitle: string, newNote: string) {
     const { title, note } = this.props
     const saveDisable = (newTitle === title && newNote === note)
                         || !newTitle.length

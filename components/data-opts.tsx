@@ -11,16 +11,18 @@ const ButtonGroupM = styled(ButtonGroup)`
   margin: 1em 0;
 `
 
+type DataOptsProps = any
+
 export default connect(
   '', { onDeleteData }
 )(class DataOpts extends Component {
-  constructor(props) {
+  constructor(props: DataOptsProps) {
     super(props)
     this.state = {
       active: 'opts',
     }
   }
-  onOptsClick = (opt) => {
+  onOptsClick = (opt: string) => {
     this.setState({ active: opt })
   }
   onDeleteClick = () => {

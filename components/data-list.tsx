@@ -43,14 +43,16 @@ const CardM = styled(Card)`
   margin-top: 1em;
 `
 
+type DataListProps = any
+
 export default connect(
   createSelector([
     constSelector,
     henseiDataSelector,
-  ], ({ $ships, $equips }, { data }) =>
+  ], ({ $ships, $equips }: any, { data }: any) =>
   ({ $ships, $equips, data }))
 )(class DataList extends Component {
-  constructor(props) {
+  constructor(props: DataListProps) {
     super(props)
     this.state = {
       keywords: '',
@@ -58,10 +60,10 @@ export default connect(
       showList: false,
     }
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DataListProps) {
     this.setState({ showData: nextProps.data })
   }
-  onKeywordChange = (e) => {
+  onKeywordChange = (e: any) => {
     const { data, $ships, $equips } = this.props
     const keywords = e.target.value
     const showData = keywords
@@ -72,7 +74,7 @@ export default connect(
       showData,
     })
   }
-  onTitleSelected = (title) => {
+  onTitleSelected = (title: string) => {
     if (title !== this.props.activeTitle) {
       this.props.onShowData(title)
       this.setState({ showList: false })
@@ -111,7 +113,7 @@ export default connect(
               }
               <div>
                 {
-                  map(showData, ({ note }, title) => (
+                  map(showData, ({ note }: any, title: string) => (
                     note
                       ? (
                         <Popover

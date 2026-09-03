@@ -5,16 +5,18 @@ import DataList from '../components/data-list'
 import DataView from '../components/data-view'
 import { henseiDataSelector } from '../utils'
 
+type DataModuleProps = any
+
 export default connect(
   henseiDataSelector
 )(class DataModule extends Component {
-  constructor(props) {
+  constructor(props: DataModuleProps) {
     super(props)
     this.state = {
       activeTitle: '',
     }
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: DataModuleProps) {
     const { data } = nextProps
     if (!data) return
     const { activeTitle } = this.state
@@ -25,7 +27,7 @@ export default connect(
       this.setState({ activeTitle: first(Object.keys(data)) })
     }
   }
-  onShowData = (title) => {
+  onShowData = (title: string) => {
     this.setState({ activeTitle: title })
   }
   render() {

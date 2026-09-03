@@ -1,7 +1,39 @@
-import { range, compact } from 'lodash'
+const range = (start: number, end: number): number[] => Array.from(
+  { length: Math.max(0, end - start) },
+  (_, index) => start + index,
+)
 
-const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
-const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
+const compact = (values: any[] | undefined): any[] => (values || []).filter(Boolean)
+
+export interface SlotData {
+  id: number
+  lv?: number
+  alv?: number
+}
+
+export type SlotList = SlotData[] & { ex?: SlotData }
+
+export interface ShipData {
+  id: number
+  lv?: number
+  saku?: number
+  soku?: number
+  slots: SlotList
+}
+
+export type FleetData = Array<ShipData | undefined>
+export type FleetsData = Array<FleetData | undefined>
+
+export interface SavedRecord {
+  version: 'poi-h-v1'
+  fleets: FleetsData
+  note?: string
+}
+
+const arrDepth = (p: number, a: unknown): number => Math.max(
+  p,
+  a instanceof Array ? a.reduce<number>(arrDepth, 0) + 1 : 0,
+)
 /*
   code types
   thirdparty (support: 艦載機厨デッキビルダー(old, v3, v4))
@@ -13,30 +45,30 @@ const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
   shipItem [ shipId, [ lv, cond ], [ ...slotId ], [ ...slotLv ] ]
   code: [ (fleet)[ shipItem, ... ], ... ]
 */
-function oldSlots(idArr, lvArr, alvArr) {
+function oldSlots(idArr: any[], lvArr: any[] = [], alvArr: any[] = []): SlotData[] {
   if (!idArr.length) return []
-  return idArr.map((id, i) => {
-    const slot = { id }
+  return idArr.map((id: number, i: number): SlotData => {
+    const slot: SlotData = { id }
     if (lvArr[i]) slot.lv = lvArr[i]
     if (alvArr[i]) slot.alv = alvArr[i]
     return slot
   })
 }
-function oldFleet(data) {
+function oldFleet(data: any[]): FleetData | undefined {
   if (!data.length) return
-  return data.map(s => ({
+  return data.map((s: any): ShipData => ({
     id: s[0],
     lv: s[1][0],
     slots: oldSlots(s[2], s[3], s[4]),
   }))
 }
-function oldVer(data) {
+function oldVer(data: any): FleetsData {
   const depth = arrDepth(0, data)
   const fleets = []
   if (depth === 3) {
     fleets.push(oldFleet(data))
   } else if (depth === 4) {
-    data.forEach(fleet => fleets.push(oldFleet(fleet)))
+    data.forEach((fleet: any[]) => fleets.push(oldFleet(fleet)))
   } else {
     throw 'TypeError'
   }
@@ -50,35 +82,35 @@ function oldVer(data) {
   v4
   {version: 4, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, mas:7},{i2:{id:3, rf: 0}}...,ix:{id:43}}}, s2:{}...},...}
 */
-function newSlots(data) {
-  const slots = range(1, 5).map(i => {
+function newSlots(data: Record<string, any>): SlotList {
+  const slots: SlotList = compact(range(1, 5).map((i: number): SlotData | undefined => {
     const s = data['i' + i]
     if (s && s.id) {
       const { id, rf, rp, mas } = s
-      const slot = { id }
+      const slot: SlotData = { id }
       if (rf) slot.lv = rf
       if (rp) slot.alv = rp
       if (mas) slot.alv = mas
       return slot
     }
-  })
+  })) as SlotList
   if (data.ix) slots.ex = data.ix
-  return slots.filter(s => s)
+  return slots
 }
-function newFleet(data) {
-  return range(1, 7).map(i => {
+function newFleet(data: Record<string, any>): FleetData {
+  return compact(range(1, 7).map((i: number): ShipData | undefined => {
     const ship = data['s' + i]
     if (ship && Object.keys(ship).length) {
       const { id, lv, items } = ship
       return { id, lv, slots: newSlots(items) }
     }
-  })
+  }))
 }
-function newVer(data) {
-  return range(1, 5).map(i => {
+function newVer(data: Record<string, any>): FleetsData {
+  return compact(range(1, 5).map((i: number): FleetData | undefined => {
     const fleet = data['f' + i]
     if (fleet && Object.keys(fleet).length) return newFleet(fleet)
-  })
+  }))
 }
 /*
   v1
@@ -119,7 +151,7 @@ function newVer(data) {
   tags: [ tag, ... ]
   [] for empty
 */
-function checkData(data) {
+function checkData(data: any): boolean {
   if (!(data instanceof Object)) return false
   const { version, tags, fleets } = data
   if (version !== 'poi-h-v1') return false
@@ -127,16 +159,16 @@ function checkData(data) {
   if (!(fleets instanceof Array)) return false
   if (!fleets.length) return false
   if (fleets.length > 4) return false
-  const fleetValid = fleets.every(fleet => {
+  const fleetValid = fleets.every((fleet: any) => {
     if (!(fleet instanceof Array)) return false
     if (fleet.length > 6) return false
-    const shipValid = fleet.every(ship => {
+    const shipValid = fleet.every((ship: any) => {
       if (!(ship instanceof Object)) return false
       const { id, slots } = ship
       if (!id) return false
       if (!(slots instanceof Array)) return false
       if (slots.length > 4) return false
-      const slotValid = slots.every(slot => {
+      const slotValid = slots.every((slot: any) => {
         if (!(slot instanceof Object)) return false
         if (!slot.id) return false
       })
@@ -148,11 +180,11 @@ function checkData(data) {
   return true
 }
 
-function codeConversion(data) {
+function codeConversion(data: any): FleetsData | undefined {
   if (data instanceof Array) {
     return oldVer(data) // thirdparty & HenseiNikki old version
   } else if (data instanceof Object) {
-    if ([ 3, 4 ].indexOf(data.version) > 0) {
+    if ([3, 4].includes(data.version)) {
       return newVer(data) // thirdparty new version
     } else if (data.version === 'poi-h-v1') {
       return data.fleets
@@ -161,7 +193,7 @@ function codeConversion(data) {
 }
 
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
-const aircraftLevelBonus = {
+const aircraftLevelBonus: Record<number, number[]> = {
   '6': [0, 0, 2, 5, 9, 14, 14, 22, 22],   // 艦上戦闘機
   '7': [0, 0, 0, 0, 0, 0, 0, 0, 0],       // 艦上爆撃機
   '8': [0, 0, 0, 0, 0, 0, 0, 0, 0],       // 艦上攻撃機
@@ -174,27 +206,27 @@ const aircraftLevelBonus = {
   '58': [0, 0, 0, 0, 0, 0, 0, 0, 0],      // 噴式攻撃機
 }
 
-function getShipSaku(id, lv) {
+function getShipSaku(_id: number, _lv: number): number {
   return 0
-  const sakuArr = $saku[id] // [ lv1, lv99, lv100, lv155 ]
-  const baseSaku = lv >= 100 ? sakuArr[2] : sakuArr[0]
-  const tempSaku = (lv >= 100 ? sakuArr[3] : sakuArr[1]) - baseSaku
-  const base = lv >= 100 ? lv - 1 : lv - 99
-  const temp = lv >= 100 ? 99 - 1 : 155 - 100
-  return tempSaku * base / temp + baseSaku
 }
 
 //  data = { shipId: { slots: [ { id, lv, alv }, ... , ex: { id } ], lv }, ... }
-function getTyku(data, $equipsData, $shipsData, landbaseStatus=0) {
+function getTyku(
+  data: FleetData,
+  $equipsData: Record<number, any>,
+  $shipsData: Record<number, any>,
+  landbaseStatus = 0,
+) {
   let minTyku = 0
   let maxTyku = 0
   let basicTyku = 0
   let reconBonus = 1
   for (const ship of data) {
+    if (!ship) continue
     if (!ship.id) continue
     const { slots, id } = ship
     const maxeq = $shipsData[id].api_maxeq
-    slots.forEach((slot, i) => {
+    slots.forEach((slot: SlotData, i: number) => {
       const { id, lv, alv } = slot
       let tempTyku = 0.0
       const tempAlv = alv || 0
@@ -265,16 +297,17 @@ function getTyku(data, $equipsData, $shipsData, landbaseStatus=0) {
 
 // Saku (2-5 旧式)
 // 偵察機索敵値×2 ＋ 電探索敵値 ＋ √(艦隊の装備込み索敵値合計 - 偵察機索敵値 - 電探索敵値)
-function getSaku25(data, $equipsData) {
+function getSaku25(data: FleetData, $equipsData: Record<number, any>) {
   let reconSaku = 0
   let shipSaku = 0
   let radarSaku = 0
   let totalSaku = 0
   for (const ship of data) {
+    if (!ship) continue
     if (!ship.id) continue
     const { slots, saku, lv } = ship
     shipSaku += saku || 0
-    slots.forEach(slot => {
+    slots.forEach((slot: SlotData) => {
       const $equip = $equipsData[slot.id]
       switch ($equip.api_type[3]) {
       case 9:
@@ -312,16 +345,17 @@ function getSaku25(data, $equipsData) {
 // 索敵スコア = 艦上爆撃機 × (1.04) + 艦上攻撃機 × (1.37) + 艦上偵察機 × (1.66) + 水上偵察機 × (2.00)
 //            + 水上爆撃機 × (1.78) + 小型電探 × (1.00) + 大型電探 × (0.99) + 探照灯 × (0.91)
 //            + √(各艦毎の素索敵) × (1.69) + (司令部レベルを5の倍数に切り上げ) × (-0.61)
-function getSaku25a(data, $equipsData, teitokuLv) {
+function getSaku25a(data: FleetData, $equipsData: Record<number, any>, teitokuLv: number) {
   let totalSaku = 0
   let shipSaku = 0
   let equipSaku = 0
   let teitokuSaku = 0
   for (const ship of data) {
+    if (!ship) continue
     if (!ship.id) continue
     const { slots, lv, saku } = ship
     let shipPureSaku = saku || 0
-    slots.forEach(slot => {
+    slots.forEach((slot: SlotData) => {
       const $equip = $equipsData[slot.id]
       shipPureSaku -= $equip.api_saku
       switch ($equip.api_type[3]) {
@@ -395,17 +429,23 @@ function getSaku25a(data, $equipsData, teitokuLv) {
 //     S(各艦毎の素索敵)
 //     H(レベル)
 //     M(空き数)
-function getSaku33(data, $equipsData, teitokuLv, mapModifier=1.0) {
+function getSaku33(
+  data: FleetData,
+  $equipsData: Record<number, any>,
+  teitokuLv: number,
+  mapModifier = 1.0,
+) {
   let totalSaku = 0
   let shipSaku = 0
   let equipSaku = 0
   let teitokuSaku = 0
   let shipCount = 6
   for (const ship of data) {
+    if (!ship) continue
     shipCount -= 1
     const { slots, saku, lv } = ship
     let shipPureSaku = saku || 0
-    slots.forEach(slot => {
+    slots.forEach((slot: SlotData) => {
       const { id, lv } = slot
       const $equip = $equipsData[id]
       shipPureSaku -= $equip.api_saku
@@ -447,18 +487,23 @@ function getSaku33(data, $equipsData, teitokuLv, mapModifier=1.0) {
   }
 }
 
-const speedInterpretation = {
+const speedInterpretation: Record<number, string> = {
   [5]: 'Slow',
   [10]: 'Fast',
   [15]: 'Fast+',
   [20]: 'Fastest',
 }
 
-function getSoku(fleet) {
-  return speedInterpretation[Math.min(...fleet.map(ship => ship.soku).filter(soku => !!soku))]
+function getSoku(fleet: FleetData): string | undefined {
+  return speedInterpretation[Math.min(...fleet.filter(Boolean).map((ship) => ship!.soku || 0).filter((soku) => !!soku))]
 }
 
-export function getDetails(fleet, $equips, $ships, teitokuLv) {
+export function getDetails(
+  fleet: FleetData,
+  $equips: Record<number, any>,
+  $ships: Record<number, any>,
+  teitokuLv: number,
+) {
   return {
     tyku: getTyku(fleet, $equips, $ships),
     saku25: getSaku25(fleet, $equips),
@@ -469,12 +514,12 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
     soku: getSoku(fleet),
   }
 }
-export function transSavedData(oldData) {
-  const newData = {}
+export function transSavedData(oldData: Record<string, any>): Record<string, SavedRecord> {
+  const newData: Record<string, SavedRecord> = {}
   for (const title in oldData) {
     try {
       const { version, ships, tags } = oldData[title]
-      let tempData = {}
+      let tempData: any = {}
       if (version !== 'poi-h-v1') {
         tempData.fleets = codeConversion(ships)
         tempData.note = typeof tags === 'object' && tags instanceof Array
@@ -482,8 +527,7 @@ export function transSavedData(oldData) {
                       : ''
         tempData.version = 'poi-h-v1'
       } else {
-        const fleet = []
-        tempData = oldData[title]
+      tempData = oldData[title]
       }
       if (!tempData.fleets) continue
       newData[title] = tempData
@@ -493,12 +537,16 @@ export function transSavedData(oldData) {
   }
   return newData
 }
-export function getHenseiDataByCode(code) {
+export function getHenseiDataByCode(code: any): FleetsData {
   return compact(codeConversion(code))
 }
-export function getHenseiDataByApi(fleets, ships, equips) {
+export function getHenseiDataByApi(
+  fleets: Array<Array<{ id: number }>>,
+  ships: Record<number, any>,
+  equips: Record<number, any>,
+): FleetsData {
   return compact(fleets.map(fleet =>
-    compact(fleet.map(ship => {
+    compact(fleet.map((ship): ShipData | undefined => {
       if (ship.id !== -1) {
         const s = ships[ship.id]
         const e = s.api_slot                // arr
@@ -508,10 +556,10 @@ export function getHenseiDataByApi(fleets, ships, equips) {
         const lv = s.api_lv
         const saku = s.api_sakuteki[0]
         const soku = s.api_soku
-        const slots = compact(e.map(slotId => {
+        const slots: SlotList = compact(e.map((slotId: number): SlotData | undefined => {
           if (slotId > 0) {
             const slot = equips[slotId]
-            const sData = { id: slot.api_slotitem_id, lv: slot.api_level }
+            const sData: SlotData = { id: slot.api_slotitem_id, lv: slot.api_level }
             if (slot.api_alv) sData.alv = slot.api_alv
             return sData
           }
@@ -529,16 +577,17 @@ export function getHenseiDataByApi(fleets, ships, equips) {
     }))
   ))
 }
-export function dataToThirdparty(oldData) {
-  const newData = { version: 4 }
-  oldData.forEach((fleet, fi) => {
-    const f = {}
+export function dataToThirdparty(oldData: FleetsData) {
+  const newData: Record<string, any> = { version: 4 }
+  oldData.forEach((fleet: FleetData | undefined, fi: number) => {
+    const f: Record<string, any> = {}
     if (fleet) {
-      fleet.forEach((ship, si) => {
+      fleet.forEach((ship: ShipData | undefined, si: number) => {
+        if (!ship) return
         const { id, lv, slots } = ship
-        const s = { id, lv, luck: -1, items: {} }
-        slots.forEach((slot, ei) => {
-          const e = { id: slot.id, rf: slot.lv }
+        const s: Record<string, any> = { id, lv, luck: -1, items: {} }
+        slots.forEach((slot: SlotData, ei: number) => {
+          const e: Record<string, any> = { id: slot.id, rf: slot.lv }
           if (slot.alv) e.mas = slot.alv
           s.items[`i${ei + 1}`] = e
         })

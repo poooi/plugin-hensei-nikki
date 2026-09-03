@@ -20,6 +20,7 @@ import DataModule from './containers/data-module'
 import fs from 'fs'
 
 const { dialog } = remote.require('electron')
+type IndexProps = any
 
 const OptionsPop = styled(Popover)`
   position: absolute;
@@ -31,10 +32,10 @@ const Options = connect(
   henseiDataSelector,
   { onImportFile }
 )(class Options extends Component {
-  constructor(props) {
+  constructor(props: IndexProps) {
     super(props)
   }
-  onMenuSelected = (eventKey) => {
+  onMenuSelected = (eventKey: string) => {
     switch (eventKey) {
       case 'importFile':
         this.onFileImportSelected()
@@ -47,7 +48,7 @@ const Options = connect(
     }
 
   }
-  onFileImportSelected = (e) => {
+  onFileImportSelected = (_e?: any) => {
     const filename = (dialog.showOpenDialogSync ? dialog.showOpenDialogSync : dialog.showOpenDialog)({
       title: __('Import records file'),
       filters: [{ name: 'json file', extensions: ['json'] }],
@@ -59,14 +60,14 @@ const Options = connect(
       window.toggleModal('找不到该文件')
     }
   }
-  onFileExportSelected = (e) => {
+  onFileExportSelected = (_e?: any) => {
     const filename = (dialog.showSaveDialogSync ? dialog.showSaveDialogSync : dialog.showSaveDialog)({
       title: __('Export records file'),
       defaultPath: 'HenseiNikki.json',
     })
     let msg
     if (filename) {
-      fs.writeFile(filename, JSON.stringify(this.props.data), err => {
+      fs.writeFile(filename, JSON.stringify(this.props.data), (err: any) => {
         if (err) {
           console.log(err)
           msg = '数据导出失败'
@@ -110,11 +111,11 @@ const Options = connect(
 })
 
 export const reactClass = class HenseiNikki extends Component {
-  constructor(props) {
+  constructor(props: IndexProps) {
     super(props)
     this.state = { activeState: '' }
   }
-  switchState = (state) => {
+  switchState = (state: string) => {
     this.setState({ activeState: state })
   }
   render() {
@@ -132,13 +133,13 @@ export const reactClass = class HenseiNikki extends Component {
 
 export { reducer }
 
-let unsubHenseiDataObserve
+let unsubHenseiDataObserve: (() => void) | undefined
 
 export function pluginDidLoad() {
 
   unsubHenseiDataObserve = observe(store, [observer(
     henseiDataSelector,
-    (dispatch, current, previous) => {
+    (dispatch: any, current: any, previous: any) => {
       if (!current.data) return
       saveData(current.data)
     }
@@ -148,5 +149,5 @@ export function pluginDidLoad() {
 }
 
 export function pluginWillUnload() {
-  unsubHenseiDataObserve()
+  if (unsubHenseiDataObserve) unsubHenseiDataObserve()
 }

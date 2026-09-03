@@ -5,10 +5,12 @@ import { __ } from '../utils'
 import { onSaveData } from '../redux'
 import DataPreviewModule from './data-preview-module'
 
+type ImportModuleProps = any
+
 const ImportModule = connect(
   '', { onSaveData }
 )(class ImportModule extends Component {
-  onSaveData = (title, note, data) => {
+  onSaveData = (title: string, note: string, data: any) => {
     this.props.onSaveData(
       title,
       {
@@ -19,7 +21,7 @@ const ImportModule = connect(
     )
     this.onCancel()
   }
-  onCancel = (e) => {
+  onCancel = (_e?: any) => {
     this.props.switchState('')
   }
   render() {

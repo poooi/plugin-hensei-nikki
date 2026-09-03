@@ -6,12 +6,12 @@ import FleetsView from './fleets-view'
 import { henseiDataSelector } from '../utils'
 
 const DataView = connect(
-  (state, { title }) => {
+  (state: any, { title }: any) => {
     const { fleets, note } = henseiDataSelector(state).data[title]
 
     return { fleets, note }
   }
-)(({ title, fleets, note }) =>
+)(({ title, fleets, note }: any) =>
   <>
     <DataOpts title={title} />
     { note && <Card>{ note }</Card> }
