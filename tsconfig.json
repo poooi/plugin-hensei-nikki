@@ -11,5 +11,5 @@
     "noEmit": true,
     "types": []
   },
-  "include": ["utils/**/*.ts"]
+  "include": ["utils/**/*.ts", "redux/**/*.ts", "types/**/*.d.ts"]
 }
