@@ -6,17 +6,23 @@
   "dependencies": {},
   "devDependencies": {
     "poi-util-transpile": "^8.2.2",
-    "sass": "^1.92.1"
+    "sass": "^1.92.1",
+    "typescript": "6.0.3"
   },
   "scripts": {
     "build:css": "sass --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
     "watch:css": "sass --watch --no-source-map assets/hensei-nikki.scss assets/hensei-nikki.css",
-    "build:js": "poi-util-transpile --sm",
+    "build:core": "node ./node_modules/typescript/bin/tsc --outDir .quality/core --noEmit false && cp .quality/core/utils/fleet-data.js utils/fleet-data.js",
+    "build:js": "npm run build:core && poi-util-transpile",
     "build": "npm run build:css && npm run build:js",
     "prepack": "npm run build",
     "postpublish": "npm run reset",
     "reset": "git checkout . && git clean -f",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "rm -rf .quality && node ./node_modules/typescript/bin/tsc --outDir .quality --noEmit false && node --test test/fleet-data.test.js",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
+    "check:no-any": "sh scripts/check-no-explicit-any.sh",
+    "check:package": "node scripts/check-package.mjs",
+    "check": "npm run test && npm run typecheck && npm run build && npm run check:package && npm run check:no-any"
   },
   "repository": {
     "type": "git",

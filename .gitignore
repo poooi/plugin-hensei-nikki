@@ -1,4 +1,11 @@
 assets/.sass-cache
 assets/hensei-nikki.css.map
 node_modules
-
+.quality
+*.js.map
+index.js
+redux/*.js
+utils/*.js
+containers/*.js
+components/*.js
+components/fleets-view/*.js
