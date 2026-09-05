@@ -1,85 +1,18 @@
-import { range, compact } from 'lodash'
+import { range } from 'lodash'
+import {
+  dataToThirdparty,
+  getHenseiDataByApi,
+  getHenseiDataByCode,
+  transSavedData,
+} from './fleet-data'
 
-const arrDepth = (p, a) => Math.max(p, a instanceof Array ? a.reduce(arrDepth, 0) + 1 : 0)
-const fillIfEmpty = (arr, length) => arr.concat(new Array(length - arr.length))
+export { dataToThirdparty, getHenseiDataByApi, getHenseiDataByCode, transSavedData }
 /*
   code types
   thirdparty (support: 艦載機厨デッキビルダー(old, v3, v4))
   data (support: latest 4 versions) title: { ships(fleets), details, tags }
 */
 
-/*
-  old
-  shipItem [ shipId, [ lv, cond ], [ ...slotId ], [ ...slotLv ] ]
-  code: [ (fleet)[ shipItem, ... ], ... ]
-*/
-function oldSlots(idArr, lvArr, alvArr) {
-  if (!idArr.length) return []
-  return idArr.map((id, i) => {
-    const slot = { id }
-    if (lvArr[i]) slot.lv = lvArr[i]
-    if (alvArr[i]) slot.alv = alvArr[i]
-    return slot
-  })
-}
-function oldFleet(data) {
-  if (!data.length) return
-  return data.map(s => ({
-    id: s[0],
-    lv: s[1][0],
-    slots: oldSlots(s[2], s[3], s[4]),
-  }))
-}
-function oldVer(data) {
-  const depth = arrDepth(0, data)
-  const fleets = []
-  if (depth === 3) {
-    fleets.push(oldFleet(data))
-  } else if (depth === 4) {
-    data.forEach(fleet => fleets.push(oldFleet(fleet)))
-  } else {
-    throw 'TypeError'
-  }
-  return fleets.map(f => f)
-}
-/*
-  v3
-  {version: 3, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, rp:},...,ix:{id:200}}}, s2:{}...},...}
-*/
-/*
-  v4
-  {version: 4, f1: {s1: {id: '100', lv: 40, luck: -1, items:{i1:{id:1, rf: 4, mas:7},{i2:{id:3, rf: 0}}...,ix:{id:43}}}, s2:{}...},...}
-*/
-function newSlots(data) {
-  const slots = range(1, 5).map(i => {
-    const s = data['i' + i]
-    if (s && s.id) {
-      const { id, rf, rp, mas } = s
-      const slot = { id }
-      if (rf) slot.lv = rf
-      if (rp) slot.alv = rp
-      if (mas) slot.alv = mas
-      return slot
-    }
-  })
-  if (data.ix) slots.ex = data.ix
-  return slots.filter(s => s)
-}
-function newFleet(data) {
-  return range(1, 7).map(i => {
-    const ship = data['s' + i]
-    if (ship && Object.keys(ship).length) {
-      const { id, lv, items } = ship
-      return { id, lv, slots: newSlots(items) }
-    }
-  })
-}
-function newVer(data) {
-  return range(1, 5).map(i => {
-    const fleet = data['f' + i]
-    if (fleet && Object.keys(fleet).length) return newFleet(fleet)
-  })
-}
 /*
   v1
   ships: [ [ [ id, [ lv(null), cond(-1) ], [ ...slotId ], [ ...slotLv(null) ], [ ...slotALv(null) ] ], ... ], ... ]
@@ -146,18 +79,6 @@ function checkData(data) {
   })
   if (!fleetValid) return false
   return true
-}
-
-function codeConversion(data) {
-  if (data instanceof Array) {
-    return oldVer(data) // thirdparty & HenseiNikki old version
-  } else if (data instanceof Object) {
-    if ([ 3, 4 ].indexOf(data.version) > 0) {
-      return newVer(data) // thirdparty new version
-    } else if (data.version === 'poi-h-v1') {
-      return data.fleets
-    }
-  }
 }
 
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
@@ -468,84 +389,4 @@ export function getDetails(fleet, $equips, $ships, teitokuLv) {
     saku33x4: getSaku33(fleet, $equips, teitokuLv, 4.0),
     soku: getSoku(fleet),
   }
-}
-export function transSavedData(oldData) {
-  const newData = {}
-  for (const title in oldData) {
-    try {
-      const { version, ships, tags } = oldData[title]
-      let tempData = {}
-      if (version !== 'poi-h-v1') {
-        tempData.fleets = codeConversion(ships)
-        tempData.note = typeof tags === 'object' && tags instanceof Array
-                      ? tags.join(' ')
-                      : ''
-        tempData.version = 'poi-h-v1'
-      } else {
-        const fleet = []
-        tempData = oldData[title]
-      }
-      if (!tempData.fleets) continue
-      newData[title] = tempData
-    } catch (e) {
-      continue
-    }
-  }
-  return newData
-}
-export function getHenseiDataByCode(code) {
-  return compact(codeConversion(code))
-}
-export function getHenseiDataByApi(fleets, ships, equips) {
-  return compact(fleets.map(fleet =>
-    compact(fleet.map(ship => {
-      if (ship.id !== -1) {
-        const s = ships[ship.id]
-        const e = s.api_slot                // arr
-        const ex = s.api_slot_ex            // int
-
-        const id = s.api_ship_id
-        const lv = s.api_lv
-        const saku = s.api_sakuteki[0]
-        const soku = s.api_soku
-        const slots = compact(e.map(slotId => {
-          if (slotId > 0) {
-            const slot = equips[slotId]
-            const sData = { id: slot.api_slotitem_id, lv: slot.api_level }
-            if (slot.api_alv) sData.alv = slot.api_alv
-            return sData
-          }
-        }))
-        if (ex > 0) slots.ex = { id: ex }
-
-        return {
-          id,
-          lv,
-          saku,
-          slots,
-          soku,
-        }
-      }
-    }))
-  ))
-}
-export function dataToThirdparty(oldData) {
-  const newData = { version: 4 }
-  oldData.forEach((fleet, fi) => {
-    const f = {}
-    if (fleet) {
-      fleet.forEach((ship, si) => {
-        const { id, lv, slots } = ship
-        const s = { id, lv, luck: -1, items: {} }
-        slots.forEach((slot, ei) => {
-          const e = { id: slot.id, rf: slot.lv }
-          if (slot.alv) e.mas = slot.alv
-          s.items[`i${ei + 1}`] = e
-        })
-        f[`s${si + 1}`] = s
-      })
-    }
-    newData[`f${fi + 1}`] = f
-  })
-  return newData
 }
