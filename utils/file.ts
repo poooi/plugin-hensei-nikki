@@ -62,8 +62,8 @@ function getFileSystem(): PersistenceFileSystem {
 }
 
 function getJoin(): PathModule['join'] {
-  const loaded = require('path')
-  if (!isPathModule(loaded)) throw new TypeError('Expected a path module')
+  const loaded = require('path-extra')
+  if (!isPathModule(loaded)) throw new TypeError('Expected a path-extra module')
   return loaded.join
 }
 

@@ -121,3 +121,20 @@ test('persists after conversion and keeps save/load ordering', () => {
   assert.deepEqual(persistence.loadImportFile('/import.json'), stored)
   assert.deepEqual(events[2], ['access', '/import.json', 4])
 })
+
+test('normalizes primitive imported JSON like the historical file boundary', () => {
+  const fileSystem = {
+    R_OK: 4,
+    ensureDirSync: () => undefined,
+    readJSONSync: () => 'not saved data',
+    accessSync: () => undefined,
+  }
+  const persistence = createPersistence({
+    fileSystem,
+    fileWriter: { write: () => undefined },
+    pluginPath: '/plugin',
+    dataPath: '/plugin/member.json',
+  })
+
+  assert.deepEqual(persistence.loadImportFile('/import.json'), {})
+})

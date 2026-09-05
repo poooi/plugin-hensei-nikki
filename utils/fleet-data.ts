@@ -159,11 +159,15 @@ function newSlots(value: UnknownRecord): FleetSlots {
     const item = getProperty(value, `i${index}`)
     if (item && isObject(item) && item.id) {
       const slot: FleetSlot = { id: requireIdentifier(item.id) }
-      const level = optionalNumber(item.rf)
       let proficiency = optionalNumber(item.rp)
       if (item.mas) proficiency = optionalNumber(item.mas)
-      if (level !== undefined) slot.lv = level
-      if (proficiency !== undefined) slot.alv = proficiency
+      if (item.rf) {
+        const level = optionalNumber(item.rf)
+        if (level !== undefined) slot.lv = level
+      }
+      if (item.rp || item.mas) {
+        if (proficiency !== undefined) slot.alv = proficiency
+      }
       candidates.push(slot)
     } else {
       candidates.push(undefined)
@@ -344,8 +348,10 @@ export function dataToThirdparty(input: unknown): ThirdPartyData {
         const items: Record<string, ThirdPartyItem> = {}
         requireArray(ship.slots).forEach((slotInput, slotIndex) => {
           const slot = requireObject(slotInput)
-          const item: ThirdPartyItem = { id: requireIdentifier(slot.id) }
-          if (slot.lv) item.rf = optionalNumber(slot.lv)
+          const item: ThirdPartyItem = {
+            id: requireIdentifier(slot.id),
+            rf: optionalNumber(slot.lv),
+          }
           if (slot.alv) item.mas = optionalNumber(slot.alv)
           items[`i${slotIndex + 1}`] = item
         })

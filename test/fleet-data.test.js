@@ -72,6 +72,37 @@ test('converts third-party v4 and preserves the historical ix-property loss', ()
   assert.equal(getHenseiDataByCode({ version: 3, f1: {} }).length, 0)
 })
 
+test('preserves zero-valued v4 levels and third-party rf output compatibility', () => {
+  assert.deepEqual(getHenseiDataByCode({
+    version: 4,
+    f1: {
+      s1: {
+        id: '100',
+        lv: 40,
+        items: { i1: { id: 1, rf: 0, rp: 0 } },
+      },
+    },
+  }), [[{
+    id: '100',
+    lv: 40,
+    slots: [{ id: 1 }],
+  }, undefined, undefined, undefined, undefined, undefined]])
+
+  assert.deepEqual(dataToThirdparty([[
+    { id: '100', lv: 40, slots: [{ id: 1, lv: 0, alv: 0 }] },
+  ]]), {
+    version: 4,
+    f1: {
+      s1: {
+        id: '100',
+        lv: 40,
+        luck: -1,
+        items: { i1: { id: 1, rf: 0 } },
+      },
+    },
+  })
+})
+
 test('keeps API slot-ex optional for absent and null values', () => {
   const baseShip = {
     api_ship_id: 100,

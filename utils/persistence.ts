@@ -46,7 +46,8 @@ export function createPersistence(options: PersistenceOptions): Persistence {
 
     loadImportFile(filename: string): unknown {
       fileSystem.accessSync(filename, fileSystem.R_OK)
-      return fileSystem.readJSONSync(filename)
+      const data = fileSystem.readJSONSync(filename)
+      return typeof data === 'object' && data !== null ? data : {}
     },
   }
 }
