@@ -80,3 +80,20 @@ test('API selectors retain live host slot and equipment relationships', () => {
   })
   assert.deepEqual(getEquipInfoByApi(201)(state), { name: 'gun', iconId: 3, lv: 4, alv: 2 })
 })
+
+test('presentation selectors keep partial host records renderable', () => {
+  assert.deepEqual(constShipInfoSelector(999)(state), { name: 'translated:', type: 'translated:' })
+  assert.deepEqual(getShipInfoByApi(999)(state), {
+    name: 'translated:',
+    lv: 0,
+    saku: undefined,
+    type: 'translated:',
+    slots: [],
+  })
+  assert.deepEqual(getEquipInfoByApi(999)(state), {
+    name: '',
+    iconId: 0,
+    lv: undefined,
+    alv: undefined,
+  })
+})

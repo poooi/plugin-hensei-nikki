@@ -5,11 +5,12 @@
     "strict": true,
     "noEmit": false,
     "declaration": false,
+    "jsx": "react",
     "sourceMap": false,
     "outDir": ".",
     "rootDir": ".",
     "skipLibCheck": false
   },
-  "include": ["redux/**/*.ts", "utils/**/*.ts", "types/**/*.d.ts"],
+  "include": ["redux/**/*.ts", "utils/**/*.ts", "components/**/*.tsx", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

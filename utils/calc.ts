@@ -42,8 +42,8 @@ interface ShipData {
   api_slot: number[]
   api_slot_ex: number
 }
-type EquipIndex = Record<string, EquipData>
-type ShipIndex = Record<string, ShipData>
+type EquipIndex = Record<string, Pick<EquipData, 'api_baku' | 'api_houk' | 'api_houm' | 'api_saku' | 'api_type' | 'api_tyku'>>
+type ShipIndex = Record<string, Pick<ShipData, 'api_maxeq'>>
 export type UnknownRecord = Record<string, unknown>
 interface PassthroughSavedFleetData extends UnknownRecord {
   version: 'poi-h-v1'
