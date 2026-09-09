@@ -8,8 +8,8 @@
     "sourceMap": false,
     "outDir": ".",
     "rootDir": ".",
-    "skipLibCheck": true
+    "skipLibCheck": false
   },
-  "include": ["utils/calc.ts"],
+  "include": ["redux/**/*.ts", "utils/**/*.ts", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

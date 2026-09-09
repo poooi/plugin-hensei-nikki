@@ -44,12 +44,14 @@ interface ShipData {
 }
 type EquipIndex = Record<string, EquipData>
 type ShipIndex = Record<string, ShipData>
-type UnknownRecord = Record<string, unknown>
+export type UnknownRecord = Record<string, unknown>
 interface PassthroughSavedFleetData extends UnknownRecord {
   version: 'poi-h-v1'
   fleets: unknown
+  note?: unknown
 }
-type TransformedSavedFleetData = SavedFleetData | PassthroughSavedFleetData
+export type SavedDataRecord = SavedFleetData | PassthroughSavedFleetData
+export type SavedDataRecords = Record<string, SavedDataRecord>
 
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
 const aircraftLevelBonus: Record<string, number[]> = {
@@ -263,13 +265,13 @@ export function getDetails(fleet: FleetShip[], equips: EquipIndex, ships: ShipIn
 function isPassthroughSavedData(value: UnknownRecord): value is PassthroughSavedFleetData {
   return value.version === 'poi-h-v1' && Boolean(value.fleets)
 }
-export function transSavedData(oldData: unknown): Record<string, TransformedSavedFleetData> {
-  const result: Record<string, TransformedSavedFleetData> = {}
+export function transSavedData(oldData: unknown): SavedDataRecords {
+  const result: SavedDataRecords = {}
   if (!isRecord(oldData)) return result
   for (const title in oldData) {
     try {
       const record = requireRecord(oldData[title], `saved record ${title}`); const { version, ships, tags } = record
-      let converted: TransformedSavedFleetData
+      let converted: SavedDataRecord
       if (version !== 'poi-h-v1') {
         const fleets = codeConversion(ships); if (!fleets) continue
         converted = { fleets, note: Array.isArray(tags) ? tags.join(' ') : '', version: 'poi-h-v1' }

@@ -22,7 +22,7 @@
     "prepack": "npm run build",
     "postpublish": "npm run reset",
     "reset": "git checkout . && git clean -f",
-    "test": "npm run build:ts && node --test test/calc.test.js"
+    "test": "npm run build:ts && node --test test/*.test.js"
   },
   "repository": {
     "type": "git",
