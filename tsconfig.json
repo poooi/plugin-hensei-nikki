@@ -6,11 +6,11 @@
     "noEmit": false,
     "declaration": false,
     "jsx": "react",
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": ".",
     "rootDir": ".",
     "skipLibCheck": false
   },
-  "include": ["redux/**/*.ts", "utils/**/*.ts", "components/**/*.tsx", "containers/**/*.tsx", "types/**/*.d.ts"],
+  "include": ["index.tsx", "redux/**/*.ts", "utils/**/*.ts", "components/**/*.tsx", "containers/**/*.tsx", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

@@ -43,6 +43,7 @@ Module._load = function load(request, parent, isMain) {
   if (request === 'react') return React
   if (request === 'fast-memoize') return (callback) => callback
   if (request === 'react-redux') return { connect: () => (component) => component }
+  if (request === 'lodash') return { isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right) }
   if (request === 'reselect') return { createSelector: (...args) => (state) => args.at(-1)(...args.slice(0, -1).map((selector) => selector(state))) }
   if (request === '@blueprintjs/core') return {
     Popover,

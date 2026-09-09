@@ -55,6 +55,7 @@ function createSelector(...argumentsList) {
 Module._load = function load(request, parent, isMain) {
   if (request === 'react') return React
   if (request === 'react-redux') return { connect: () => (component) => component }
+  if (request === 'lodash') return { isEqual: (left, right) => JSON.stringify(left) === JSON.stringify(right) }
   if (request === 'reselect') return { createSelector }
   if (request === 'fast-memoize') return (callback) => callback
   if (request === 'styled-components') return styled
