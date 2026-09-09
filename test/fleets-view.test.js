@@ -66,7 +66,7 @@ Module._load = function load(request, parent, isMain) {
 
 const { FleetPanel, default: FleetsView } = require('../components/fleets-view/index.js')
 const { SlotItem } = require('../components/fleets-view/ship.js')
-const { getLosDisplay } = require('../components/fleets-view/details.js')
+const { Details, getLosDisplay } = require('../components/fleets-view/details.js')
 
 function fleet(shipId = 101) {
   return [{ id: shipId, lv: 40, slots: [] }]
@@ -95,17 +95,23 @@ test('fleet tabs preserve selection and expose each non-empty fleet', () => {
   assert.equal(view.render().props.selectedTabId, 2)
 })
 
-test('LOS keeps calculated zero distinct from unavailable values', () => {
+test('LOS preserves the legacy fallback for a zero Formula 33 total', () => {
   const formula = { total: 0 }
   assert.deepEqual(getLosDisplay({ saku33: formula, saku25: { total: 20 }, saku25a: { total: 30 } }), {
-    value: 0,
-    source: 'formula33',
+    value: 20,
+    source: 'legacy',
   })
   assert.deepEqual(getLosDisplay({ saku33: { total: undefined }, saku25: { total: 20 }, saku25a: { total: 30 } }), {
     value: 20,
     source: 'legacy',
   })
   assert.equal(getLosDisplay({ saku33: { total: undefined }, saku25: { total: undefined }, saku25a: { total: undefined } }), undefined)
+})
+
+test('details retains id-zero ships for the Formula 33 calculation', () => {
+  const details = new Details({ fleet: [{ id: 0, slots: [] }], $equips: {}, $ships: {}, lv: 1 })
+  details.componentDidMount()
+  assert.equal(details.state.details.saku33.total, 9)
 })
 
 test('seaplane proficiency keeps the host icon relationship and zero level', () => {
@@ -125,5 +131,22 @@ test('seaplane proficiency keeps the host icon relationship and zero level', () 
   const improvement = rendered.props.children[2]
   assert.equal(improvement.props.children[1].props.src, '/poi/assets/img/airplane/alv3.png')
   window.getStore = previousStore
+  Module._load = previousLoad
+})
+
+test('ships preserve the base zero-level presentation', () => {
+  const previousLoad = Module._load
+  Module._load = function load(request, parent, isMain) {
+    if (request === '../../utils/selectors') return {
+      equipInfoSelector: () => () => ({ name: 'equipment', iconId: 42 }),
+      shipInfoSelector: () => () => ({ name: 'ship', type: 'destroyer', lv: 0, slots: [] }),
+    }
+    return previousLoad.call(this, request, parent, isMain)
+  }
+  delete require.cache[require.resolve('../components/fleets-view/ship.js')]
+  const { default: ship } = require('../components/fleets-view/ship.js')
+  const rendered = ship({ shipId: 101, ship: { id: 101, slots: [] } })
+  const detail = rendered.props.children[1]
+  assert.equal(detail.props.children[0], 0)
   Module._load = previousLoad
 })

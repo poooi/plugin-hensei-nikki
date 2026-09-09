@@ -36,7 +36,9 @@ const isAvailable = (value: number | null | undefined): value is number =>
   typeof value === 'number' && !Number.isNaN(value)
 
 export function getLosDisplay(details: LosInputs): LosDisplay | undefined {
-  if (isAvailable(details.saku33.total)) return { value: details.saku33.total, source: 'formula33' }
+  if (isAvailable(details.saku33.total) && details.saku33.total !== 0) {
+    return { value: details.saku33.total, source: 'formula33' }
+  }
   if (isAvailable(details.saku25.total)) return { value: details.saku25.total, source: 'legacy' }
   if (isAvailable(details.saku25a.total)) return { value: details.saku25a.total, source: 'fall' }
   return undefined
@@ -67,7 +69,7 @@ export class Details extends Component<DetailsProps, { details?: DetailsResult }
   }
 
   private updateDetails(props: DetailsProps): void {
-    const fleet = props.fleet.filter((ship): ship is FleetShip => Boolean(ship && ship.id))
+    const fleet = props.fleet.filter((ship): ship is FleetShip => Boolean(ship))
     this.setState({ details: getDetails(fleet, props.$equips, props.$ships, props.lv) })
   }
 

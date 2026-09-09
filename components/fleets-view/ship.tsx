@@ -53,7 +53,7 @@ export default function Ship({ shipId, ship }: ShipProps): JSX.Element {
     <div className="ship-item">
       <span className="ship-name">{name}</span>
       <div className="ship-detail">
-        {typeof lv === 'number' && <span>Lv.{lv}</span>}
+        {lv && <span>Lv.{lv}</span>}
         <span className="ship-type">{type}</span>
       </div>
       <div className="slot-detail">

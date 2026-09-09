@@ -1,4 +1,11 @@
 type HenseiPluginState = import('../redux').HenseiState
+interface HenseiReactElement {
+  type: unknown
+  props: HenseiReactNode
+  key: string | number | null
+}
+type HenseiReactNode = HenseiReactElement | string | number | boolean | null | undefined | HenseiReactNode[]
+
 interface HenseiHostRootState {
   'poi-plugin-hensei-nikki': HenseiPluginState
 }
@@ -99,10 +106,10 @@ declare module 'reselect' {
 declare module 'react' {
   export type Key = string | number
   export type ReactText = string | number
-  export type ReactNode = ReactElement | ReactText | boolean | null | undefined | ReactNode[]
+  export type ReactNode = HenseiReactNode
   export interface ReactElement {
     type: unknown
-    props: Record<string, unknown>
+    props: ReactNode
     key: Key | null
   }
   export interface SyntheticEvent<T = Element> {
@@ -111,6 +118,16 @@ declare module 'react' {
   }
   export interface CSSProperties {
     [property: string]: string | number | undefined
+  }
+  export interface HTMLAttributes {
+    id?: string
+    className?: string
+    style?: CSSProperties
+    children?: ReactNode
+  }
+  export interface ImgHTMLAttributes extends HTMLAttributes {
+    alt?: string
+    src?: string
   }
   export interface FunctionComponent<P = {}> {
     (props: P): ReactElement | null
@@ -129,13 +146,16 @@ declare module 'react' {
   }
   export function createElement(
     type: unknown,
-    props: Record<string, unknown> | null,
+    props: object | null,
     ...children: ReactNode[]
   ): ReactElement
   export namespace JSX {
     interface Element extends ReactElement {}
     interface IntrinsicElements {
-      [elementName: string]: Record<string, unknown>
+      div: HTMLAttributes
+      span: HTMLAttributes
+      strong: HTMLAttributes
+      img: ImgHTMLAttributes
     }
   }
   const React: { createElement: typeof createElement; Fragment: unknown }
@@ -182,14 +202,11 @@ declare module '@blueprintjs/core' {
 }
 
 declare module 'styled-components' {
-  import { ComponentType } from 'react'
+  import { ComponentType, HTMLAttributes } from 'react'
 
   interface StyledFactory {
     <Props>(component: ComponentType<Props>): StyledTemplate<Props>
-    div: (
-      strings: TemplateStringsArray,
-      ...interpolations: readonly unknown[]
-    ) => ComponentType<Record<string, unknown>>
+    div: StyledTemplate<HTMLAttributes>
   }
   interface StyledTemplate<Props> {
     (
@@ -239,15 +256,14 @@ declare module 'lodash' {
 }
 
 declare namespace JSX {
-  interface Element {
-    type: unknown
-    props: Record<string, unknown>
-    key: string | number | null
-  }
+  interface Element extends HenseiReactElement {}
   interface IntrinsicAttributes {
     key?: string | number
   }
   interface IntrinsicElements {
-    [elementName: string]: Record<string, unknown>
+    div: import('react').HTMLAttributes
+    span: import('react').HTMLAttributes
+    strong: import('react').HTMLAttributes
+    img: import('react').ImgHTMLAttributes
   }
 }
