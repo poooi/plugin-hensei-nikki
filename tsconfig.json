@@ -11,6 +11,6 @@
     "rootDir": ".",
     "skipLibCheck": false
   },
-  "include": ["redux/**/*.ts", "utils/**/*.ts", "components/**/*.tsx", "types/**/*.d.ts"],
+  "include": ["redux/**/*.ts", "utils/**/*.ts", "components/**/*.tsx", "containers/**/*.tsx", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

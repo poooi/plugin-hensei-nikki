@@ -14,10 +14,9 @@ import {
 import styled from 'styled-components'
 
 import { reducer, onImportFile } from './redux'
-import { __, henseiDataSelector, saveData, loadImportFile } from './utils'
+import { __, exportRecordsFile, henseiDataSelector, saveData, loadImportFile } from './utils'
 import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
-import fs from 'fs'
 
 const { dialog } = remote.require('electron')
 
@@ -64,17 +63,8 @@ const Options = connect(
       title: __('Export records file'),
       defaultPath: 'HenseiNikki.json',
     })
-    let msg
     if (filename) {
-      fs.writeFile(filename, JSON.stringify(this.props.data), err => {
-        if (err) {
-          console.log(err)
-          msg = '数据导出失败'
-        } else {
-          msg = '数据导出成功'
-        }
-        window.toggleModal(msg)
-      })
+      exportRecordsFile(filename, this.props.data, (msg) => window.toggleModal(msg))
     }
   }
   render() {
