@@ -28,7 +28,10 @@ interface HenseiConstantEquip {
 
 interface HenseiApiShip {
   api_lv: number
+  api_ship_id: Identifier
   api_sakuteki: number[]
+  api_soku: number
+  api_maxeq: number[]
   api_slot: number[]
   api_slot_ex: number
 }
@@ -36,6 +39,14 @@ interface HenseiApiShip {
 interface HenseiApiEquip {
   api_level: number
   api_alv?: number
+  api_slotitem_id?: Identifier
+}
+
+type Identifier = number | string
+
+interface HenseiHostFleet {
+  api_name: string
+  api_ship: number[]
 }
 
 interface HenseiConstants {
@@ -66,6 +77,22 @@ interface Window {
     }
   }
   toggleModal(...messages: Array<string | HenseiModalAction[]>): void
+}
+
+declare const __dirname: string
+
+interface HenseiDialogOptions {
+  title: string
+  filters?: Array<{ name: string; extensions: string[] }>
+  properties?: string[]
+  defaultPath?: string
+}
+
+interface HenseiDialog {
+  showOpenDialogSync?: (options: HenseiDialogOptions) => string[] | undefined
+  showOpenDialog?: (options: HenseiDialogOptions) => string[] | undefined
+  showSaveDialogSync?: (options: HenseiDialogOptions) => string | undefined
+  showSaveDialog?: (options: HenseiDialogOptions) => string | undefined
 }
 
 interface HenseiModalAction {
@@ -117,6 +144,10 @@ declare module 'reselect' {
     inputs: [Selector<State, First>, Selector<State, Second>],
     result: (first: First, second: Second) => Result,
   ): Selector<State, Result>
+  export function createSelector<State, First, Second, Third, Result>(
+    inputs: [Selector<State, First>, Selector<State, Second>, Selector<State, Third>],
+    result: (first: First, second: Second, third: Third) => Result,
+  ): Selector<State, Result>
 }
 
 declare module 'react' {
@@ -139,6 +170,8 @@ declare module 'react' {
   export interface HTMLAttributes {
     id?: string
     className?: string
+    rel?: string
+    href?: string
     style?: CSSProperties
     children?: ReactNode
     onClick?: () => void
@@ -223,6 +256,7 @@ declare module '@blueprintjs/core' {
     leftIcon?: string
     placeholder?: string
     value?: string
+    type?: string
     onChange?: (event: SyntheticEvent<HTMLInputElement>) => void
   }
   export interface TextAreaProps extends CommonProps {
@@ -230,6 +264,18 @@ declare module '@blueprintjs/core' {
     id?: string
     value?: string
     onChange?: (event: SyntheticEvent<HTMLTextAreaElement>) => void
+  }
+  export interface CheckboxProps extends CommonProps {
+    checked?: boolean
+    onChange?: () => void
+  }
+  export interface ControlGroupProps extends CommonProps {
+    fill?: boolean
+  }
+  export interface MenuItemProps extends CommonProps {
+    text?: ReactNode
+    icon?: string
+    onClick?: () => void
   }
   export interface FormGroupProps extends CommonProps {
     label?: ReactNode
@@ -247,6 +293,10 @@ declare module '@blueprintjs/core' {
   export const InputGroup: ComponentType<InputGroupProps>
   export const TextArea: ComponentType<TextAreaProps>
   export const HTMLSelect: ComponentType<HTMLSelectProps>
+  export const Checkbox: ComponentType<CheckboxProps>
+  export const ControlGroup: ComponentType<ControlGroupProps>
+  export const Menu: ComponentType<CommonProps>
+  export const MenuItem: ComponentType<MenuItemProps>
 
   export type TabId = string | number
   export interface TabsProps {
@@ -307,12 +357,38 @@ declare module 'views/services/clipboard' {
 }
 
 declare module 'electron' {
+  export const dialog: HenseiDialog
   export const clipboard: {
     writeText(text: string): void
   }
   export const shell: {
     openExternal(url: string): void
   }
+}
+
+declare module 'views/create-store' {
+  interface HenseiStore {
+    dispatch(action: { type: string }): void
+    getState(): HenseiHostRootState
+    subscribe(listener: () => void): () => void
+  }
+  export const store: HenseiStore
+}
+
+declare module 'redux-observers' {
+  import { Selector } from 'reselect'
+
+  export function observer<State, Selection>(
+    selector: Selector<State, Selection>,
+    callback: (dispatch: (action: { type: string }) => void, current: Selection, previous: Selection | undefined) => void,
+  ): unknown
+  export function observe(store: unknown, observers: unknown[]): () => void
+}
+
+declare module 'views/utils/selectors' {
+  export const fleetsSelector: (state: HenseiHostRootState) => HenseiHostFleet[]
+  export const shipsSelector: (state: HenseiHostRootState) => Record<string, HenseiApiShip>
+  export const equipsSelector: (state: HenseiHostRootState) => Record<string, HenseiApiEquip>
 }
 
 declare function require(moduleName: 'views/services/clipboard'): typeof import('views/services/clipboard')
@@ -352,6 +428,7 @@ declare namespace JSX {
     key?: string | number
   }
   interface IntrinsicElements {
+    link: import('react').HTMLAttributes
     div: import('react').HTMLAttributes
     span: import('react').HTMLAttributes
     strong: import('react').HTMLAttributes
