@@ -265,6 +265,14 @@ export function getDetails(fleet: FleetShip[], equips: EquipIndex, ships: ShipIn
 function isPassthroughSavedData(value: UnknownRecord): value is PassthroughSavedFleetData {
   return value.version === 'poi-h-v1' && Boolean(value.fleets)
 }
+
+export function isSavedFleetData(value: SavedDataRecord | Record<string, never> | undefined): value is SavedFleetData {
+  return isRecord(value)
+    && value.version === 'poi-h-v1'
+    && isFleetCollection(value.fleets)
+    && (value.note === undefined || typeof value.note === 'string')
+}
+
 export function transSavedData(oldData: unknown): SavedDataRecords {
   const result: SavedDataRecords = {}
   if (!isRecord(oldData)) return result
@@ -300,7 +308,7 @@ export function getHenseiDataByApi(fleets: unknown, ships: unknown, equips: unkn
   }))))
 }
 
-export function dataToThirdparty(oldData: Fleet[]): UnknownRecord {
+export function dataToThirdparty(oldData: Array<Fleet | undefined>): UnknownRecord {
   const result: UnknownRecord = { version: 4 }
   oldData.forEach((fleet, fleetIndex) => {
     const outputFleet: UnknownRecord = {}

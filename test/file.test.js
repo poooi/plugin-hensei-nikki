@@ -9,6 +9,7 @@ let accessError
 let writeError
 const writes = []
 let writerCount = 0
+const exportedResults = []
 
 global.window = {
   APPDATA_PATH: '/appdata',
@@ -16,6 +17,15 @@ global.window = {
 }
 
 Module._load = function load(request, parent, isMain) {
+  if (request === 'fs') return {
+    writeFile(path, contents, callback) {
+      if (writeError) callback(writeError)
+      else {
+        writes.push({ path, contents })
+        callback(null)
+      }
+    },
+  }
   if (request === 'path-extra') return { join: (...parts) => parts.join('/') }
   if (request === 'views/utils/file-writer') {
     return class FileWriter {
@@ -41,6 +51,7 @@ Module._load = function load(request, parent, isMain) {
 }
 
 const { loadData, loadImportFile, saveData } = require('../utils/file.js')
+const { exportRecordsFile } = require('../utils/record-export.js')
 
 test('saveData uses one account-scoped writer and preserves write order', () => {
   const first = { first: { version: 'poi-h-v1', fleets: [] } }
@@ -88,4 +99,16 @@ test('loadImportFile keeps valid data, normalizes non-objects, and rethrows I/O 
   readError = undefined
   accessError = new Error('missing')
   assert.throws(() => loadImportFile('/tmp/missing.json'), /missing/)
+})
+
+test('exportRecordsFile reports filesystem callback results and preserves JSON output', () => {
+  const data = { first: { version: 'poi-h-v1', fleets: [] } }
+  exportRecordsFile('/tmp/records.json', data, (result) => exportedResults.push(result))
+  assert.equal(writes.at(-1).contents, JSON.stringify(data))
+  assert.deepEqual(exportedResults, ['数据导出成功'])
+
+  writeError = new Error('write failed')
+  exportRecordsFile('/tmp/records.json', data, (result) => exportedResults.push(result))
+  assert.deepEqual(exportedResults, ['数据导出成功', '数据导出失败'])
+  writeError = undefined
 })
