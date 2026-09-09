@@ -63,10 +63,14 @@ export const dataByTitleSelector = (
   createSelector(henseiDataSelector, ({ data }) => ({ data: data?.[title] || {} }))
 
 export const constShipInfoSelector = memoize((id: Identifier): Selector<HenseiHostRootState, { name: string; type: string }> =>
-  createSelector(constSelector, ({ $ships, $shipTypes }) => ({
-    name: getI18n(($ships[id] || { api_name: '' }).api_name),
-    type: getI18n($shipTypes[$ships[id].api_stype].api_name),
-  })))
+  createSelector(constSelector, ({ $ships, $shipTypes }) => {
+    const ship = $ships[id]
+    const shipType = ship ? $shipTypes[ship.api_stype] : undefined
+    return {
+      name: getI18n(ship ? ship.api_name : ''),
+      type: getI18n(shipType ? shipType.api_name : ''),
+    }
+  }))
 
 export const constEquipInfoSelector = memoize((id: Identifier): Selector<HenseiHostRootState, { name: string; iconId: number }> =>
   createSelector(constSelector, ({ $equips }) => ({
@@ -101,8 +105,10 @@ export const getShipInfoByApi = memoize((id: Identifier): Selector<HenseiHostRoo
     return {
       name: getI18n((constantShip || { api_name: '' }).api_name),
       lv: ship ? ship.api_lv : 0,
-      saku: ship!.api_sakuteki[0],
-      type: getI18n($shipTypes[ship ? constantShip!.api_stype : 0].api_name),
+      saku: ship ? ship.api_sakuteki[0] : undefined,
+      type: getI18n(ship && constantShip && $shipTypes[constantShip.api_stype]
+        ? $shipTypes[constantShip.api_stype].api_name
+        : ''),
       slots,
     }
   }))
@@ -116,12 +122,12 @@ export const getEquipInfoByApi = memoize((id: number): Selector<HenseiHostRootSt
   createSelector(equipDataSelectorFactory(id), ([equip, constantEquip]) => ({
     name: (constantEquip || { api_name: '' }).api_name,
     iconId: constantEquip ? constantEquip.api_type[3] : 0,
-    lv: equip.api_level,
-    alv: equip.api_alv,
+    lv: equip ? equip.api_level : undefined,
+    alv: equip ? equip.api_alv : undefined,
   })))
 
 export const equipInfoSelector = (
   id: Identifier,
-  slot: Slot | number,
+  slot: Slot | Identifier,
 ): Selector<HenseiHostRootState, EquipInfo> =>
-  id ? getEquipInfoByData(id, typeof slot === 'number' ? { id: slot } : slot) : getEquipInfoByApi(typeof slot === 'number' ? slot : Number(slot))
+  id ? getEquipInfoByData(id, typeof slot === 'object' ? slot : { id: slot }) : getEquipInfoByApi(typeof slot === 'number' ? slot : Number(slot))
