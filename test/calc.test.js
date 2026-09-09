@@ -28,6 +28,25 @@ test('saved conversion preserves empty, zero, unsupported, legacy, and v4 record
   assert.deepEqual(result.v4.fleets[0][0], { id: 101, lv: 40, slots: [{ id: 200 }] })
 })
 
+test('legacy saved conversion preserves empty fleet positions', () => {
+  const ship = [101, [99, -1], [200], [4], [7]]
+  const result = transSavedData({ partial: { version: 1, ships: [[ship], [], [ship]] } })
+  assert.deepEqual(result.partial.fleets, [
+    [{ id: 101, lv: 99, slots: [{ id: 200, lv: 4, alv: 7 }] }],
+    undefined,
+    [{ id: 101, lv: 99, slots: [{ id: 200, lv: 4, alv: 7 }] }],
+  ])
+})
+
+test('saved v1 conversion preserves partial fleet records', () => {
+  const record = {
+    version: 'poi-h-v1',
+    fleets: [null, { not: 'a fleet' }, [{ id: 101 }]],
+  }
+  const result = transSavedData({ partial: record })
+  assert.strictEqual(result.partial, record)
+})
+
 test('legacy and third-party code conversion keeps fleet shape', () => {
   const legacy = [[[101, [99, -1], [200], [4], [7]]]]
   assert.deepEqual(getHenseiDataByCode(legacy), [[{ id: 101, lv: 99, slots: [{ id: 200, lv: 4, alv: 7 }] }]])

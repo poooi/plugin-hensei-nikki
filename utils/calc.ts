@@ -45,6 +45,11 @@ interface ShipData {
 type EquipIndex = Record<string, EquipData>
 type ShipIndex = Record<string, ShipData>
 type UnknownRecord = Record<string, unknown>
+interface PassthroughSavedFleetData extends UnknownRecord {
+  version: 'poi-h-v1'
+  fleets: unknown
+}
+type TransformedSavedFleetData = SavedFleetData | PassthroughSavedFleetData
 
 const aircraftExpTable = [0, 10, 25, 40, 55, 70, 85, 100, 121]
 const aircraftLevelBonus: Record<string, number[]> = {
@@ -120,14 +125,13 @@ function oldFleet(value: unknown[]): Fleet | undefined {
     }
   })
 }
-function oldVer(data: unknown[]): Fleet[] {
+function oldVer(data: unknown[]): Array<Fleet | undefined> {
   const depth = arrDepth(0, data)
-  const fleets: Fleet[] = []
+  const fleets: Array<Fleet | undefined> = []
   if (depth === 3) {
-    const fleet = oldFleet(data)
-    if (fleet) fleets.push(fleet)
+    fleets.push(oldFleet(data))
   } else if (depth === 4) {
-    data.forEach((fleet) => { const converted = oldFleet(requireArray(fleet, 'legacy fleet')); if (converted) fleets.push(converted) })
+    data.forEach((fleet) => { fleets.push(oldFleet(requireArray(fleet, 'legacy fleet'))) })
   } else throw new TypeError('unsupported legacy data depth')
   return fleets
 }
@@ -256,21 +260,23 @@ export function getDetails(fleet: FleetShip[], equips: EquipIndex, ships: ShipIn
   return { tyku: getTyku(fleet, equips, ships), saku25: getSaku25(fleet, equips), saku25a: getSaku25a(fleet, equips, teitokuLv), saku33: getSaku33(fleet, equips, teitokuLv), saku33x3: getSaku33(fleet, equips, teitokuLv, 3), saku33x4: getSaku33(fleet, equips, teitokuLv, 4), soku: getSoku(fleet) }
 }
 
-function isSavedData(value: unknown): value is SavedFleetData {
-  return isRecord(value) && value.version === 'poi-h-v1' && isFleetCollection(value.fleets)
+function isPassthroughSavedData(value: UnknownRecord): value is PassthroughSavedFleetData {
+  return value.version === 'poi-h-v1' && Boolean(value.fleets)
 }
-export function transSavedData(oldData: unknown): Record<string, SavedFleetData> {
-  const result: Record<string, SavedFleetData> = {}
+export function transSavedData(oldData: unknown): Record<string, TransformedSavedFleetData> {
+  const result: Record<string, TransformedSavedFleetData> = {}
   if (!isRecord(oldData)) return result
   for (const title in oldData) {
     try {
       const record = requireRecord(oldData[title], `saved record ${title}`); const { version, ships, tags } = record
-      let converted: SavedFleetData
+      let converted: TransformedSavedFleetData
       if (version !== 'poi-h-v1') {
         const fleets = codeConversion(ships); if (!fleets) continue
         converted = { fleets, note: Array.isArray(tags) ? tags.join(' ') : '', version: 'poi-h-v1' }
       } else {
-        if (!isSavedData(record)) continue
+        // Saved data is passed through historically when it has a truthy fleets field.
+        // Do not validate its contents here: old and partial saves must remain loadable.
+        if (!isPassthroughSavedData(record)) continue
         converted = record
       }
       if (converted.fleets) result[title] = converted
