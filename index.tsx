@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { observer, observe } from 'redux-observers'
 import { join } from 'path-extra'
-import { dialog } from 'electron'
 import { store } from 'views/create-store'
 import {
   Icon,
@@ -18,6 +17,8 @@ import { reducer, onImportFile } from './redux'
 import { __, exportRecordsFile, henseiDataSelector, saveData, loadImportFile } from './utils'
 import ImportModule from './containers/import-module'
 import DataModule from './containers/data-module'
+
+const { dialog } = remote.require('electron')
 
 interface OptionsOwnProps {
   switchState: (state: string) => void

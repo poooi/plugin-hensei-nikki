@@ -6,6 +6,10 @@ const originalLoad = Module._load
 const dispatches = []
 const saved = []
 const observed = []
+const opened = []
+const savedFiles = []
+const importedFiles = []
+const exportedFiles = []
 let unloaded = 0
 
 class ReactComponent {
@@ -34,6 +38,24 @@ global.window = {
   toggleModal() {},
 }
 
+global.remote = {
+  require: (moduleName) => {
+    assert.equal(moduleName, 'electron')
+    return {
+      dialog: {
+        showOpenDialogSync: (options) => {
+          opened.push(options)
+          return ['/tmp/records.json']
+        },
+        showSaveDialogSync: (options) => {
+          savedFiles.push(options)
+          return '/tmp/export.json'
+        },
+      },
+    }
+  },
+}
+
 Module._load = function load(request, parent, isMain) {
   if (request === 'react') return { Component: ReactComponent, createElement, Fragment: Symbol('fragment') }
   if (request === 'react-redux') return { connect: () => (component) => component }
@@ -53,7 +75,7 @@ Module._load = function load(request, parent, isMain) {
       subscribe: () => () => {},
     },
   }
-  if (request === 'electron') return { dialog: {} }
+  if (request === 'electron') return { clipboard: {}, shell: {} }
   if (request === 'path-extra') return { join: (...parts) => parts.join('/') }
   if (request === 'styled-components') {
     const styled = () => () => null
@@ -75,10 +97,13 @@ Module._load = function load(request, parent, isMain) {
   if (request === './containers/data-module') return function DataModule() {}
   if (request === './utils') return {
     __: (value) => value,
-    exportRecordsFile: () => {},
+    exportRecordsFile: (filename, data, onError) => exportedFiles.push({ filename, data, onError }),
     henseiDataSelector: (state) => state['poi-plugin-hensei-nikki'].henseiData,
     saveData: (data) => saved.push(data),
-    loadImportFile: () => ({}),
+    loadImportFile: (filename) => {
+      importedFiles.push(filename)
+      return { imported: filename }
+    },
   }
   if (request === '../utils/file') return {
     loadData: () => ({ loaded: { version: 'poi-h-v1', fleets: [] } }),
@@ -94,6 +119,7 @@ Module._load = function load(request, parent, isMain) {
 }
 
 const entry = require('../index.js')
+const { onImportFile } = require('../redux/index.js')
 
 test('host entry renders the view and exercises reducer initialization plus persistence lifecycle', () => {
   const view = new entry.reactClass({})
@@ -104,11 +130,36 @@ test('host entry renders the view and exercises reducer initialization plus pers
   view.switchState('add')
   assert.equal(view.render().props.children[2].type.name, 'ImportModule')
 
+  const options = new entry.Options({
+    switchState: () => {},
+    onImportFile: (fileBuffer) => dispatches.push(onImportFile(fileBuffer)),
+    data: { existing: { version: 'poi-h-v1', fleets: [] } },
+  })
+  options.onMenuSelected('importFile')
+  assert.deepEqual(opened, [{
+    title: 'Import records file',
+    filters: [{ name: 'json file', extensions: ['json'] }],
+    properties: ['openFile'],
+  }])
+  assert.deepEqual(importedFiles, ['/tmp/records.json'])
+  assert.deepEqual(dispatches.at(-1), {
+    type: '@@HENSEI_IMPORT_FILE',
+    fileBuffer: { imported: '/tmp/records.json' },
+  })
+
+  options.onMenuSelected('exportFile')
+  assert.deepEqual(savedFiles, [{
+    title: 'Export records file',
+    defaultPath: 'HenseiNikki.json',
+  }])
+  assert.deepEqual(exportedFiles[0].filename, '/tmp/export.json')
+  assert.deepEqual(exportedFiles[0].data, { existing: { version: 'poi-h-v1', fleets: [] } })
+
   const state = entry.reducer(undefined, { type: '@@poi-plugin-hensei-nikki@init' })
   assert.ok(state.henseiData.data.loaded)
 
   entry.pluginDidLoad()
-  assert.deepEqual(dispatches, [{ type: '@@poi-plugin-hensei-nikki@init' }])
+  assert.deepEqual(dispatches.at(-1), { type: '@@poi-plugin-hensei-nikki@init' })
   observed[0].callback(() => {}, { data: { saved: { version: 'poi-h-v1', fleets: [] } } }, undefined)
   assert.deepEqual(saved, [{ saved: { version: 'poi-h-v1', fleets: [] } }])
   entry.pluginWillUnload()

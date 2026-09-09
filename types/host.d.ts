@@ -95,6 +95,12 @@ interface HenseiDialog {
   showSaveDialog?: (options: HenseiDialogOptions) => string | undefined
 }
 
+interface HenseiRemote {
+  require(moduleName: 'electron'): { dialog: HenseiDialog }
+}
+
+declare const remote: HenseiRemote
+
 interface HenseiModalAction {
   name: string
   func: () => void
@@ -357,7 +363,6 @@ declare module 'views/services/clipboard' {
 }
 
 declare module 'electron' {
-  export const dialog: HenseiDialog
   export const clipboard: {
     writeText(text: string): void
   }
